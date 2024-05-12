@@ -90,5 +90,8 @@
     "react-docgen-typescript": "^2.2.2",
     "tsconfig-paths-webpack-plugin": "^4.0.0",
     "typechain": "^8.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
