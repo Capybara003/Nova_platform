@@ -1,0 +1,87 @@
+/* Inter */
+
+@font-face {
+  font-family: Inter;
+  font-weight: 100;
+  src: url('../fonts/Inter-Thin.ttf');
+}
+
+@font-face {
+  font-family: Inter;
+  font-weight: 200;
+  src: url('../fonts/Inter-ExtraLight.ttf');
+}
+
+@font-face {
+  font-family: Inter;
+  font-weight: 300;
+  src: url('../fonts/Inter-Light.ttf');
+}
+
+@font-face {
+  font-family: Inter;
+  font-weight: 400;
+  src: url('../fonts/Inter-Regular.ttf');
+}
+
+@font-face {
+  font-family: Inter;
+  font-weight: 500;
+  src: url('../fonts/Inter-Medium.ttf');
+}
+
+@font-face {
+  font-family: Inter;
+  font-weight: 600;
+  src: url('../fonts/Inter-SemiBold.ttf');
+}
+
+@font-face {
+  font-family: Inter;
+  font-weight: 700;
+  src: url('../fonts/Inter-Bold.ttf');
+}
+
+/* Lexend */
+
+@font-face {
+  font-family: Lexend;
+  font-weight: 100;
+  src: url('../fonts/Lexend-Thin.ttf');
+}
+
+@font-face {
+  font-family: Lexend;
+  font-weight: 200;
+  src: url('../fonts/Lexend-ExtraLight.ttf');
+}
+
+@font-face {
+  font-family: Lexend;
+  font-weight: 300;
+  src: url('../fonts/Lexend-Light.ttf');
+}
+
+@font-face {
+  font-family: Lexend;
+  font-weight: 400;
+  src: url('../fonts/Lexend-Regular.ttf');
+}
+
+@font-face {
+  font-family: Lexend;
+  font-weight: 500;
+  src: url('../fonts/Lexend-Medium.ttf');
+}
+
+@font-face {
+  font-family: Lexend;
+  font-weight: 600;
+  src: url('../fonts/Lexend-Black.ttf');
+}
+
+@font-face {
+  font-family: Lexend;
+  font-weight: 700;
+  src: url('../fonts/Lexend-Bold.ttf');
+}

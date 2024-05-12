@@ -1,0 +1,21 @@
+name: Quality
+
+on: [push, pull_request]
+
+jobs:
+  code-checks:
+    name: Lint & Style
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16'
+      - name: Install Node Modules
+        run: yarn
+      - name: Run Formatter
+        run: yarn run fc
+      - name: Run Linter
+        run: yarn run lint

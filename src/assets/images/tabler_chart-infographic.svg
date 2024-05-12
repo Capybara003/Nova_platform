@@ -1,0 +1,18 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="tabler:chart-infographic">
+<g id="Group">
+<path id="Vector" d="M2.25 7C2.25 8.06087 2.67143 9.07828 3.42157 9.82843C4.17172 10.5786 5.18913 11 6.25 11C7.31087 11 8.32828 10.5786 9.07843 9.82843C9.82857 9.07828 10.25 8.06087 10.25 7C10.25 5.93913 9.82857 4.92172 9.07843 4.17157C8.32828 3.42143 7.31087 3 6.25 3C5.18913 3 4.17172 3.42143 3.42157 4.17157C2.67143 4.92172 2.25 5.93913 2.25 7Z" stroke="url(#paint0_radial_720_4937)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M6.25 3V7H10.25M8.25 17V21M16.25 14V21M12.25 13V21M20.25 12V21" stroke="url(#paint1_radial_720_4937)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<defs>
+<radialGradient id="paint0_radial_720_4937" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(10 1.5) rotate(90) scale(20.5)">
+<stop stop-color="#2592D9"/>
+<stop offset="1" stop-color="#C517D1"/>
+</radialGradient>
+<radialGradient id="paint1_radial_720_4937" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(10 1) rotate(90) scale(21 16.3333)">
+<stop stop-color="#2592D9"/>
+<stop offset="1" stop-color="#C517D1"/>
+</radialGradient>
+</defs>
+</svg>

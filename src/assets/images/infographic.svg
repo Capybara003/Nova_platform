@@ -1,0 +1,18 @@
+<svg width="50" height="48" viewBox="0 0 50 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="tabler:chart-infographic">
+<g id="Group">
+<path id="Vector" d="M4.60547 14C4.60547 16.1217 5.46843 18.1566 7.00452 19.6569C8.54061 21.1571 10.624 22 12.7964 22C14.9687 22 17.0521 21.1571 18.5882 19.6569C20.1243 18.1566 20.9872 16.1217 20.9872 14C20.9872 11.8783 20.1243 9.84344 18.5882 8.34315C17.0521 6.84285 14.9687 6 12.7964 6C10.624 6 8.54061 6.84285 7.00452 8.34315C5.46843 9.84344 4.60547 11.8783 4.60547 14Z" stroke="url(#paint0_radial_787_16266)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M12.7969 6V14H20.9878M16.8923 34V42M33.2741 28V42M25.0832 26V42M41.465 24V42" stroke="url(#paint1_radial_787_16266)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<defs>
+<radialGradient id="paint0_radial_787_16266" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(14.1615 23) rotate(-91.9547) scale(40.0233 103.708)">
+<stop stop-color="#C517D1"/>
+<stop offset="1" stop-color="#2592D9"/>
+</radialGradient>
+<radialGradient id="paint1_radial_787_16266" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(29.5199 44.25) rotate(-91.5205) scale(90.0317 181.53)">
+<stop stop-color="#C517D1"/>
+<stop offset="1" stop-color="#2592D9"/>
+</radialGradient>
+</defs>
+</svg>
