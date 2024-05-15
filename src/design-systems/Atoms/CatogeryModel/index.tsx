@@ -1,6 +1,8 @@
 import React from 'react'
+
 import { CheckboxLabel } from '../CheckboxLabel'
 import Typography from '../Typography'
+
 import { MarketCatogery } from 'design-systems/data/data'
 
 export const CatogeryModel = () => {

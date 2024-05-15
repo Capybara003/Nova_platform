@@ -11,9 +11,9 @@ import InputAtom from 'design-systems/Atoms/Input/InputAtom'
 import Typography from 'design-systems/Atoms/Typography'
 import { chatData } from 'design-systems/data/data'
 
-const colorList = ['#F1BB64', '#CB4067', '#FF9567']
+// const colorList = ['#F1BB64', '#CB4067', '#FF9567']
 
-const NftChatBox: React.FC<NFTChatProps> = ({ innerdiv }) => {
+const NftChatBox: React.FC<NFTChatProps> = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   // const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState<string | null>(null) // State for input value

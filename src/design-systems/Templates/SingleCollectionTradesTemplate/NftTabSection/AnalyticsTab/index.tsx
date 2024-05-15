@@ -479,7 +479,7 @@ const AnalyticsTab: React.FC = () => {
                     .map((item, index) => {
                       return (
                         <li className="flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={index}>
-                          <Image className="h-5 w-5" alt="marker" src={IMG.clm1} />
+                          <Image alt="marker" className="h-5 w-5" src={IMG.clm1} />
                           <CustomSingleBar
                             downValue={`${index + 1 * Math.floor(Math.random() * 100)}`}
                             upValue={`${index + 1 * Math.floor(Math.random() * 100)}`}
@@ -616,7 +616,7 @@ const AnalyticsTab: React.FC = () => {
                     .map((item, index) => {
                       return (
                         <li className="flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={index}>
-                          <Image className="h-5 w-5" alt="marker" src={IMG.clm1} />
+                          <Image alt="marker" className="h-5 w-5" src={IMG.clm1} />
                           <CustomSingleBar
                             downValue={`${index + 1 * Math.floor(Math.random() * 100)}`}
                             upValue={`${index + 1 * Math.floor(Math.random() * 100)}`}

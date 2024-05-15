@@ -4,10 +4,10 @@
 import React, { useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { TETooltip } from 'tw-elements-react'
+import { useChain } from '@cosmos-kit/react'
 
 import Web3Modal from '../../../context/WagmiModalProvider'
 import ExchangeModal from '../ModalMolecules/ExchnageModal'
-import WalletSignUp from '../ModalMolecules/WalletSignUp'
 import { TableSkeletan } from '../Skeletan/TableSkeletan'
 
 import { ExchangeSettingType } from './interface'
@@ -21,8 +21,8 @@ import { walletData } from 'lib/redux/slices/walletSlice'
 import { useDataSelector } from 'lib/redux/store'
 
 const HoldingDataGroup2: React.FC = () => {
+  const { connect } = useChain('sei')
   const { walletConnect } = useHolding()
-  const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [walletList, setWalletList] = useState<any>([])
   const [loading, setLoading] = useState(false)
   const [showExchangeWallet, setShowExchangeWallet] = useState<boolean>(false)
@@ -88,10 +88,6 @@ const HoldingDataGroup2: React.FC = () => {
         : undefined || 0),
     [coinbase, binance]
   )
-
-  const openModal = () => {
-    setModalOpen(true)
-  }
 
   const handleWalletSettings = (e: React.ChangeEvent<HTMLInputElement>, item2: any) => {
     if (e.target.name === 'selectAll') {
@@ -355,10 +351,7 @@ const HoldingDataGroup2: React.FC = () => {
             </div>
               </div>*/}
             <div className="flex w-full justify-center">
-              <Button
-                className=" flex w-full flex-row rounded-xs bg-gradint-dark-pink  p-[2px]"
-                onClick={() => openModal()}
-              >
+              <Button className=" flex w-full flex-row rounded-xs bg-gradint-dark-pink  p-[2px]" onClick={connect}>
                 <div className="flex h-full w-full items-center justify-center gap-2  rounded-xs bg-bg25  px-8 py-3">
                   <PlusOutlined />
                   <Typography className="font-normal" size="md">
@@ -368,7 +361,6 @@ const HoldingDataGroup2: React.FC = () => {
               </Button>
             </div>
           </div>
-          <WalletSignUp setShow={setModalOpen} showModal={modalOpen} />
           <ExchangeModal
             exchangeSetting={exchangeSetting}
             setShow={() => setShowExchangeWallet(prev => !prev)}

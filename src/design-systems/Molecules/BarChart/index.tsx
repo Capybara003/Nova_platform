@@ -6,7 +6,7 @@ import { BarChartProps } from './interface'
 const CustomBarChart: React.FC<BarChartProps> = ({ data, height, name, width, xdata1, xdata2, xdata3 }) => {
   return (
     <ResponsiveContainer height={height} width={width}>
-      <BarChart data={data} barCategoryGap={2} barGap={5}>
+      <BarChart barCategoryGap={2} barGap={5} data={data}>
         <CartesianGrid horizontal={true} stroke="#373737" vertical={false} />
         <XAxis dataKey={name} />
         <YAxis />

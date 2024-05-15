@@ -8,11 +8,11 @@ import { FiInfo } from 'react-icons/fi'
 import { RxCaretSort } from 'react-icons/rx'
 
 import TableProps from '../IndexTable/interface'
+import BookMarkButton from '../Table/BookMarkButton'
 
-import { BookMarkEmpty, LinkIcon, RightArrowIcons } from 'design-systems/Atoms/Icons'
+import { LinkIcon, RightArrowIcons } from 'design-systems/Atoms/Icons'
 import Typography from 'design-systems/Atoms/Typography'
 import { Checkbox } from 'design-systems/Atoms/CheckBox'
-import BookMarkButton from '../Table/BookMarkButton'
 
 const HoldingAnalyticsTable: React.FC<TableProps> = ({ data, headData }) => {
   const [activeElement, setActiveElement] = useState<string>('')

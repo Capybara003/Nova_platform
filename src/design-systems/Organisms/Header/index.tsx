@@ -8,12 +8,12 @@ import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useChain } from '@cosmos-kit/react'
 
 import logo from 'assets/images/adaLogo.png'
 import Button from 'design-systems/Atoms/Button'
 import { NovaLogo, PersonAvtar, PlusOutlined } from 'design-systems/Atoms/Icons'
 import Typography from 'design-systems/Atoms/Typography'
-import WalletSignUp from 'design-systems/Molecules/ModalMolecules/WalletSignUp'
 import NavTabsMolecule from 'design-systems/Molecules/NavTabs/NavTabsMolecule'
 import OnSelect from 'design-systems/Molecules/OnSelect'
 import SearchMolecule from 'design-systems/Molecules/Search/SearchMolecule'
@@ -27,16 +27,13 @@ declare global {
   }
 }
 const Header: React.FC<any> = ({ noComponent, hide, userData }) => {
+  const { connect } = useChain('sei')
   const dispatch = useDispatch()
   const tabCount = useSelector((state: RootState) => state.toggle.tabName)
   const { crypto } = useDataSelector('toggle')
-  const [walletConnected, setWalletConnected] = useState(false)
-  const [modalOpen, setModalOpen] = useState<boolean>(false)
-  const [activeTab, setActiveTab] = useState<number>(0)
 
-  const openModal = () => {
-    setModalOpen(true)
-  }
+  const [walletConnected, setWalletConnected] = useState(false)
+  const [activeTab, setActiveTab] = useState<number>(0)
 
   // useEffect(() => {
   //   if(crypto){
@@ -113,10 +110,7 @@ const Header: React.FC<any> = ({ noComponent, hide, userData }) => {
           {' '}
           {!hide && <SearchMolecule />}
           {hide && (
-            <Button
-              className="flex h-[52px] rounded-[6px]  bg-gradint-dark-pink p-[3px] font-Inter"
-              onClick={() => openModal()}
-            >
+            <Button className="flex h-[52px] rounded-[6px]  bg-gradint-dark-pink p-[3px] font-Inter" onClick={connect}>
               <div className="flex h-full items-center justify-center gap-[10px] rounded-[6px] bg-[#181620] px-4">
                 <div>
                   <PlusOutlined />
@@ -171,7 +165,6 @@ const Header: React.FC<any> = ({ noComponent, hide, userData }) => {
             </Button>
           )}
         </div>
-        <WalletSignUp setShow={setModalOpen} showModal={modalOpen} />
       </div>
     </div>
   )

@@ -10,13 +10,13 @@ import { FiInfo } from 'react-icons/fi'
 import { RxCaretSort } from 'react-icons/rx'
 
 import { TableSkeletan } from '../Skeletan/TableSkeletan'
+import BookMarkButton from '../Table/BookMarkButton'
 
 import { Checkbox } from 'design-systems/Atoms/CheckBox'
 import { BookMarkEmpty, InfoIcons, LinkIcon, RightArrowIcons } from 'design-systems/Atoms/Icons'
 import Typography from 'design-systems/Atoms/Typography'
 import { cryptoProps } from 'lib/redux/slices/navToggleSlice/interface'
 import { NoData } from 'design-systems/Atoms/NoData'
-import BookMarkButton from '../Table/BookMarkButton'
 
 interface HoldingIndexTableProps {
   data: NFTData['data']

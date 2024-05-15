@@ -2,9 +2,10 @@
 import { RxCaretSort } from 'react-icons/rx'
 import { FiInfo } from 'react-icons/fi'
 
-import Typography from 'design-systems/Atoms/Typography'
-import { getNestedValue } from 'utils/function'
 import BookMarkButton from './BookMarkButton'
+
+import { getNestedValue } from 'utils/function'
+import Typography from 'design-systems/Atoms/Typography'
 
 interface RealTimeNftTableProps {
   headData: { title: string; isSortable: boolean; isInfo: boolean; key: string; width?: number | string }[]

@@ -2,6 +2,7 @@
 'use client'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
+import { FaBookmark, FaRegBookmark } from 'react-icons/fa'
 
 import NftChart from '../NftChart'
 import NftChatBox from '../NftChatBox'
@@ -12,7 +13,6 @@ import Typography from 'design-systems/Atoms/Typography'
 import NavTabsMolecule from 'design-systems/Molecules/NavTabs/NavTabsMolecule'
 import useWindowWidth from 'hooks/useWindowWidth'
 import { nftDetailData } from 'design-systems/data/data'
-import { FaBookmark, FaRegBookmark } from 'react-icons/fa'
 
 const NftInfoCard: React.FC<NFTProps> = ({ holdingData, isLoadingAssetDetails }) => {
   const [activeTab, setActiveTab] = useState<number>(0)

@@ -58,7 +58,7 @@ export const ConnectedModel: React.FC<ConnectedModelProps> = ({ showModal, heade
               <tr className="">
                 {header?.map((item, key: number) => {
                   return (
-                    <th style={{ width: item.width }} key={key}>
+                    <th key={key} style={{ width: item.width }}>
                       <Typography className={`line-clamp-2 overflow-hidden text-ellipsis`} size="md">
                         {item.name}
                       </Typography>

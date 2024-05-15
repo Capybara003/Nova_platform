@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useChain } from '@cosmos-kit/react'
 
 import backgroundImage from '../../../assets/images/B&W-bg.png'
 
@@ -16,16 +17,12 @@ import {
 } from 'design-systems/Atoms/Icons'
 import Typography from 'design-systems/Atoms/Typography'
 import DynamicDonutChart from 'design-systems/Molecules/DynamicDonutChart'
-import WalletSignUp from 'design-systems/Molecules/ModalMolecules/WalletSignUp'
 import { YourNFT } from 'design-systems/Molecules/NovaNautMolecules/YourNFT'
 import { FaitTrans } from 'design-systems/data/data'
 
 const NovaNautTemplate: React.FC = () => {
-  const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const { connect } = useChain('sei')
 
-  const openModal = () => {
-    setModalOpen(true)
-  }
   const [count, setCount] = useState<number>(0)
   const [queue, setQueue] = useState({
     ticket: false,
@@ -238,7 +235,7 @@ const NovaNautTemplate: React.FC = () => {
               {queue.connetWallet && (
                 <Button
                   className="flex h-[52px] rounded-[6px]  bg-gradint-dark-pink p-[3px] font-Inter"
-                  onClick={() => openModal()}
+                  onClick={connect}
                 >
                   <div className="flex h-full w-full items-center justify-center gap-[10px] rounded-[6px] bg-[#181620] px-4">
                     <div>
@@ -280,7 +277,6 @@ const NovaNautTemplate: React.FC = () => {
           <YourNFT />
         </div>
       </div>
-      <WalletSignUp setShow={setModalOpen} showModal={modalOpen} />
     </div>
   )
 }

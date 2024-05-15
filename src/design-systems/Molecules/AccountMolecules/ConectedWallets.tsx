@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
+import { useChain } from '@cosmos-kit/react'
 
 import ConnectedWalletTable from '../AccountTable/ConnectedWalletTable'
-import WalletSignUp from '../ModalMolecules/WalletSignUp'
 import { ConnectedModel } from '../ModalMolecules/ConnectedModel'
 
 import { data } from 'app/account/utils'
@@ -11,11 +11,9 @@ import IconAtom from 'design-systems/Atoms/Logo'
 import Typography from 'design-systems/Atoms/Typography'
 
 const ConnectedWallet: React.FC = () => {
-  const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const { connect } = useChain('sei')
   const [open, setOpen] = useState(false)
-  const openModal = () => {
-    setModalOpen(true)
-  }
+
   const header = [
     { name: 'Address', key: 'Address', isInfo: false, isSort: false, width: '25%' },
     { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '12.5%' },
@@ -25,6 +23,7 @@ const ConnectedWallet: React.FC = () => {
     { name: 'Tokens', key: 'Tokens', isInfo: false, isSort: false, width: '12.5%' },
     { name: '', key: '', isInfo: false, isSort: false, width: '9%' },
   ]
+
   return (
     <div className="h-full ">
       <div
@@ -37,10 +36,7 @@ const ConnectedWallet: React.FC = () => {
           </Typography>
 
           <div className="hidden w-full flex-col items-center gap-3 xsm:!w-auto xsm:!flex-row xxsm:!flex">
-            <Button
-              className="h-[40px] w-full rounded-[6px] bg-gradient-pink px-[3px]  xsm:w-auto"
-              onClick={() => openModal()}
-            >
+            <Button className="h-[40px] w-full rounded-[6px] bg-gradient-pink px-[3px]  xsm:w-auto" onClick={connect}>
               <div className="flex h-[34px] w-full flex-row items-center justify-center gap-2 rounded-[6px] bg-gradient-pink px-[30px] py-[12px] xsm:!w-auto">
                 <Typography size="lg">Connect Wallet</Typography>
               </div>
@@ -59,10 +55,7 @@ const ConnectedWallet: React.FC = () => {
         </div>
 
         <div className="flex w-full flex-col items-center gap-3 xxsm:!hidden">
-          <Button
-            className="h-[40px] w-full rounded-[6px] bg-gradient-pink px-[3px]  xsm:w-auto"
-            onClick={() => openModal()}
-          >
+          <Button className="h-[40px] w-full rounded-[6px] bg-gradient-pink px-[3px]  xsm:w-auto" onClick={connect}>
             <div className="flex h-[34px] w-full flex-row items-center justify-center gap-2 rounded-[6px] bg-gradient-pink px-[30px] py-[12px] xsm:!w-auto">
               <Typography size="lg">Connect Wallet</Typography>
             </div>
@@ -76,7 +69,6 @@ const ConnectedWallet: React.FC = () => {
           </Button>
         </div>
       </div>
-      <WalletSignUp setShow={setModalOpen} showModal={modalOpen} />
       <ConnectedModel data={data} header={header} setShow={setOpen} showModal={open} />
     </div>
   )

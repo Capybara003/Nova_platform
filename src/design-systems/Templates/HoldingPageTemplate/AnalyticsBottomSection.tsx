@@ -13,7 +13,7 @@ import CustomBarChart from 'design-systems/Molecules/BarChart'
 import NegativeChart from 'design-systems/Molecules/NegativeChart'
 import RealTimeNftTable from 'design-systems/Molecules/Table/RealTimeNftTable'
 import Typography from 'design-systems/Atoms/Typography'
-import { ArrowRightCircleIcon, BookMarkEmpty, InfoIcons, RightArrowIcons } from 'design-systems/Atoms/Icons'
+import { BookMarkEmpty, InfoIcons } from 'design-systems/Atoms/Icons'
 import NavTabsMolecule from 'design-systems/Molecules/NavTabs/NavTabsMolecule'
 import Table from 'design-systems/Atoms/Table'
 

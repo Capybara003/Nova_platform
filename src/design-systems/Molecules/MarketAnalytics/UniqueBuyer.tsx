@@ -43,7 +43,7 @@ export const UniqueBuyer = () => {
                   .map((item, index) => {
                     return (
                       <li className="mt-2 flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={index}>
-                        <Image className="h-6 w-6" alt="marker" src={IMG.clm1} />
+                        <Image alt="marker" className="h-6 w-6" src={IMG.clm1} />
                         <CustomSingleBar
                           downValue={`${index + 1 * Math.floor(Math.random() * 100)}`}
                           upValue={`${index + 1 * Math.floor(Math.random() * 100)}`}

@@ -61,7 +61,7 @@ const DonutWithTableChart: React.FC<DonutWithTableChartProps> = ({
                 {['0-5K ₳', '5K-25k ₳', '25K-100K ₳', '100K-250K ₳', '250K-1M ₳', '1M+ ₳'].map(item => {
                   return (
                     <li className="flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={item}>
-                      <Image className="h-6 w-6" alt="marker" src={IMG.clm1} />
+                      <Image alt="marker" className="h-6 w-6" src={IMG.clm1} />
                       <Typography>{item}</Typography>
                     </li>
                   )

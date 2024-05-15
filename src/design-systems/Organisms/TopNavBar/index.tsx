@@ -7,9 +7,10 @@ import { useState } from 'react'
 import { signOut, useSession } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
-import Image from 'next/image'
+import { useChain } from '@cosmos-kit/react'
 
 import NavTabsMolecule from 'design-systems/Molecules/NavTabs/NavTabsMolecule'
 import Button from 'design-systems/Atoms/Button'
@@ -19,17 +20,14 @@ import SearchMolecule from 'design-systems/Molecules/Search/SearchMolecule'
 import { IMG } from 'assets/images'
 import { DownArrow, PersonAvtar, PlusOutlined } from 'design-systems/Atoms/Icons'
 import { ADAdata, SidebarData } from 'design-systems/data/data'
-import WalletSignUp from 'design-systems/Molecules/ModalMolecules/WalletSignUp'
 import { ModuleName, setCrypto } from 'lib/redux/slices/navToggleSlice'
 import { cryptoProps } from 'lib/redux/slices/navToggleSlice/interface'
 
 export const TopNavbar: React.FC<HeaderProps> = ({ open, setOpen, setModelName, hide, userData }) => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const [modalOpen, setModalOpen] = useState<boolean>(false)
-  const openModal = () => {
-    setModalOpen(true)
-  }
+  const { connect } = useChain('sei')
+
   const [activeTab, setActiveTab] = useState<number>(0)
   const [API, setAPI] = useState(null)
   const pathname = usePathname()
@@ -103,7 +101,7 @@ export const TopNavbar: React.FC<HeaderProps> = ({ open, setOpen, setModelName, 
           pathname === '/NOVA-portal/NOVA-portal-id') && (
           <Button
             className="flex h-[52px] w-full rounded-[6px]  bg-gradint-dark-pink p-[3px] font-Inter"
-            onClick={() => openModal()}
+            onClick={connect}
           >
             <div className="flex h-full items-center justify-center gap-[10px] rounded-[6px] bg-[#181620] px-4">
               <div>
@@ -147,7 +145,7 @@ export const TopNavbar: React.FC<HeaderProps> = ({ open, setOpen, setModelName, 
                   </div>
                 ) : (
                   <div className="h-[40px] w-[40px] p-1 md:!h-[54px] md:!w-[54px]">
-                    <Image className="h-full w-full" alt="profile" src={IMG.profile} />
+                    <Image alt="profile" className="h-full w-full" src={IMG.profile} />
                   </div>
                 )}
               </Button>
@@ -201,7 +199,6 @@ export const TopNavbar: React.FC<HeaderProps> = ({ open, setOpen, setModelName, 
           })}
         </div>
       </div>
-      <WalletSignUp setShow={setModalOpen} showModal={modalOpen} />
     </div>
   )
 }

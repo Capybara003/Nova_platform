@@ -28,5 +28,8 @@
     "Lexend",
     "roadmap",
     "wagmi"
-  ]
+  ],
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  }
 }

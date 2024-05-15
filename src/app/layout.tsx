@@ -10,6 +10,10 @@ import { usePathname } from 'next/navigation'
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ToastContainer } from 'react-toastify'
+import { SignerOptions, wallets } from 'cosmos-kit'
+import { chains, assets } from 'chain-registry'
+import { ChainProvider } from '@cosmos-kit/react'
+import { GasPrice } from '@cosmjs/stargate'
 
 import 'react-multi-carousel/lib/styles.css'
 import 'react-toastify/dist/ReactToastify.css'
@@ -17,6 +21,7 @@ import 'swiper/css'
 import AuthProvider from './components/AuthProvider/AuthProvider'
 
 import NoFirstRender from 'design-systems/Atoms/NoFirstRender'
+import WalletSignUp from 'design-systems/Molecules/ModalMolecules/WalletSignUp'
 import Footer from 'design-systems/Organisms/Footer'
 import Header from 'design-systems/Organisms/Header'
 import MobileHeader from 'design-systems/Organisms/MobileHeader.tsx'
@@ -34,12 +39,16 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/thumbs'
 import 'swiper/css/zoom'
+import '@interchain-ui/react/styles'
+import '@interchain-ui/react/globalStyles'
 // import { useDispatch } from 'react-redux'
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      retry: 2,
       refetchOnWindowFocus: false,
+      staleTime: Infinity,
     },
   },
 })
@@ -92,6 +101,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [open, setOpen] = useState<boolean>(false)
   const [ModelName, setModelName] = useState<string>('NOVA')
   const [userData, setUserData] = useState({})
+
+  const signerOptions: SignerOptions = {
+    signingStargate: _chain => {
+      let gasPrice
+      try {
+        const chain = typeof _chain === 'string' ? chains.find(({ chain_name }) => chain_name === _chain) : _chain
+        const feeToken = chain?.fees?.fee_tokens[0]
+        const fee = `${feeToken?.average_gas_price || 0.025}${feeToken?.denom}`
+        gasPrice = GasPrice.fromString(fee)
+      } catch (error) {
+        gasPrice = GasPrice.fromString('0.025uosmo')
+      }
+      return { gasPrice }
+    },
+  }
 
   const localUserData = typeof window !== 'undefined' ? localStorage?.getItem('UserData') : ''
   useEffect(() => {
@@ -149,63 +173,83 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider attribute="class" defaultTheme="dark">
           <Providers>
-            <NoFirstRender>
-              <AuthProvider>
-                <RestrictedRoute>
-                  {!noComponent && (
-                    <div className="fixed z-[1000] w-full  font-Lexend ">
-                      <div className="hidden xm:!flex">
-                        <Header hide={hide} noComponent={noComponent} userData={userData} />
-                      </div>
-                      <div>
-                        <div className="flex xm:!hidden">
-                          <MobileHeader ModelName={ModelName} open={open} setOpen={setOpen} />
+            <ChainProvider
+              assetLists={assets}
+              chains={chains}
+              signerOptions={signerOptions}
+              walletConnectOptions={{
+                signClient: {
+                  projectId: 'a8510432ebb71e6948cfd6cde54b70f7',
+                  relayUrl: 'wss://relay.walletconnect.org',
+                  metadata: {
+                    name: 'CosmosKit Template',
+                    description: 'CosmosKit dapp template',
+                    url: 'https://docs.cosmology.zone/cosmos-kit/',
+                    icons: [],
+                  },
+                },
+              }}
+              walletModal={WalletSignUp}
+              wallets={wallets}
+            >
+              <NoFirstRender>
+                <AuthProvider>
+                  <RestrictedRoute>
+                    {!noComponent && (
+                      <div className="fixed z-[1000] w-full  font-Lexend ">
+                        <div className="hidden xm:!flex">
+                          <Header hide={hide} noComponent={noComponent} userData={userData} />
                         </div>
-                        {open && (
+                        <div>
                           <div className="flex xm:!hidden">
-                            <TopNavbar
-                              hide={hide}
-                              open={open}
-                              setModelName={setModelName}
-                              setOpen={setOpen}
-                              userData={userData}
-                            />
+                            <MobileHeader ModelName={ModelName} open={open} setOpen={setOpen} />
                           </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                  <div
-                    className={
-                      pathname === '/mint'
-                        ? ''
-                        : pathname === '/' || pathname === '/login'
-                        ? 'h-screen'
-                        : 'flex h-[calc(100vh_-_70px)] overflow-scroll'
-                    }
-                  >
-                    {!noComponent && !hide && (
-                      <>
-                        <div className="!hidden md:!flex md:flex-row">
-                          <SideNavbar />
+                          {open && (
+                            <div className="flex xm:!hidden">
+                              <TopNavbar
+                                hide={hide}
+                                open={open}
+                                setModelName={setModelName}
+                                setOpen={setOpen}
+                                userData={userData}
+                              />
+                            </div>
+                          )}
                         </div>
-                      </>
+                      </div>
                     )}
-                    <div className="m-0 flex min-h-full w-full overflow-scroll p-0 text-center">
-                      <div
-                        className={` ${
-                          !noComponent && !hide && '!mt-[87px] !py-[22px] px-[22px] md:!px-[36px]'
-                        } w-full`}
-                      >
-                        {children}
+                    <div
+                      className={
+                        pathname === '/mint'
+                          ? ''
+                          : pathname === '/' || pathname === '/login'
+                          ? 'h-screen'
+                          : 'flex h-[calc(100vh_-_70px)] overflow-scroll'
+                      }
+                    >
+                      {!noComponent && !hide && (
+                        <>
+                          <div className="!hidden md:!flex md:flex-row">
+                            <SideNavbar />
+                          </div>
+                        </>
+                      )}
+                      <div className="m-0 flex min-h-full w-full overflow-scroll p-0 text-center">
+                        <div
+                          className={` ${
+                            !noComponent && !hide && '!mt-[87px] !py-[22px] px-[22px] md:!px-[36px]'
+                          } w-full`}
+                        >
+                          {children}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  {!noComponent && <Footer />}
-                </RestrictedRoute>
-                <ToastContainer />
-              </AuthProvider>
-            </NoFirstRender>
+                    {!noComponent && <Footer />}
+                  </RestrictedRoute>
+                  <ToastContainer />
+                </AuthProvider>
+              </NoFirstRender>
+            </ChainProvider>
           </Providers>
         </ThemeProvider>
       </body>

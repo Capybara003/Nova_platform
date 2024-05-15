@@ -7,8 +7,9 @@ import Eth from '@ledgerhq/hw-app-eth'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import axios from 'axios'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { ChainWalletBase, WalletModalProps } from 'cosmos-kit'
 
 import { IMGtextSkeleton } from '../Skeletan/IMGtextSkeleton'
 
@@ -37,12 +38,28 @@ export async function getLedgerAddress(path: string): Promise<string> {
   return address
 }
 
-const WalletSignUp: React.FC<ModelProps> = ({ showModal, setShow }) => {
+const WalletSignUp = ({ isOpen, setOpen, walletRepo }: WalletModalProps) => {
+  console.log(walletRepo)
   const [ShowWallet, setShowWallet] = useState<boolean>(false)
   const [mannulvalue, setMannulValue] = useState('')
   const [API, setAPI] = useState<any>(null)
   const { postWalletConnect, postNonceWallet, postVerifySignature, isLoadingNounce, isLoadingVerify } = useWallet()
   const [ledgerAddress, setLedgerAddress] = useState<string | null>(null)
+  const [desktopWallets, setDesktopWallets] = useState<Array<ChainWalletBase>>([])
+  const [mobileWallets, setMobileWallets] = useState<Array<ChainWalletBase>>([])
+  const [hardwareWallets, setHardwareWallets] = useState<Array<ChainWalletBase>>([])
+
+  useEffect(() => {
+    if (walletRepo && isOpen) {
+      const { wallets } = walletRepo
+      const desktop = wallets.filter(wallet => wallet.walletName.includes('extension'))
+      const mobile = wallets.filter(wallet => wallet.walletName.includes('mobile'))
+      const hardware = wallets.filter(wallet => wallet.walletName.includes('ledger'))
+      setDesktopWallets(desktop)
+      setMobileWallets(mobile)
+      setHardwareWallets(hardware)
+    }
+  }, [isOpen])
 
   // const fetchCardanoAddressInfo = async (address: string) => {
   //   try {
@@ -147,7 +164,7 @@ const WalletSignUp: React.FC<ModelProps> = ({ showModal, setShow }) => {
           toast.success(resultVerify.message, { position: toast.POSITION.TOP_RIGHT })
 
           if (resultVerify.success) {
-            setShow(false)
+            setOpen(false)
           }
         }
       } else {
@@ -320,7 +337,7 @@ const WalletSignUp: React.FC<ModelProps> = ({ showModal, setShow }) => {
 
   return (
     // Your Index modal content goes here
-    <Model heading="Connect Wallet" setShow={setShow} showModal={showModal}>
+    <Model heading="Connect Wallet" setShow={setOpen} showModal={isOpen}>
       <div className="flex min-w-[457px] flex-col gap-4">
         <div className="max-h-[608px] w-full overflow-auto rounded-[10px]">
           {ShowWallet && (
@@ -368,22 +385,47 @@ const WalletSignUp: React.FC<ModelProps> = ({ showModal, setShow }) => {
                 Wallet Supporting Mobile
               </Typography>
               <div className="mt-3 flex flex-col gap-3">
-                {MobileSupportDataWalet.map((item, key) => (
+                {mobileWallets.map(wallet => (
                   <Button
                     className="flex w-full cursor-pointer items-center gap-[16px] rounded-[10px] bg-black225_05 p-3 text-left"
-                    key={key}
-                    onClick={() => enableWallet(item.Label)}
+                    key={wallet.walletInfo.name}
+                    onClick={() => {
+                      wallet
+                        .connect()
+                        .then(() => {
+                          if (wallet.walletStatus === 'Connected') {
+                            toast.success('Wallet connected', { position: toast.POSITION.TOP_RIGHT })
+                          } else {
+                            toast.error('Connect Failed', { position: toast.POSITION.TOP_RIGHT })
+                          }
+                        })
+                        .catch(() => toast.error('Connect Failed', { position: toast.POSITION.TOP_RIGHT }))
+                        .finally(() => setOpen(false))
+                    }}
                   >
-                    {isLoadingNounce || isLoadingVerify ? (
-                      <IMGtextSkeleton limit={3} />
+                    {typeof wallet.walletInfo.logo === 'object' ? (
+                      <div className="relative h-[50px] w-[50px]">
+                        <Image
+                          alt="IMG"
+                          className="absolute left-0 top-0"
+                          height={48}
+                          src={wallet.walletInfo.logo.major}
+                          width={48}
+                        />
+                        <Image
+                          alt="IMG"
+                          className="border-white absolute bottom-0 right-0 rounded-full"
+                          height={20}
+                          src={wallet.walletInfo.logo.minor}
+                          width={20}
+                        />
+                      </div>
                     ) : (
-                      <>
-                        <Image alt="IMG" height={50} src={item.img} width={50} />
-                        <Typography className="!font-medium" size="paragraph">
-                          {item.Label}
-                        </Typography>
-                      </>
+                      <Image alt="IMG" height={50} src={wallet.walletInfo.logo || ''} width={50} />
                     )}
+                    <Typography className="!font-medium" size="paragraph">
+                      {wallet.walletInfo.prettyName}
+                    </Typography>
                   </Button>
                 ))}
               </div>
@@ -392,27 +434,48 @@ const WalletSignUp: React.FC<ModelProps> = ({ showModal, setShow }) => {
                 Desktop Only
               </Typography>
               <div className="mt-3 flex flex-col gap-3">
-                {DesktopSupportDataWalet.map((item, key) => (
-                  <>
-                    {/* {wallet.isEnabled && wallet.walletLabel !== item.Label && ( */}
-                    <Button
-                      className="flex w-full cursor-pointer items-center gap-[16px] rounded-[10px] bg-black225_05 p-3 text-left"
-                      key={key}
-                      onClick={() => enableWallet(item.Label)}
-                    >
-                      {isLoadingNounce || isLoadingVerify ? (
-                        <IMGtextSkeleton limit={3} />
-                      ) : (
-                        <>
-                          <Image alt="IMG" height={50} src={item.img} width={50} />
-                          <Typography className="!font-medium" size="paragraph">
-                            {item.Label}
-                          </Typography>
-                        </>
-                      )}
-                    </Button>
-                    {/* )} */}
-                  </>
+                {desktopWallets.map(wallet => (
+                  <Button
+                    className="flex w-full cursor-pointer items-center gap-[16px] rounded-[10px] bg-black225_05 p-3 text-left"
+                    key={wallet.walletInfo.name}
+                    onClick={() => {
+                      wallet
+                        .connect()
+                        .then(() => {
+                          if (wallet.walletStatus === 'Connected') {
+                            toast.success('Wallet connected', { position: toast.POSITION.TOP_RIGHT })
+                          } else {
+                            toast.error('Connect Failed', { position: toast.POSITION.TOP_RIGHT })
+                          }
+                        })
+                        .catch(() => toast.error('Connect Failed', { position: toast.POSITION.TOP_RIGHT }))
+                        .finally(() => setOpen(false))
+                    }}
+                  >
+                    {typeof wallet.walletInfo.logo === 'object' ? (
+                      <div className="relative h-[50px] w-[50px]">
+                        <Image
+                          alt="IMG"
+                          className="absolute left-0 top-0"
+                          height={48}
+                          src={wallet.walletInfo.logo.major}
+                          width={48}
+                        />
+                        <Image
+                          alt="IMG"
+                          className="border-white absolute bottom-0 right-0 rounded-full"
+                          height={20}
+                          src={wallet.walletInfo.logo.minor}
+                          width={20}
+                        />
+                      </div>
+                    ) : (
+                      <Image alt="IMG" height={50} src={wallet.walletInfo.logo || ''} width={50} />
+                    )}
+                    <Typography className="!font-medium" size="paragraph">
+                      {wallet.walletInfo.prettyName}
+                    </Typography>
+                  </Button>
                 ))}
               </div>
               <Line className="!my-3" />
@@ -420,21 +483,49 @@ const WalletSignUp: React.FC<ModelProps> = ({ showModal, setShow }) => {
                 {`USB Connect (Hardware Wallet)`}
               </Typography>
               <div className="mt-3 flex flex-col gap-3">
-                <Button
-                  className="flex w-full cursor-pointer items-center gap-[16px] rounded-[10px] bg-black225_05 p-3 text-left"
-                  onClick={() => enableWallet('Ledger')}
-                >
-                  {isLoadingNounce || isLoadingVerify ? (
-                    <IMGtextSkeleton limit={3} />
-                  ) : (
-                    <>
-                      <Image alt="IMG" height={50} src={IMG.legand} width={50} />
-                      <Typography className="!font-medium" size="paragraph">
-                        Ledger
-                      </Typography>
-                    </>
-                  )}
-                </Button>
+                {hardwareWallets.map(wallet => (
+                  <Button
+                    className="flex w-full cursor-pointer items-center gap-[16px] rounded-[10px] bg-black225_05 p-3 text-left"
+                    key={wallet.walletInfo.name}
+                    onClick={() => {
+                      wallet
+                        .connect()
+                        .then(() => {
+                          if (wallet.walletStatus === 'Connected') {
+                            toast.success('Wallet connected', { position: toast.POSITION.TOP_RIGHT })
+                          } else {
+                            toast.error('Connect Failed', { position: toast.POSITION.TOP_RIGHT })
+                          }
+                        })
+                        .catch(() => toast.error('Connect Failed', { position: toast.POSITION.TOP_RIGHT }))
+                        .finally(() => setOpen(false))
+                    }}
+                  >
+                    {typeof wallet.walletInfo.logo === 'object' ? (
+                      <div className="relative h-[50px] w-[50px]">
+                        <Image
+                          alt="IMG"
+                          className="absolute left-0 top-0"
+                          height={48}
+                          src={wallet.walletInfo.logo.major}
+                          width={48}
+                        />
+                        <Image
+                          alt="IMG"
+                          className="border-white absolute bottom-0 right-0 rounded-full"
+                          height={20}
+                          src={wallet.walletInfo.logo.minor}
+                          width={20}
+                        />
+                      </div>
+                    ) : (
+                      <Image alt="IMG" height={50} src={wallet.walletInfo.logo || ''} width={50} />
+                    )}
+                    <Typography className="!font-medium" size="paragraph">
+                      {wallet.walletInfo.prettyName}
+                    </Typography>
+                  </Button>
+                ))}
               </div>
             </>
           )}

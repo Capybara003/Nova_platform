@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
+import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
@@ -18,9 +19,8 @@ import Speedometer from 'design-systems/Molecules/Speedometer'
 import TwoLineGraph from 'design-systems/Molecules/TwoLineGraph'
 import { RealTimeData } from 'design-systems/data/data'
 import CustomSingleBar from 'design-systems/Molecules/CustomSingleBar'
-import Image from 'next/image'
-import { IMG } from 'assets/images'
 import DynamicLineGraph from 'design-systems/Molecules/DynamicLineGraph'
+import { IMG } from 'assets/images'
 
 const graphData = [
   {

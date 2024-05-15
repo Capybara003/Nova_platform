@@ -29,7 +29,7 @@ const ConnectedWalletTable: React.FC<ConnectedTableProps> = ({ data, header }) =
       <thead className="h-16">
         <tr className="">
           {header?.map((item, key: number) => (
-            <th style={{ width: item.width }} className="text-md md:!text-body" key={key}>
+            <th className="text-md md:!text-body" key={key} style={{ width: item.width }}>
               <Typography className={`line-clamp-2 overflow-hidden text-ellipsis`} size="md">
                 {item.name}
               </Typography>

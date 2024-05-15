@@ -82,7 +82,7 @@ const DonutWithTableChart: React.FC<DonutWithTableChartProps> = ({
                     ].map(item => {
                       return (
                         <li className="flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={item.label}>
-                          <Image className="h-5 w-5" alt="marker" src={item.icons} />
+                          <Image alt="marker" className="h-5 w-5" src={item.icons} />
                           <Typography>{item.label}</Typography>
                         </li>
                       )

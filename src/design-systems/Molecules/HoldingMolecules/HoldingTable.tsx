@@ -11,6 +11,7 @@ import { RxCaretSort } from 'react-icons/rx'
 
 import TableProps from '../IndexTable/interface'
 import { TableSkeletan } from '../Skeletan/TableSkeletan'
+import BookMarkButton from '../Table/BookMarkButton'
 
 import { Checkbox } from 'design-systems/Atoms/CheckBox'
 import { BookMarkEmpty, BookMarkFill, InfoIcons, LinkIcon, RightArrowIcons } from 'design-systems/Atoms/Icons'
@@ -18,7 +19,6 @@ import Typography from 'design-systems/Atoms/Typography'
 import { useDataSelector } from 'lib/redux/store'
 import { IMG } from 'assets/images'
 import { NoData } from 'design-systems/Atoms/NoData'
-import BookMarkButton from '../Table/BookMarkButton'
 
 const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerData, crypto }) => {
   const [activeElement, setActiveElement] = useState<string>('')

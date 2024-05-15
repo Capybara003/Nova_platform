@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
-import { Treemap, ResponsiveContainer, Rectangle, Text, Cross } from 'recharts'
+import { Treemap, ResponsiveContainer, Rectangle, Text } from 'recharts'
 
 const data = [
   {
@@ -129,6 +129,7 @@ const CustomizedContent = ({ depth, x, y, width, height, name, percentage }: any
       <Text
         fill="#fff"
         fontFamily="'Lexend', sans-serif"
+        fontSize={fontSize + 5}
         stroke="transparent"
         style={{
           textTransform: 'uppercase',
@@ -137,7 +138,6 @@ const CustomizedContent = ({ depth, x, y, width, height, name, percentage }: any
         width={width}
         x={x + width / 2}
         y={y + height / 2 + 12}
-        fontSize={fontSize + 5}
       >
         {name}
       </Text>

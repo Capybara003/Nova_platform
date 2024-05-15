@@ -42,8 +42,8 @@ const WhalesModel: React.FC<ModelProps> = ({ showModal, setShow, heading }) => {
               </Typography>
               <div className=" flex  justify-center">
                 <NavTabsMolecule
-                  className="whitespace-nowrap"
                   activeTab={activeTab1}
+                  className="whitespace-nowrap"
                   tabs={['Floor Value', 'Trait Value']}
                   onTabChange={tab => setActiveTab1(tab)}
                 />
