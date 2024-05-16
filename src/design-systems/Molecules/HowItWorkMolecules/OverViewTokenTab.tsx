@@ -57,9 +57,9 @@ export const OverViewTokenTab = () => {
             </div>
             <div className="flex justify-between border-b-[1.155px] border-black225_05 py-[18px]">
               <Typography className="" size="body">
-                max. ADA Cap
+                max. SEI Cap
               </Typography>
-              <Typography size="body">4.000.000 ₳ </Typography>
+              <Typography size="body">4.000.000 SEI </Typography>
             </div>
             <div className="flex justify-between border-b-[1.155px] border-black225_05 py-[18px]">
               <Typography className="" size="body">
@@ -71,7 +71,7 @@ export const OverViewTokenTab = () => {
               <Typography className="" size="body">
                 Price
               </Typography>
-              <Typography size="body">0,25 ₳ </Typography>
+              <Typography size="body">0,25 SEI </Typography>
             </div>
 
             <div className="flex items-center justify-between gap-[10px] border-b-[1.155px] border-black225_05 py-[25px]">
@@ -79,7 +79,7 @@ export const OverViewTokenTab = () => {
               {/* <input className="w-full" type="range" /> */}
               <RangeBar />
               <div className="flex h-[32px] w-[241px] items-center justify-center rounded-[6px] bg-black225_05">
-                <Typography>ADA Amount</Typography>
+                <Typography>SEI Amount</Typography>
               </div>
             </div>
             <div className="flex justify-between border-b-[1.155px] border-black225_05 py-[18px]">
@@ -104,7 +104,7 @@ export const OverViewTokenTab = () => {
               <tr>
                 <th className="!border-b-0 !bg-[#1d1b25] text-[#DBDBDB]">Address</th>
                 <th className="!border-b-0 !bg-[#1d1b25] text-[#DBDBDB]">Quantity</th>
-                <th className="!border-b-0 !bg-[#1d1b25] text-[#DBDBDB]">ADA</th>
+                <th className="!border-b-0 !bg-[#1d1b25] text-[#DBDBDB]">SEI</th>
                 <th className="!border-b-0 !bg-[#1d1b25] text-[#DBDBDB]">Time</th>
               </tr>
             </thead>
@@ -118,7 +118,7 @@ export const OverViewTokenTab = () => {
                 <tr key={key}>
                   <td className="!border-0">{item.address}</td>
                   <td className="!border-0">{item.qua}</td>
-                  <td className="!border-0">{item.ada}</td>
+                  <td className="!border-0">{item.sei}</td>
                   <td className="!border-0">{item.time}</td>
                 </tr>
               ))}

@@ -80,11 +80,11 @@ const ProjectOverviewTables: React.FC<TableProps> = ({ headData, data }) => {
             <td>Tokens: 4.000</td>
             <td>100%</td>
             <td></td>
-            <td>975.000 ₳</td>
-            <td>975.000 ₳</td>
-            <td>975.000 ₳</td>
-            <td>975.000 ₳</td>
-            <td>975.000 ₳</td>
+            <td>975.000 SEI</td>
+            <td>975.000 SEI</td>
+            <td>975.000 SEI</td>
+            <td>975.000 SEI</td>
+            <td>975.000 SEI</td>
           </tr>
         </tfoot>
       </table>

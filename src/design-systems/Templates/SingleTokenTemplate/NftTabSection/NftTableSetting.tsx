@@ -66,7 +66,7 @@ const NftTableSetting: React.FC<NftTableSettingProps> = ({ isOpen, handleOpen, a
               </div>
             </li>
 
-            {['0-5K ₳', '5K-25k ₳', '25K-100K ₳', '100K-250K ₳', '250K-1M ₳', '1M+ ₳'].map(item => {
+            {['0-5K SEI', '5K-25k SEI', '25K-100K SEI', '100K-250K SEI', '250K-1M SEI', '1M+ SEI'].map(item => {
               return (
                 <li className="my-4 flex items-center justify-start gap-2 text-md text-[#DBDBDB]" key={item}>
                   <input className="h-4 w-4 checked:bg-red" id="" name="" type="checkbox" />

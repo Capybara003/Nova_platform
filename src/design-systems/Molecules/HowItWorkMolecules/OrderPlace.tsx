@@ -80,7 +80,7 @@ export const OrderPlace = () => {
               <Typography className="" size="body">
                 Price
               </Typography>
-              <Typography size="body">380 ₳</Typography>
+              <Typography size="body">380 SEI</Typography>
             </div>
             <div className="flex justify-between border-b-[1.155px] border-black225_05 py-[18px]">
               <div className="flex gap-[8px]">
@@ -123,7 +123,7 @@ export const OrderPlace = () => {
               <Typography className="" size="body">
                 Cost
               </Typography>
-              <Typography size="body">380 ₳</Typography>
+              <Typography size="body">380 SEI</Typography>
             </div>
             <Button className="rounded-[6px] bg-gradient-to-r from-primary to-secondary-25 p-[12px]">
               <Typography className="text-[18px]">Enter Queue</Typography>

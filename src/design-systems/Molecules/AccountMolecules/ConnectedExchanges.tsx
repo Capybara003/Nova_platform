@@ -18,7 +18,7 @@ const ConnectedExchanges: React.FC = () => {
   const header = [
     { name: 'Address', key: 'Address', isInfo: false, isSort: false, width: '26.2%' },
     { name: 'Exchange', key: 'Exchange', isInfo: false, isSort: false, width: '16.2%' },
-    { name: '₳ Transferred', key: 'Transferred', isInfo: false, isSort: false, width: '16.2%' },
+    { name: 'SEI Transferred', key: 'Transferred', isInfo: false, isSort: false, width: '16.2%' },
     { name: 'Floor Value', key: 'FloorValue', isInfo: false, isSort: false, width: '16.2%' },
     { name: 'Trade Volume', key: 'TradeVolume', isInfo: false, isSort: false, width: '16.2%' },
     { name: '', key: '', isInfo: false, isSort: false, width: '9%' },

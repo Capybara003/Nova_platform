@@ -21,7 +21,7 @@ import { NoData } from 'design-systems/Atoms/NoData'
 const TaxableTaxesTable: React.FC<TableProps> = ({ data, headData, footerData, loading }) => {
   const [checkboxes, setCheckboxes] = useState<any>([])
   const [activeElement, setActiveElement] = useState<string>('')
-  const ADA = 1000000
+  const SEI = 1000000
   const handleClick = (value: string) => {
     if (value === activeElement) {
       setActiveElement('')
@@ -52,18 +52,18 @@ const TaxableTaxesTable: React.FC<TableProps> = ({ data, headData, footerData, l
     }
   }
 
-  const NftTotal = footerData?.nftTotal / ADA
-  const TotalAmount = footerData?.totalAmount / ADA
-  const TotalWeight = footerData?.totalWeight / ADA
-  const TotalFloorPrice = footerData?.totalFloorPrice / ADA
-  const TotalRarity = footerData?.totalRarity / ADA
-  const TotalBuyPrice = footerData?.totalBuyPrice / ADA
-  const TotalFee = footerData?.totalFee / ADA
-  const TotalFloorValue = footerData?.totalFloorValue / ADA
-  const TotalUnRealizedGains = footerData?.totalUnRealizedGains / ADA
-  const TotalSinceTrade = footerData?.totalSinceTrade / ADA
-  const TotalIncome = footerData?.totalIncome / ADA
-  const TotalRealiste = footerData?.totalRealizedGain / ADA
+  const NftTotal = footerData?.nftTotal / SEI
+  const TotalAmount = footerData?.totalAmount / SEI
+  const TotalWeight = footerData?.totalWeight / SEI
+  const TotalFloorPrice = footerData?.totalFloorPrice / SEI
+  const TotalRarity = footerData?.totalRarity / SEI
+  const TotalBuyPrice = footerData?.totalBuyPrice / SEI
+  const TotalFee = footerData?.totalFee / SEI
+  const TotalFloorValue = footerData?.totalFloorValue / SEI
+  const TotalUnRealizedGains = footerData?.totalUnRealizedGains / SEI
+  const TotalSinceTrade = footerData?.totalSinceTrade / SEI
+  const TotalIncome = footerData?.totalIncome / SEI
+  const TotalRealiste = footerData?.totalRealizedGain / SEI
   return (
     <table className="rounded-corners h-full w-full  font-Lexend">
       <thead>
@@ -109,10 +109,10 @@ const TaxableTaxesTable: React.FC<TableProps> = ({ data, headData, footerData, l
       <tbody>
         {!loading &&
           data?.map((item: any, index: any) => {
-            const Income = item.income / ADA
-            const SinceTrade = Number(item?.sinceTrade) / ADA
-            const Fee = item?.fee / ADA
-            const Grain = item?.realizedGains / ADA
+            const Income = item.income / SEI
+            const SinceTrade = Number(item?.sinceTrade) / SEI
+            const Fee = item?.fee / SEI
+            const Grain = item?.realizedGains / SEI
             const date = new Date(item.confirmedAt)
 
             const year = date.getFullYear().toString().slice(-2) // Get the last two digits of the year
@@ -153,7 +153,7 @@ const TaxableTaxesTable: React.FC<TableProps> = ({ data, headData, footerData, l
                           alt={'IMG'}
                           className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
                           height={48}
-                          src={IMG.Nova}
+                          src={IMG.webump}
                           width={48}
                         />
                       )}
@@ -164,7 +164,7 @@ const TaxableTaxesTable: React.FC<TableProps> = ({ data, headData, footerData, l
                   <td>{item?.sellPrice ? item?.sellPrice : '--'}</td>
                   <td>
                     <Typography>
-                      <Typography>{`${Income.toFixed(3)} ₳`}</Typography>
+                      <Typography>{`${Income.toFixed(3)} SEI`}</Typography>
                       <Typography className={item?.sinceTrade < 0 ? 'text-warning-300' : 'text-green'}>
                         <TETooltip title={SinceTrade}>
                           {item?.sinceTrade ? SinceTrade.toFixed(3) + '%' : '--'}
@@ -173,11 +173,11 @@ const TaxableTaxesTable: React.FC<TableProps> = ({ data, headData, footerData, l
                     </Typography>
                   </td>
                   <td>
-                    <div className="flex w-full justify-center">{item?.fee ? `${Fee.toFixed(3)} ₳` : '--'}</div>
+                    <div className="flex w-full justify-center">{item?.fee ? `${Fee.toFixed(3)} SEI` : '--'}</div>
                   </td>
                   <td>
                     <Typography>
-                      <Typography>{`${Grain.toFixed(3)} ₳`}</Typography>
+                      <Typography>{`${Grain.toFixed(3)} SEI`}</Typography>
                       <Typography className={item?.sinceTrade < 0 ? 'text-warning-300' : 'text-green'}>
                         <TETooltip title={SinceTrade}>
                           {item?.sinceTrade ? SinceTrade.toFixed(3) + '%' : '--'}
@@ -237,11 +237,11 @@ const TaxableTaxesTable: React.FC<TableProps> = ({ data, headData, footerData, l
                             </tr>
                             <tr className="flex w-full items-center" key={index}>
                               <td></td>
-                              <td className="text-black7f">Yield Farming</td>
+                              <td className="text-black7f">Bought</td>
                               <td>
-                                <Image alt={'IMG'} src={res?.yieldFarming?.StakeIMG} />
+                                <Image alt={'IMG'} src={res?.bought?.StakeIMG} />
                               </td>
-                              <td>{res?.yieldFarming?.StakeName}</td>
+                              <td>{res?.bought?.StakeName}</td>
                             </tr>
                           </tbody>
                         </>
@@ -315,19 +315,19 @@ const TaxableTaxesTable: React.FC<TableProps> = ({ data, headData, footerData, l
             <td>
               {/* {TotalWeight.toFixed(5)} */}
               {/* <div className="tooltip !w-[60px]">
-              <TETooltip title={`${TotalBuyPrice} ₳`}>
-                {TotalBuyPrice ? TotalBuyPrice.toFixed(2) + '₳' : '--'}
+              <TETooltip title={`${TotalBuyPrice} SEI`}>
+                {TotalBuyPrice ? TotalBuyPrice.toFixed(2) + 'SEI' : '--'}
               </TETooltip>
              
             </div> */}
             </td>
             <td>
-              <TETooltip title={`${TotalFee} ₳`}>{TotalFee ? TotalFee.toFixed(3) + '₳' : '--'}</TETooltip>
+              <TETooltip title={`${TotalFee} SEI`}>{TotalFee ? TotalFee.toFixed(3) + 'SEI' : '--'}</TETooltip>
             </td>
             <td>
-              <TETooltip title={`${TotalIncome} ₳`}>{TotalIncome ? TotalIncome.toFixed(3) + '₳' : '--'}</TETooltip>
+              <TETooltip title={`${TotalIncome} SEI`}>{TotalIncome ? TotalIncome.toFixed(3) + 'SEI' : '--'}</TETooltip>
             </td>
-            <td>{/* <Typography className="w-max">{TotalRealiste?.toFixed(2)} ₳</Typography> */}</td>
+            <td>{/* <Typography className="w-max">{TotalRealiste?.toFixed(2)} SEI</Typography> */}</td>
             <td></td>
             <td></td>
             <td>{footerData?.totalHolding && footerData?.totalHolding}</td>

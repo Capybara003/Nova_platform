@@ -81,7 +81,7 @@ const NftChart: React.FC = () => {
                 <Typography>Floor</Typography>
               </Typography>
               <Typography className="font-normal" size="subtitle">
-                5.463 ₳
+                5.463 SEI
               </Typography>
               <Typography className=" text-success-500" size="paragraph">
                 +225,53%
@@ -94,7 +94,7 @@ const NftChart: React.FC = () => {
                 <Typography>Listings</Typography>
               </Typography>
               <Typography className="font-normal" size="subtitle">
-                5.150 ₳
+                5.150 SEI
               </Typography>
               <Typography className=" text-success-500" size="paragraph">
                 +51,50%
@@ -106,7 +106,7 @@ const NftChart: React.FC = () => {
               Your Position
             </Typography>
             <Typography className="font-normal" size="subtitle">
-              5.463 ₳
+              5.463 SEI
             </Typography>
             <Typography className=" text-success-500" size="paragraph">
               +51,50%

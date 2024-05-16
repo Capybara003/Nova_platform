@@ -23,7 +23,7 @@ import { NoData } from 'design-systems/Atoms/NoData'
 const TaxesTable: React.FC<TableProps> = ({ data, headData, footerData, crypto, loading }) => {
   const [activeElement, setActiveElement] = useState<string>('')
   const [checkboxes, setCheckboxes] = useState<any>([])
-  const ADA = crypto?.value || 0
+  const SEI = crypto?.value || 0
   const handleClick = (value: string) => {
     if (value === activeElement) {
       setActiveElement('')
@@ -53,18 +53,18 @@ const TaxesTable: React.FC<TableProps> = ({ data, headData, footerData, crypto, 
       setCheckboxes([])
     }
   }
-  const NftTotal = footerData?.nftTotal / ADA
-  const TotalAmount = footerData?.totalAmount / ADA
-  const TotalWeight = footerData?.totalWeight / ADA
-  const TotalFloorPrice = footerData?.totalFloorPrice / ADA
-  const TotalRarity = footerData?.totalRarity / ADA
-  const TotalBuyPrice = footerData?.totalBuyPrice / ADA
-  const TotalFee = footerData?.totalFee / ADA
-  const TotalFloorValue = footerData?.totalFloorValue / ADA
-  const TotalUnRealizedGains = footerData?.totalUnRealizedGains / ADA
-  const TotalSinceTrade = footerData?.totalSinceTrade / ADA
-  const TotalIncome = footerData?.totalIncome / ADA
-  const TotalRealiste = footerData?.totalRealizedGain / ADA
+  const NftTotal = footerData?.nftTotal / SEI
+  const TotalAmount = footerData?.totalAmount / SEI
+  const TotalWeight = footerData?.totalWeight / SEI
+  const TotalFloorPrice = footerData?.totalFloorPrice / SEI
+  const TotalRarity = footerData?.totalRarity / SEI
+  const TotalBuyPrice = footerData?.totalBuyPrice / SEI
+  const TotalFee = footerData?.totalFee / SEI
+  const TotalFloorValue = footerData?.totalFloorValue / SEI
+  const TotalUnRealizedGains = footerData?.totalUnRealizedGains / SEI
+  const TotalSinceTrade = footerData?.totalSinceTrade / SEI
+  const TotalIncome = footerData?.totalIncome / SEI
+  const TotalRealiste = footerData?.totalRealizedGain / SEI
 
   return (
     <table className="rounded-corners h-full w-full  font-Lexend">
@@ -123,13 +123,13 @@ const TaxesTable: React.FC<TableProps> = ({ data, headData, footerData, crypto, 
             //   KoiosApiResponse && KoiosApiResponse?.tokenRegistryMetadata?.logo !== undefined
             //     ? `data:image/png;base64,${KoiosApiResponse?.tokenRegistryMetadata?.logo}`
             //     : `https://ipfs.io/ipfs/${Logo}`
-            const BuyPrice = item.buyPrice / ADA
-            const Fees = item.fee / ADA
-            const Income = item.income / ADA
-            const ShortTerm = item.shortTerm / ADA
-            const LongTerm = item?.longTerm / ADA
-            const RealizedGains = item.realizedGains / ADA
-            const SinceTrade = Number(item?.sinceTrade) / ADA
+            const BuyPrice = item.buyPrice / SEI
+            const Fees = item.fee / SEI
+            const Income = item.income / SEI
+            const ShortTerm = item.shortTerm / SEI
+            const LongTerm = item?.longTerm / SEI
+            const RealizedGains = item.realizedGains / SEI
+            const SinceTrade = Number(item?.sinceTrade) / SEI
             return (
               <>
                 <tr className="cursor-pointer">
@@ -172,7 +172,7 @@ const TaxesTable: React.FC<TableProps> = ({ data, headData, footerData, crypto, 
                           alt={'IMG'}
                           className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
                           height={48}
-                          src={IMG.Nova}
+                          src={IMG.webump}
                           width={48}
                         />
                       )}
@@ -271,11 +271,11 @@ const TaxesTable: React.FC<TableProps> = ({ data, headData, footerData, crypto, 
                             </tr>
                             <tr className="flex w-full items-center" key={index}>
                               <td></td>
-                              <td className="text-black7f">Yield Farming</td>
+                              <td className="text-black7f">Bought</td>
                               <td>
-                                <Image alt={'IMG'} src={res?.yieldFarming?.StakeIMG} />
+                                <Image alt={'IMG'} src={res?.bought?.StakeIMG} />
                               </td>
-                              <td>{res?.yieldFarming?.StakeName}</td>
+                              <td>{res?.bought?.StakeName}</td>
                             </tr>
                           </tbody>
                         </>

@@ -24,7 +24,7 @@ const SingleCollectionMolecules: React.FC = () => {
         </div>
         <div className="flex flex-col items-start justify-start gap-3">
           <Typography className="flex flex-row items-center gap-3" size="subtitle-25">
-            <Typography>$Society</Typography>
+            <Typography>WeBump</Typography>
             <button className="text-paragraph" onClick={() => setBookmark(!bookmark)}>
               {bookmark ? <FaBookmark className="text-green" /> : <FaRegBookmark />}
             </button>
@@ -47,38 +47,38 @@ const SingleCollectionMolecules: React.FC = () => {
         </Typography>
         <Typography className="flex w-full  justify-between gap-[22px]" size="lg">
           <Typography>Collection MC:</Typography>
-          <Typography>15.000.000 ₳</Typography>
+          <Typography>15.000.000 SEI</Typography>
         </Typography>
         <Typography className="flex w-full  justify-between gap-[22px]" size="lg">
           <Typography>FD Collection MC :</Typography>
-          <Typography>35.000.000 ₳</Typography>
+          <Typography>35.000.000 SEI</Typography>
         </Typography>
         <Typography className="flex w-full  justify-between gap-[22px]" size="lg">
           <Typography>Project MC:</Typography>
-          <Typography>35.000.000 ₳</Typography>
+          <Typography>35.000.000 SEI</Typography>
         </Typography>
         <Typography className="flex w-full  justify-between gap-[22px]" size="lg">
           <Typography>FD Project MC:</Typography>
-          <Typography>55.000.000 ₳</Typography>
+          <Typography>55.000.000 SEI</Typography>
         </Typography>
         <Typography className="flex w-full  justify-between gap-[22px]" size="lg">
           <Typography>Collection Volume:</Typography>
-          <Typography>38.000.000 ₳</Typography>
+          <Typography>38.000.000 SEI</Typography>
         </Typography>
         <Typography className="flex w-full  justify-between gap-[22px]" size="lg">
           <Typography>Project Volume:</Typography>
-          <Typography>38.000.000 ₳</Typography>
+          <Typography>38.000.000 SEI</Typography>
         </Typography>
         <Typography className="flex w-full  justify-between gap-[22px]" size="lg">
-          <Typography>% Pooled $Society:</Typography>
+          <Typography>% Pooled SEI:</Typography>
           <Typography>5%</Typography>
         </Typography>
         <Typography className="flex w-full  justify-between gap-[22px]" size="lg">
-          <Typography>Pooled ADA: </Typography>
-          <Typography>138.000.000 ₳</Typography>
+          <Typography>Pooled SEI: </Typography>
+          <Typography>138.000.000 SEI</Typography>
         </Typography>
         <Typography className="flex w-full  justify-between gap-[22px]" size="lg">
-          <Typography>Pooled $Society: </Typography>
+          <Typography>Pooled SEI: </Typography>
           <Typography>1.138.000.000</Typography>
         </Typography>
         <Typography className="flex w-full  justify-between gap-[22px]" size="lg">
@@ -95,7 +95,7 @@ const SingleCollectionMolecules: React.FC = () => {
         </Typography>
         <Typography className="flex w-full  justify-between gap-[22px]" size="lg">
           <Typography>Avg. Sale</Typography>
-          <Typography>2.500 ₳</Typography>
+          <Typography>2.500 SEI</Typography>
         </Typography>
         <Typography className="flex w-full  justify-between gap-[22px]" size="lg">
           <Typography>Buyers: </Typography>
@@ -114,7 +114,7 @@ const SingleCollectionMolecules: React.FC = () => {
           <Typography>2249/35%</Typography>
         </Typography>
         <Typography className="flex w-full  justify-between gap-[22px]" size="lg">
-          <Typography>1 ADA:</Typography>
+          <Typography>1 SEI:</Typography>
           <Typography>5.000 Society</Typography>
         </Typography>
       </div>

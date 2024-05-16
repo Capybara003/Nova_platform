@@ -324,7 +324,7 @@ export const tableData = [
 
 export const assetsTableData = [
   {
-    asset: 'Alvin Wilson',
+    asset: 'BUMP #876',
     rarity: 4.656,
     buyPrice: 4.656,
     traitFloor: 4.656,
@@ -339,7 +339,7 @@ export const assetsTableData = [
       thumbnail: IMG.sellerImage,
     },
     link: 'Link 1',
-    thumbnail: IMG.monkey,
+    thumbnail: IMG.nft876,
   },
   {
     asset: 'Ella Torres',
@@ -357,7 +357,7 @@ export const assetsTableData = [
       thumbnail: IMG.sellerImage,
     },
     link: 'Link 1',
-    thumbnail: IMG.monkey,
+    thumbnail: IMG.webump,
   },
   {
     asset: 'John Doe',
@@ -375,7 +375,7 @@ export const assetsTableData = [
       thumbnail: IMG.sellerImage,
     },
     link: 'Link 1',
-    thumbnail: IMG.monkey,
+    thumbnail: IMG.webump,
   },
 ]
 

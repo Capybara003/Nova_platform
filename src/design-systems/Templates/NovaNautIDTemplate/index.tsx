@@ -66,7 +66,7 @@ const NovaNautTemplate: React.FC = () => {
                 <div className="flex !flex-col items-center justify-between gap-[22px] md:!flex-row">
                   <Typography className="flex gap-[11px] text-grayDB" size="body">
                     <Typography>Mint Price</Typography>
-                    <Typography>400 ₳</Typography>
+                    <Typography>400 SEI</Typography>
                   </Typography>
                   <div className="flex w-full !flex-col items-center gap-[6px] text-center xsm:!w-auto xsm:!flex-row  ">
                     <div className="!w-full rounded-[6px] bg-black225_05   px-[22px] py-[14px]">Utility</div>
@@ -165,7 +165,7 @@ const NovaNautTemplate: React.FC = () => {
                   <Typography className="" size="body">
                     Price
                   </Typography>
-                  <Typography size="body">380 ₳</Typography>
+                  <Typography size="body">380 SEI</Typography>
                 </div>
                 <div className="flex justify-between border-b-[1.155px] border-black225_05 py-[18px]">
                   <Typography className="" size="body">
@@ -201,7 +201,7 @@ const NovaNautTemplate: React.FC = () => {
                       <Typography className="" size="body">
                         Cost
                       </Typography>
-                      <Typography size="body">380 ₳</Typography>
+                      <Typography size="body">380 SEI</Typography>
                     </div>
                   </>
                 )}
@@ -257,7 +257,7 @@ const NovaNautTemplate: React.FC = () => {
                   <tr>
                     <th className="!bg-[#1d1b25] text-[#DBDBDB]">Address</th>
                     <th className="!bg-[#1d1b25] text-[#DBDBDB]">Quantity</th>
-                    <th className="!bg-[#1d1b25] text-[#DBDBDB]">ADA</th>
+                    <th className="!bg-[#1d1b25] text-[#DBDBDB]">SEI</th>
                     <th className="!bg-[#1d1b25] text-[#DBDBDB]">Time</th>
                   </tr>
                 </thead>
@@ -265,7 +265,7 @@ const NovaNautTemplate: React.FC = () => {
                   <tr key={key}>
                     <td className="pt-[15px]">{item.address}</td>
                     <td className="pt-[15px]">{item.qua}</td>
-                    <td className="pt-[15px]">{item.ada}</td>
+                    <td className="pt-[15px]">{item.sei}</td>
                     <td className="pt-[15px]">{item.time}</td>
                   </tr>
                 ))}

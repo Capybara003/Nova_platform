@@ -24,18 +24,18 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
   const [activeElement, setActiveElement] = useState<string>('')
   const [bookmarkedItems, setBookmarkedItems] = useState<number[]>([])
   const [checkboxes, setCheckboxes] = useState<any>([])
-  const ADA = crypto?.value || 0
+  const SEI = crypto?.value || 0
   const baseValue = 100
-  const NftTotal = footerData?.nftTotal / ADA
-  const TotalAmount = footerData?.totalAmount / ADA
-  const TotalWeight = footerData?.totalWeight / ADA
-  const TotalFloorPrice = footerData?.totalFloorPrice / ADA
-  const TotalRarity = footerData?.totalRarity / ADA
-  const TotalBuyPrice = footerData?.totalBuyPrice / ADA
-  const TotalFee = footerData?.totalFee / ADA
-  const TotalFloorValue = footerData?.totalFloorValue / ADA
-  const TotalUnRealizedGains = footerData?.totalUnRealizedGains / ADA
-  const TotalSinceTrade = footerData?.totalSinceTrade / ADA
+  const NftTotal = footerData?.nftTotal / SEI
+  const TotalAmount = footerData?.totalAmount / SEI
+  const TotalWeight = footerData?.totalWeight / SEI
+  const TotalFloorPrice = footerData?.totalFloorPrice / SEI
+  const TotalRarity = footerData?.totalRarity / SEI
+  const TotalBuyPrice = footerData?.totalBuyPrice / SEI
+  const TotalFee = footerData?.totalFee / SEI
+  const TotalFloorValue = footerData?.totalFloorValue / SEI
+  const TotalUnRealizedGains = footerData?.totalUnRealizedGains / SEI
+  const TotalSinceTrade = footerData?.totalSinceTrade / SEI
   const TotalpercentageChange = (TotalSinceTrade - baseValue) / baseValue
   const TotalFormattedPercentageChange = `${
     (TotalpercentageChange >= 0 ? '+' : '') +
@@ -128,12 +128,12 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
       <tbody>
         {!loading &&
           data?.map((item: any, index: any) => {
-            const Floor = item?.floor / ADA
-            const BuyPrice = item.buyPrice / ADA
-            const Fees = item.fee / ADA
-            const FloorValue = item?.floorValue / ADA
-            const UnRealizedGains = item?.unrealizedGains / ADA
-            const SinceTrade = item?.sinceTrade / ADA
+            const Floor = item?.floor / SEI
+            const BuyPrice = item.buyPrice / SEI
+            const Fees = item.fee / SEI
+            const FloorValue = item?.floorValue / SEI
+            const UnRealizedGains = item?.unrealizedGains / SEI
+            const SinceTrade = item?.sinceTrade / SEI
 
             const percentageChange = (SinceTrade - baseValue) / baseValue
             const formattedPercentageChange = `${
@@ -187,10 +187,10 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                               alt={'IMG'}
                               className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
                               height={48}
-                              src={'/cardano-logo.jpg'}
+                              src={'/sei-logo.jpg'}
                               width={48}
                             />
-                            ADA {item.type ? `(${item.type})`.toUpperCase() : ''}
+                            SEI {item.type ? `(${item.type})`.toUpperCase() : ''}
                           </Link>
                         </div>
                       </>
@@ -388,7 +388,7 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                             alt={'IMG'}
                             className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
                             height={48}
-                            src={IMG.Nova}
+                            src={IMG.webump}
                             width={48}
                           />
                         )}
@@ -515,11 +515,11 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                             </tr>
                             <tr className="flex w-full items-center" key={index}>
                               <td></td>
-                              <td className="text-black7f">Yield Farming</td>
+                              <td className="text-black7f">Bought</td>
                               <td>
-                                <Image alt={'IMG'} src={res?.yieldFarming?.StakeIMG} />
+                                <Image alt={'IMG'} src={res?.bought?.StakeIMG} />
                               </td>
-                              <td>{res?.yieldFarming?.StakeName}</td>
+                              <td>{res?.bought?.StakeName}</td>
                             </tr>
                           </tbody>
                         </React.Fragment>

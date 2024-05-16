@@ -47,7 +47,7 @@ const NftChatBox: React.FC<NFTChatProps> = () => {
   return (
     <div className="relative !col-span-3 flex h-[810px]  flex-col content-between justify-between gap-4 rounded-[24px] bg-blackCardBg p-6 lg:!col-span-1">
       <Typography className="text-left font-Lexend text-subtitle" size="paragraph">
-        The Ape Society Chat
+        WeBump Chat
       </Typography>
 
       <div

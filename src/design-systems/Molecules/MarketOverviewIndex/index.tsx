@@ -42,7 +42,7 @@ const MarketOverviewIndex: React.FC<MarketOverviewIndexProps> = ({ activeTab }) 
               </div>
               <div>
                 <Typography className="!text-[25px] font-medium" size="h3">
-                  5.463,56 ₳
+                  5.463,56 SEI
                 </Typography>
                 <Typography className=" text-success-500" size="paragraph">
                   +225,53%

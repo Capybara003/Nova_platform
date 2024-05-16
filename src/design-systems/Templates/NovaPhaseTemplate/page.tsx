@@ -84,7 +84,7 @@ const NovaPhaseTemplate: React.FC = () => {
                     </Typography>
                     <Typography className="flex gap-[11px] text-grayDB" size="body">
                       <Typography>Mint Price</Typography>
-                      <Typography>390 ₳</Typography>
+                      <Typography>390 SEI</Typography>
                     </Typography>
                   </div>
                   <div className="flex cursor-pointer items-end justify-end gap-[10px] font-medium text-secondary-25">

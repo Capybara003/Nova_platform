@@ -74,14 +74,14 @@ const HoldingDataGroup2: React.FC = () => {
     () =>
       (Array.isArray(coinbase.data)
         ? coinbase.data
-            ?.filter(item => item.asset.includes('ADA'))
+            ?.filter(item => item.asset.includes('Sei'))
             .reduce((accm, curr) => {
               return accm + +curr.free
             }, 0)
         : undefined || 0) +
       (Array.isArray(binance.data)
         ? binance?.data
-            ?.filter(item => item.asset.includes('ADA'))
+            ?.filter(item => item.asset.includes('Sei'))
             ?.reduce((accum, curr) => {
               return accum + parseInt(curr.free)
             }, 0)
@@ -146,7 +146,7 @@ const HoldingDataGroup2: React.FC = () => {
     () =>
       Array.isArray(coinbase.data)
         ? coinbase.data
-            ?.filter(item => item.asset.includes('ADA'))
+            ?.filter(item => item.asset.includes('Sei'))
             .reduce((accm, curr) => {
               return accm + +curr.free
             }, 0)
@@ -158,7 +158,7 @@ const HoldingDataGroup2: React.FC = () => {
     () =>
       Array.isArray(binance.data)
         ? binance.data
-            ?.filter(item => item.asset.includes('ADA'))
+            ?.filter(item => item.asset.includes('Sei'))
             ?.reduce((accum, curr) => {
               return accum + parseInt(curr.free)
             }, 0)
@@ -309,7 +309,7 @@ const HoldingDataGroup2: React.FC = () => {
                   value={''}
                 />
                 <div className="text-left">
-                  <Typography>Eternl Wallet </Typography>
+                  <Typography>Compass Wallet </Typography>
                   <Typography className="text-[11px] font-medium">$ADA-Handle</Typography>
                 </div>
               </div>

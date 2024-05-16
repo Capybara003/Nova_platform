@@ -29,7 +29,7 @@ const NftInfoCard: React.FC<NFTProps> = ({ holdingData, isLoadingAssetDetails })
         <div className="h-full w-full rounded-e-[24px] rounded-bl-[24px] rounded-tl-[2px] bg-[#181620] p-6 ">
           <div className="flex items-start justify-between gap-2">
             <div className="h-[135px] w-[135px] rounded-md">
-              <Image alt="nft" height={200} src={IMG.monkeyNft} width={200} />
+              <Image alt="nft" height={200} src={IMG.webumpNft} width={200} />
             </div>
             <div className="flex-1">
               <div className="flex gap-2">
@@ -37,7 +37,7 @@ const NftInfoCard: React.FC<NFTProps> = ({ holdingData, isLoadingAssetDetails })
                   className="text-left font-Lexend text-md sm:text-paragraph md:text-subtitle"
                   size="paragraph"
                 >
-                  $Society
+                  WeBump
                 </Typography>
 
                 <button onClick={() => setBookmark(!bookmark)}>{bookmark ? <FaBookmark /> : <FaRegBookmark />}</button>
@@ -45,7 +45,7 @@ const NftInfoCard: React.FC<NFTProps> = ({ holdingData, isLoadingAssetDetails })
 
               <Typography className="mt-2 flex gap-8 font-Inter text-md font-light md:text-[16px]">
                 <span>Floor:</span>
-                <span>4.399 ₳</span>
+                <span>4.399 SEI</span>
               </Typography>
 
               <div className="mt-4 flex items-center justify-start gap-2">

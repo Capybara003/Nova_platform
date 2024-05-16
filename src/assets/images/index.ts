@@ -1,10 +1,12 @@
 import logo from './Nova.png'
 import monkey from './MonkeyPic.png'
+import webump from './WeBump.jpg'
 import PersonProfile from './PersonProfile.png'
 import DashboardBg from './Dashboard-bg.png'
 import Flint from './Flint.png'
 import Nami from './Nami.png'
 import Eternl from './Eternl.png'
+import Compass from './Compass.png'
 import begin from './begin.png'
 import Gego from './Gego.png'
 import Exodus from './Exodus.png'
@@ -21,6 +23,7 @@ import asteronot from './asteronot.png'
 import BWBg from './B&W-bg.png'
 import Sunglasses from './Sunglasses.png'
 import monkeyNft from './monkey_nft.png'
+import webumpNft from './WeBump.jpg'
 import saveImg from './save.svg'
 import discordNft from './discord.svg'
 import global from './global.png'
@@ -41,33 +44,39 @@ import CarDano20 from './CarDano20.png'
 import BlackHole from './black-hole.png'
 import Nova from './Nova.png'
 import profile from './profile.png'
+import nft876 from './nft_876.png'
+import nft1416 from './nft_1416.png'
+import nft1481 from './nft_1481.png'
 
 export const IMG = {
-  logo: logo,
-  monkey: monkey,
-  monkeyNft: monkeyNft,
-  PersonProfile: PersonProfile,
-  DashboardBg: DashboardBg,
-  Flint: Flint,
-  Nami: Nami,
-  Eternl: Eternl,
-  legand: legand,
-  begin: begin,
-  Exodus: Exodus,
-  Gego: Gego,
-  Lace: Lace,
-  Nufi: Nufi,
-  Typhon: Typhon,
-  vesper: vesper,
-  Yoroi: Yoroi,
-  LogoXXL: LogoXXL,
-  MintBg: MintBg,
-  shipAtom: shipAtom,
-  asteronot: asteronot,
-  BWBg: BWBg,
-  Sunglasses: Sunglasses,
+  logo,
+  monkey,
+  webump,
+  monkeyNft,
+  webumpNft,
+  PersonProfile,
+  DashboardBg,
+  Flint,
+  Nami,
+  Eternl,
+  Compass,
+  legand,
+  begin,
+  Exodus,
+  Gego,
+  Lace,
+  Nufi,
+  Typhon,
+  vesper,
+  Yoroi,
+  LogoXXL,
+  MintBg,
+  shipAtom,
+  asteronot,
+  BWBg,
+  Sunglasses,
   save: saveImg,
-  discordNft: discordNft,
+  discordNft,
   xbgblack,
   nftImage44,
   global,
@@ -82,8 +91,11 @@ export const IMG = {
   clm4,
   clm5,
   clm6,
-  CarDano20: CarDano20,
-  BlackHole: BlackHole,
-  Nova: Nova,
+  CarDano20,
+  BlackHole,
+  Nova,
   profile,
+  nft876,
+  nft1416,
+  nft1481,
 }

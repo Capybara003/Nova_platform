@@ -13,13 +13,13 @@ import Button from 'design-systems/Atoms/Button'
 export const Calender = () => {
   const dataDate = [
     { key: 0, label: 'Date', subtitle: '5th May 11PM UTC' },
-    { key: 1, label: 'Price', subtitle: '100 ₳' },
+    { key: 1, label: 'Price', subtitle: '100 SEI' },
     { key: 2, label: 'Supply', subtitle: '300' },
   ]
 
   const dataDate1 = [
     { key: 0, label: 'Date', subtitle: '5th May 11PM UTC' },
-    { key: 1, label: 'Price', subtitle: '100 ₳' },
+    { key: 1, label: 'Price', subtitle: '100 SEI' },
     { key: 2, label: 'Supply', subtitle: '6000' },
   ]
   return (

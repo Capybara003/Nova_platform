@@ -121,11 +121,11 @@ const ProjectTables: React.FC<TableProps> = ({ headData, data }) => {
                           </tr>
                           <tr className="flex w-full items-center" key={index}>
                             <td></td>
-                            <td className="text-black7f">Yield Farming</td>
+                            <td className="text-black7f">Bought</td>
                             <td>
-                              <Image alt={'IMG'} src={res?.yieldFarming?.StakeIMG} />
+                              <Image alt={'IMG'} src={res?.bought?.StakeIMG} />
                             </td>
-                            <td>{res?.yieldFarming?.StakeName}</td>
+                            <td>{res?.bought?.StakeName}</td>
                           </tr>
                         </tr>
                       ))}

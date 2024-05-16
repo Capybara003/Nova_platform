@@ -34,11 +34,11 @@ const AnalyticsUpperHeader: React.FC<AnalyticsUpperProps> = ({ crypto }) => {
           <div className="grid !grid-cols-1 gap-[20px] xsm:!grid-cols-2 xxsm:!grid-cols-3">
             {[
               {
-                label: 'ADA Price',
-                per: market?.adaData?.changes,
-                price: `${market?.adaData?.adaPrice}$`,
+                label: 'SEI Price',
+                per: market?.seiData?.changes,
+                price: `${market?.seiData?.seiPrice}$`,
                 graph: 'LineChart',
-                GraphData: market?.adaData?.lineChart,
+                GraphData: market?.seiData?.lineChart,
               },
               {
                 label: 'Market Volume',
@@ -144,10 +144,10 @@ const AnalyticsUpperHeader: React.FC<AnalyticsUpperProps> = ({ crypto }) => {
                 <>
                   <div className="mb-1 flex flex-row flex-wrap content-between items-center justify-between gap-y-2">
                     <Typography className="text-left font-medium" size="subtitle">
-                      Current Epoch: {Market?.changeInLoad}
+                      Current Block: {Market?.changeInLoad}
                     </Typography>
                     <div className="flex flex-row items-center justify-center rounded p-1 px-2">
-                      <Typography className="text-[18px]">1d 12h 55m 10s</Typography>
+                      {/* <Typography className="text-[18px]">1d 12h 55m 10s</Typography> */}
                     </div>
                   </div>
                   <ProgressBar gradiant={true} progress={Market?.changeInLoad} />

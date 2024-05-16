@@ -58,7 +58,7 @@ const DonutWithTableChart: React.FC<DonutWithTableChartProps> = ({
                 {columnHeadingFirst ?? 'Heading'}
               </Typography>
               <ul className="flex flex-col gap-2">
-                {['0-5K ₳', '5K-25k ₳', '25K-100K ₳', '100K-250K ₳', '250K-1M ₳', '1M+ ₳'].map(item => {
+                {['0-5K SEI', '5K-25k SEI', '25K-100K SEI', '100K-250K SEI', '250K-1M SEI', '1M+ SEI'].map(item => {
                   return (
                     <li className="flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={item}>
                       <Image alt="marker" className="h-6 w-6" src={IMG.clm1} />

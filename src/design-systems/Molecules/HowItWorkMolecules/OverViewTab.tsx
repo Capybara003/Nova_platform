@@ -79,7 +79,7 @@ export const OverViewTab = () => {
             <Typography className="" size="body">
               Price
             </Typography>
-            <Typography size="body">380 ₳</Typography>
+            <Typography size="body">380 SEI</Typography>
           </div>
           <div className="flex justify-between border-b-[1.155px] border-black225_05 py-[18px]">
             <Typography className="" size="body">
@@ -113,7 +113,7 @@ export const OverViewTab = () => {
             <Typography className="" size="body">
               Cost
             </Typography>
-            <Typography size="body">380 ₳</Typography>
+            <Typography size="body">380 SEI</Typography>
           </div>
           <Button className="rounded-[6px] bg-gradient-to-r from-primary to-secondary-25 p-[12px]">
             <Typography>Enter Queue</Typography>
@@ -130,7 +130,7 @@ export const OverViewTab = () => {
               <tr>
                 <th className="!border-b-0 !bg-[#1d1b25] text-[#DBDBDB]">Address</th>
                 <th className="!border-b-0 !bg-[#1d1b25] text-[#DBDBDB]">Quantity</th>
-                <th className="!border-b-0 !bg-[#1d1b25] text-[#DBDBDB]">ADA</th>
+                <th className="!border-b-0 !bg-[#1d1b25] text-[#DBDBDB]">SEI</th>
                 <th className="!border-b-0 !bg-[#1d1b25] text-[#DBDBDB]">Time</th>
               </tr>
             </thead>
@@ -144,7 +144,7 @@ export const OverViewTab = () => {
                 <tr key={key}>
                   <td className="!border-0">{item.address}</td>
                   <td className="!border-0">{item.qua}</td>
-                  <td className="!border-0">{item.ada}</td>
+                  <td className="!border-0">{item.sei}</td>
                   <td className="!border-0">{item.time}</td>
                 </tr>
               ))}

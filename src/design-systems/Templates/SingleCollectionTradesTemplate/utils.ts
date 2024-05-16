@@ -300,7 +300,7 @@ export const topWhalesHoldingAndIncomeDataKey = (type: string) => {
 
 export const tableData = [
   {
-    asset: 'Alvin Wilson',
+    asset: 'BUMP #876',
     rarity: 4.656,
     listedPrice: 4.656,
     price: 4.656,
@@ -322,7 +322,7 @@ export const tableData = [
       thumbnail: IMG.sellerImage,
     },
     link: 'Link 1',
-    thumbnail: IMG.monkey,
+    thumbnail: IMG.nft876,
   },
   {
     asset: 'Ella Torres',
@@ -347,7 +347,7 @@ export const tableData = [
       thumbnail: IMG.sellerImage,
     },
     link: 'Link 2',
-    thumbnail: IMG.monkey,
+    thumbnail: IMG.webump,
   },
   {
     asset: 'John Doe',
@@ -372,7 +372,7 @@ export const tableData = [
       thumbnail: IMG.sellerImage,
     },
     link: 'Link 3',
-    thumbnail: IMG.monkey,
+    thumbnail: IMG.webump,
   },
   {
     asset: 'Sophia Garcia',
@@ -397,7 +397,7 @@ export const tableData = [
       thumbnail: IMG.sellerImage,
     },
     link: 'Link 4',
-    thumbnail: IMG.monkey,
+    thumbnail: IMG.webump,
   },
   {
     asset: 'Olivia Smith',
@@ -422,13 +422,13 @@ export const tableData = [
       thumbnail: IMG.sellerImage,
     },
     link: 'Link 5',
-    thumbnail: IMG.monkey,
+    thumbnail: IMG.webump,
   },
 ]
 
 export const assetsTableData = [
   {
-    asset: 'Alvin Wilson',
+    asset: 'BUMP #876',
     rarity: 4.656,
     buyPrice: 4.656,
     traitFloor: 4.656,
@@ -443,7 +443,7 @@ export const assetsTableData = [
       thumbnail: IMG.sellerImage,
     },
     link: 'Link 1',
-    thumbnail: IMG.monkey,
+    thumbnail: IMG.nft876,
   },
   {
     asset: 'Ella Torres',
@@ -461,7 +461,7 @@ export const assetsTableData = [
       thumbnail: IMG.sellerImage,
     },
     link: 'Link 1',
-    thumbnail: IMG.monkey,
+    thumbnail: IMG.webump,
   },
   {
     asset: 'John Doe',
@@ -479,7 +479,7 @@ export const assetsTableData = [
       thumbnail: IMG.sellerImage,
     },
     link: 'Link 1',
-    thumbnail: IMG.monkey,
+    thumbnail: IMG.webump,
   },
 ]
 

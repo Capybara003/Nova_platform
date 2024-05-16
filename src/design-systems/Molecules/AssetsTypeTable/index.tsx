@@ -47,8 +47,8 @@ export const AssetsTypeTable = ({ data, headData }: TableProps) => {
         <tfoot>
           <tr className="bg-blackBg">
             <td>Total</td>
-            <td>7.377,40 ₳</td>
-            <td>7.377,40 ₳</td>
+            <td>7.377,40 SEI</td>
+            <td>7.377,40 SEI</td>
           </tr>
         </tfoot>
       </table>

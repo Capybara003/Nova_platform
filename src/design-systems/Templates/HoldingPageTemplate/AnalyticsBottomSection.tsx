@@ -101,7 +101,7 @@ const AnalyticsBottomSection: React.FC = () => {
               centerContent={
                 <>
                   <p>Total</p>
-                  <p className="text-xl text-white font-medium">115.000.000 ₳</p>
+                  <p className="text-xl text-white font-medium">115.000.000 SEI</p>
                 </>
               }
               colors={['#5A3FFF', '#2592D9', '#1ED6FF', '#F466FE', '#C517D1', '#6B0090']}
@@ -144,8 +144,8 @@ const AnalyticsBottomSection: React.FC = () => {
                   <td className="text-white text-left font-medium">
                     <div className="flex items-center justify-start gap-2">
                       <div className="h-5 w-5 rounded bg-red"></div>
-                      <Image alt="Image" src={IMG.monkey} />
-                      <Typography>The Ape Society</Typography>
+                      <Image alt="Image" height={48} src={IMG.webump} width={48} />
+                      <Typography>WeBump</Typography>
                     </div>
                   </td>
 
@@ -158,7 +158,7 @@ const AnalyticsBottomSection: React.FC = () => {
                   </td>
 
                   <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">165.87.7₳</div>
+                    <div className="flex items-center justify-start gap-2">165.87.7SEI</div>
                   </td>
                 </tr>
 
@@ -166,8 +166,8 @@ const AnalyticsBottomSection: React.FC = () => {
                   <td className="text-white text-left font-medium">
                     <div className="flex items-center justify-start gap-2">
                       <div className="h-5 w-5 rounded bg-red"></div>
-                      <Image alt="Image" src={IMG.monkey} />
-                      <Typography>The Ape Society</Typography>
+                      <Image alt="Image" height={48} src={IMG.webump} width={48} />
+                      <Typography>WeBump</Typography>
                     </div>
                   </td>
 
@@ -180,7 +180,7 @@ const AnalyticsBottomSection: React.FC = () => {
                   </td>
 
                   <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">165.87.7₳</div>
+                    <div className="flex items-center justify-start gap-2">165.87.7SEI</div>
                   </td>
                 </tr>
 
@@ -188,8 +188,8 @@ const AnalyticsBottomSection: React.FC = () => {
                   <td className="text-white text-left font-medium">
                     <div className="flex items-center justify-start gap-2">
                       <div className="h-5 w-5 rounded bg-red"></div>
-                      <Image alt="Image" src={IMG.monkey} />
-                      <Typography>The Ape Society</Typography>
+                      <Image alt="Image" height={48} src={IMG.webump} width={48} />
+                      <Typography>WeBump</Typography>
                     </div>
                   </td>
 
@@ -202,7 +202,7 @@ const AnalyticsBottomSection: React.FC = () => {
                   </td>
 
                   <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">165.87.7₳</div>
+                    <div className="flex items-center justify-start gap-2">165.87.7SEI</div>
                   </td>
                 </tr>
 
@@ -210,8 +210,8 @@ const AnalyticsBottomSection: React.FC = () => {
                   <td className="text-white text-left font-medium">
                     <div className="flex items-center justify-start gap-2">
                       <div className="h-5 w-5 rounded bg-red"></div>
-                      <Image alt="Image" src={IMG.monkey} />
-                      <Typography>The Ape Society</Typography>
+                      <Image alt="Image" height={48} src={IMG.webump} width={48} />
+                      <Typography>WeBump</Typography>
                     </div>
                   </td>
 
@@ -224,7 +224,7 @@ const AnalyticsBottomSection: React.FC = () => {
                   </td>
 
                   <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">165.87.7₳</div>
+                    <div className="flex items-center justify-start gap-2">165.87.7SEI</div>
                   </td>
                 </tr>
 
@@ -232,8 +232,8 @@ const AnalyticsBottomSection: React.FC = () => {
                   <td className="text-white text-left font-medium">
                     <div className="flex items-center justify-start gap-2">
                       <div className="h-5 w-5 rounded bg-red"></div>
-                      <Image alt="Image" src={IMG.monkey} />
-                      <Typography>The Ape Society</Typography>
+                      <Image alt="Image" height={48} src={IMG.webump} width={48} />
+                      <Typography>WeBump</Typography>
                     </div>
                   </td>
 
@@ -246,7 +246,7 @@ const AnalyticsBottomSection: React.FC = () => {
                   </td>
 
                   <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">165.87.7₳</div>
+                    <div className="flex items-center justify-start gap-2">165.87.7SEI</div>
                   </td>
                 </tr>
 
@@ -254,8 +254,8 @@ const AnalyticsBottomSection: React.FC = () => {
                   <td className="text-white text-left font-medium">
                     <div className="flex items-center justify-start gap-2">
                       <div className="h-5 w-5 rounded bg-red"></div>
-                      <Image alt="Image" src={IMG.monkey} />
-                      <Typography>The Ape Society</Typography>
+                      <Image alt="Image" height={48} src={IMG.webump} width={48} />
+                      <Typography>WeBump</Typography>
                     </div>
                   </td>
 
@@ -268,7 +268,7 @@ const AnalyticsBottomSection: React.FC = () => {
                   </td>
 
                   <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">165.87.7₳</div>
+                    <div className="flex items-center justify-start gap-2">165.87.7SEI</div>
                   </td>
                 </tr>
               </tbody>
@@ -321,8 +321,8 @@ const AnalyticsBottomSection: React.FC = () => {
                           <div className="flex items-center gap-1">
                             <BookMarkEmpty /> {key + 1}
                           </div>
-                          <Image alt="Image" src={IMG.monkey} />
-                          <Typography>The Ape Society</Typography>
+                          <Image alt="Image" height={48} src={IMG.webump} width={48} />
+                          <Typography>WeBump</Typography>
                         </div>
                       </td>
 
@@ -335,7 +335,7 @@ const AnalyticsBottomSection: React.FC = () => {
                       </td>
 
                       <td className="text-white text-left font-medium">
-                        <div className="flex items-center justify-center gap-2">165.87.7₳</div>
+                        <div className="flex items-center justify-center gap-2">165.87.7SEI</div>
                       </td>
                     </tr>
                   )
@@ -381,8 +381,8 @@ const AnalyticsBottomSection: React.FC = () => {
                             <BookMarkEmpty />
                             {key + 1}
                           </div>
-                          <Image alt="Image" src={IMG.monkey} />
-                          <Typography>The Ape Society</Typography>
+                          <Image alt="Image" height={48} src={IMG.webump} width={48} />
+                          <Typography>WeBump</Typography>
                         </div>
                       </td>
 
@@ -395,7 +395,7 @@ const AnalyticsBottomSection: React.FC = () => {
                       </td>
 
                       <td className="text-white text-left font-medium">
-                        <div className="flex items-center justify-center gap-2">165.87.7₳</div>
+                        <div className="flex items-center justify-center gap-2">165.87.7SEI</div>
                       </td>
                     </tr>
                   )
@@ -504,7 +504,7 @@ const AnalyticsBottomSection: React.FC = () => {
                 </div>
                 <div className="mt-2 flex w-full flex-row items-center gap-2">
                   <Typography className="text-left font-medium" size="lg">
-                    5.463 ₳
+                    5.463 SEI
                   </Typography>
                   <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                     +225,53%
@@ -561,7 +561,7 @@ const AnalyticsBottomSection: React.FC = () => {
                 <div className="mb-1 flex items-center justify-center">
                   <div className="mt-1 flex w-full flex-col items-start gap-1">
                     <Typography className="text-left font-medium" size="lg">
-                      5.463 ₳
+                      5.463 SEI
                     </Typography>
                     <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                       +225,53%
@@ -569,7 +569,7 @@ const AnalyticsBottomSection: React.FC = () => {
                   </div>
                   <div className="mt-2 flex w-full flex-col items-start gap-1">
                     <Typography className="text-left font-medium" size="lg">
-                      5.463 ₳
+                      5.463 SEI
                     </Typography>
                     <Typography className="text-left font-Inter font-medium text-[#F32A5A]" size="sm">
                       -225,53%
@@ -622,7 +622,7 @@ const AnalyticsBottomSection: React.FC = () => {
                 </div>
                 <div className="mt-2 flex w-full flex-row items-center gap-2">
                   <Typography className="text-left font-medium" size="lg">
-                    5.463 ₳
+                    5.463 SEI
                   </Typography>
                   <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                     +225,53%
@@ -798,7 +798,7 @@ const AnalyticsBottomSection: React.FC = () => {
                 </div>
                 <div className="mt-2 flex w-full flex-row items-center gap-2">
                   <Typography className="text-left font-medium" size="lg">
-                    5.463 ₳
+                    5.463 SEI
                   </Typography>
                   <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                     +225,53%
@@ -850,7 +850,7 @@ const AnalyticsBottomSection: React.FC = () => {
                 </div>
                 <div className="mt-2 flex w-full flex-row items-center gap-2">
                   <Typography className="text-left font-medium" size="lg">
-                    5.463 ₳
+                    5.463 SEI
                   </Typography>
                   <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                     +225,53%
@@ -890,7 +890,7 @@ const AnalyticsBottomSection: React.FC = () => {
                 </div>
                 <div className="mt-2 flex w-full flex-row items-center gap-2">
                   <Typography className="text-left font-medium" size="lg">
-                    5.463 ₳
+                    5.463 SEI
                   </Typography>
                   <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                     +225,53%
@@ -919,7 +919,7 @@ const AnalyticsBottomSection: React.FC = () => {
               <div className="flex flex-col">
                 <div className="flex flex-row flex-wrap items-center gap-2">
                   <Typography className="text-left font-medium text-[#DBDBDB] drop-shadow" size="subtitle">
-                    Yield Farming
+                    Bought
                   </Typography>
                   <div>
                     <InfoIcons />
@@ -928,7 +928,7 @@ const AnalyticsBottomSection: React.FC = () => {
                 <div className="mt-2 flex w-full flex-row items-center gap-2">
                   <div className="item-center flex flex-row gap-2">
                     <Typography className="text-left font-medium" size="lg">
-                      5.463 ₳
+                      5.463 SEI
                     </Typography>
                     <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                       +225,53%
@@ -937,7 +937,7 @@ const AnalyticsBottomSection: React.FC = () => {
 
                   <div className="item-center flex flex-row gap-2">
                     <Typography className="text-left font-medium" size="lg">
-                      5.463 ₳
+                      5.463 SEI
                     </Typography>
                     <Typography className="text-left font-Inter font-medium text-red" size="sm">
                       -225,53%

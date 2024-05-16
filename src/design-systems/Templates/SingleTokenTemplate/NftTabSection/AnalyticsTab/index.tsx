@@ -94,7 +94,7 @@ const AnalyticsTab: React.FC = () => {
               </div>
               <div className="mt-2 flex w-full flex-row items-center gap-2">
                 <Typography className="text-left font-medium" size="lg">
-                  5.463 ₳
+                  5.463 SEI
                 </Typography>
                 <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                   +225,53%
@@ -139,7 +139,7 @@ const AnalyticsTab: React.FC = () => {
               </div>
               <div className="mt-2 flex w-full flex-row items-center gap-2">
                 <Typography className="text-left font-medium" size="lg">
-                  5.463 ₳
+                  5.463 SEI
                 </Typography>
                 <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                   +225,53%
@@ -240,7 +240,7 @@ const AnalyticsTab: React.FC = () => {
                       .map((item, index) => {
                         return (
                           <li className="my-4 flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={index}>
-                            <Typography>{item}₳</Typography>
+                            <Typography>{item}SEI</Typography>
                           </li>
                         )
                       })}
@@ -282,7 +282,7 @@ const AnalyticsTab: React.FC = () => {
               </div>
               <div className="mt-2 flex w-full flex-row items-center gap-2">
                 <Typography className="text-left font-medium" size="lg">
-                  5.463 ₳
+                  5.463 SEI
                 </Typography>
                 <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                   +225,53%
@@ -344,7 +344,7 @@ const AnalyticsTab: React.FC = () => {
               </div>
               <div className="mt-2 flex w-full flex-row items-center gap-2">
                 <Typography className="text-left font-medium" size="lg">
-                  5.463 ₳
+                  5.463 SEI
                 </Typography>
                 <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                   +225,53%
@@ -433,7 +433,7 @@ const AnalyticsTab: React.FC = () => {
                   </Typography>
                   <ul>
                     {Array(6)
-                      .fill('12.000.000 ₳')
+                      .fill('12.000.000 SEI')
                       .map((item, index) => {
                         return (
                           <li className="mt-2 flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={index}>
@@ -450,7 +450,7 @@ const AnalyticsTab: React.FC = () => {
                   </Typography>
                   <ul>
                     {Array(6)
-                      .fill('12.000.000 ₳')
+                      .fill('12.000.000 SEI')
                       .map((item, index) => {
                         return (
                           <li className="mt-2 flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={index}>
@@ -467,7 +467,7 @@ const AnalyticsTab: React.FC = () => {
                   </Typography>
                   <ul>
                     {Array(6)
-                      .fill('12.000.000 ₳')
+                      .fill('12.000.000 SEI')
                       .map((item, index) => {
                         return (
                           <li className="mt-2 flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={index}>
@@ -495,7 +495,7 @@ const AnalyticsTab: React.FC = () => {
               </div>
               <div className="mt-2 flex w-full flex-row items-center gap-2">
                 <Typography className="text-left font-medium" size="lg">
-                  5.463 ₳
+                  5.463 SEI
                 </Typography>
                 <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                   +225,53%
@@ -641,7 +641,7 @@ const AnalyticsTab: React.FC = () => {
               </div>
               <div className="mt-2 flex w-full flex-row items-center gap-2">
                 <Typography className="text-left font-medium" size="lg">
-                  5.463 ₳
+                  5.463 SEI
                 </Typography>
                 <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                   +225,53%
@@ -787,7 +787,7 @@ const AnalyticsTab: React.FC = () => {
               </div>
               <div className="mt-2 flex w-full flex-row items-center gap-2">
                 <Typography className="text-left font-medium" size="lg">
-                  5.463 ₳
+                  5.463 SEI
                 </Typography>
                 <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                   +225,53%
@@ -845,7 +845,7 @@ const AnalyticsTab: React.FC = () => {
           chartCenterContent={
             <>
               <p>Avg. Distribution</p>
-              <p className="text-2xl text-white font-medium">379 ₳</p>
+              <p className="text-2xl text-white font-medium">379 SEI</p>
             </>
           }
           columnHeadingFirst="Amount"
@@ -860,7 +860,7 @@ const AnalyticsTab: React.FC = () => {
           chartCenterContent={
             <>
               <p>Median Balance</p>
-              <p className="text-2xl text-white font-medium">379 ₳</p>
+              <p className="text-2xl text-white font-medium">379 SEI</p>
             </>
           }
           columnHeadingFirst="Wallet"
@@ -872,7 +872,7 @@ const AnalyticsTab: React.FC = () => {
           chartCenterContent={
             <>
               <p>Total Balance</p>
-              <p className="text-2xl text-white font-medium">379 ₳</p>
+              <p className="text-2xl text-white font-medium">379 SEI</p>
             </>
           }
           columnHeadingFirst="Wallet"

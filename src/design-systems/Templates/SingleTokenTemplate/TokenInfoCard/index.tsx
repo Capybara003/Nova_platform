@@ -26,12 +26,12 @@ const TokenInfoCard: React.FC = () => {
       <div className="h-full w-full rounded-e-[24px] rounded-bl-[24px] rounded-tl-[2px] bg-[#181620] p-6 xm:w-[99.4%]">
         <div className="flex items-start justify-between gap-2">
           <div className="h-[135px] w-[135px] rounded-md">
-            <Image alt="nft" height={200} src={IMG.monkeyNft} width={200} />
+            <Image alt="nft" height={200} src={IMG.webumpNft} width={200} />
           </div>
           <div className="flex-1">
             <div className="flex gap-2">
               <Typography className="text-left font-Lexend text-md sm:text-paragraph md:text-subtitle" size="paragraph">
-                $Society
+                WeBump
               </Typography>
               <Image alt="save icon" src={IMG.save} />
             </div>

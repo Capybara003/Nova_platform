@@ -76,7 +76,13 @@ export const ConnectedExchangeModel: React.FC<ConnectedModelProps> = ({ showModa
                     <tr>
                       <td>
                         <div className=" flex cursor-pointer items-center gap-4 hover:text-secondary-25">
-                          <IconAtom alt={''} className="flex-shrink-0" height={46} src={IMG.Eternl} width={49} />
+                          <IconAtom
+                            alt={''}
+                            className="flex-shrink-0 overflow-hidden rounded-full"
+                            height={46}
+                            src={IMG.Compass}
+                            width={49}
+                          />
                           <Typography onClick={() => Clipboard(item.address)}>{item.address}</Typography>
                         </div>
                       </td>

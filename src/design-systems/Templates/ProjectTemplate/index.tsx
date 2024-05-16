@@ -33,13 +33,13 @@ const ProjectTemplate: React.FC = () => {
                     alt="IMG"
                     className="rounded-[4px] rounded-br-[10px] rounded-tl-[10px]"
                     height={75}
-                    src={IMG.monkey}
+                    src={IMG.webump}
                     width={75}
                   />
                 </div>
                 <Typography className="w-[80px] text-[20px] text-whiteE8">
                   <Typography className="text-[16px]">Project:</Typography>
-                  <Typography>The Ape Society</Typography>
+                  <Typography>WeBump</Typography>
                 </Typography>
               </Typography>
               <div className="flex gap-2 ">
@@ -52,7 +52,7 @@ const ProjectTemplate: React.FC = () => {
                     Market Cap
                   </Typography>
                   <Typography className="font-Poppins font-normal" size="h3">
-                    5.463,56 ₳
+                    5.463,56 SEI
                   </Typography>
                   <Typography className="font-Poppins text-success-500" size="paragraph">
                     +225,53%
@@ -66,7 +66,7 @@ const ProjectTemplate: React.FC = () => {
                 Your Position
               </Typography>
               <Typography className="font-Lexend font-normal" size="h3">
-                5.463,56 ₳
+                5.463,56 SEI
               </Typography>
               <Typography className="font-Lexend text-success-500" size="paragraph">
                 +225,53%

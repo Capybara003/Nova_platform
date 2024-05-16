@@ -10,9 +10,14 @@ import { usePathname } from 'next/navigation'
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ToastContainer } from 'react-toastify'
-import { SignerOptions, wallets } from 'cosmos-kit'
+import { SignerOptions } from 'cosmos-kit'
 import { chains, assets } from 'chain-registry'
 import { ChainProvider } from '@cosmos-kit/react'
+import { wallets as compass } from '@cosmos-kit/compass'
+import { wallets as keplr } from '@cosmos-kit/keplr'
+import { wallets as leap } from '@cosmos-kit/leap'
+import { wallets as ledger } from '@cosmos-kit/ledger'
+import { wallets as metamask } from '@cosmos-kit/leap-metamask-cosmos-snap'
 import { GasPrice } from '@cosmjs/stargate'
 
 import 'react-multi-carousel/lib/styles.css'
@@ -190,7 +195,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 },
               }}
               walletModal={WalletSignUp}
-              wallets={wallets}
+              wallets={[...compass, ...keplr, ...leap, ...ledger, ...metamask]}
             >
               <NoFirstRender>
                 <AuthProvider>

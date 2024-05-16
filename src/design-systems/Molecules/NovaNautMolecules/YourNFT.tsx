@@ -47,7 +47,7 @@ export const YourNFT = () => {
               <thead>
                 <tr>
                   <th className="text-[#DBDBDB]">Quantity</th>
-                  <th className="text-[#DBDBDB]">ADA</th>
+                  <th className="text-[#DBDBDB]">SEI</th>
                   <th className="text-[#DBDBDB]">Date</th>
                   <th className="text-[#DBDBDB]">Block</th>
                   <th className="text-[#DBDBDB]">Tx ID</th>

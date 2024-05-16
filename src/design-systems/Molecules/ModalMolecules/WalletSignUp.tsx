@@ -61,43 +61,6 @@ const WalletSignUp = ({ isOpen, setOpen, walletRepo }: WalletModalProps) => {
     }
   }, [isOpen])
 
-  // const fetchCardanoAddressInfo = async (address: string) => {
-  //   try {
-  //     const headers = {
-  //       apiKey: 'ec478e4c-9037-47d6-8d4d-6c7be0858138',
-  //     }
-  //     // Make an HTTP request to the Cardano API or a third-party API
-  //     const response = await axios.get(`https://api.cardanoscan.io/api/v1/address/${address}`, {
-  //       headers,
-  //     })
-  //     console.log(response)
-  //   } catch (error) {
-  //     console.error('Error fetching Cardano address information:', error)
-  //   }
-  // }
-
-  const fetchCardanoAddressInfo = async (address: string) => {
-    try {
-      // Specify your CardanoScan API key
-      const apiKey = 'ec478e4c-9037-47d6-8d4d-6c7be0858138'
-
-      // Specify the CardanoScan API endpoint
-      const apiUrl = `https://api.cardanoscan.io/api/v1/rewardAccount?rewardAddress=${address}`
-
-      // Specify headers, including the API key
-      const headers = {
-        apiKey: apiKey,
-      }
-
-      // Make an HTTP request to the CardanoScan API with Axios
-      const response = await axios.get(apiUrl, { headers: headers })
-
-      const walletAddress = response.data.rewardsStakeAddr
-    } catch (error) {
-      console.error('Error fetching Cardano address information:', error)
-    }
-  }
-
   const CardanoData = async (newAPI: any, item: any) => {
     try {
       if (newAPI) {
@@ -243,79 +206,6 @@ const WalletSignUp = ({ isOpen, setOpen, walletRepo }: WalletModalProps) => {
   //     handleWalletDetails()
   //   }
   // }, [LocalWallet])
-
-  const enableWallet = async (item: string) => {
-    try {
-      if (typeof window !== undefined && window !== null) {
-        if (item === 'Eternl') {
-          const newAPI = await window.cardano.eternl.enable()
-          CardanoData(newAPI, item)
-        }
-        if (item === 'Nami') {
-          const newAPI = await window.cardano.nami.enable()
-          CardanoData(newAPI, item)
-        }
-        if (item === 'Flint') {
-          const newAPI = await window.cardano.flint.enable()
-          CardanoData(newAPI, item)
-        }
-        if (item === 'Yoroi') {
-          const newAPI = await window.cardano.yoroi.enable()
-          CardanoData(newAPI, item)
-        }
-        if (item === 'Typhon') {
-          const newAPI = await window.cardano.typhon.enable()
-          CardanoData(newAPI, item)
-        }
-        if (item === 'Lace') {
-          const newAPI = await window.cardano.lace.enable()
-          CardanoData(newAPI, item)
-        }
-        if (item === 'Exodus') {
-          const newAPI = await window.cardano.exodus.enable()
-          CardanoData(newAPI, item)
-        }
-        if (item === 'Nufi') {
-          const newAPI = await window.cardano.nufi.enable()
-
-          CardanoData(newAPI, item)
-        }
-        if (item === 'Ledger') {
-          fetchLedgerAddress()
-          // const transport: any = await TransportWebHID.create()
-
-          // const appBtc = new AppBtc(transport)
-          // const { bitcoinAddress } = await appBtc.getWalletPublicKey("44'/0'/0'/0/0", {
-          //   verify: false,
-          //   format: 'legacy',
-          // })
-
-          // await appBtc.getWalletPublicKey("44'/0'/0'/0/0", { format: 'legacy', verify: true })
-        }
-        if (item === 'Gero') {
-          const newAPI = await window.cardano.gerowallet.enable()
-          CardanoData(newAPI, item)
-        }
-        if (item === 'Begin') {
-          const newAPI = await window.cardano.begin.enable()
-          CardanoData(newAPI, item)
-        }
-        if (item === 'Vespr') {
-          const newAPI = await window.cardano.vespr.enable()
-          CardanoData(newAPI, item)
-        }
-        // toast.success('Wallet Connected', {
-        //   position: toast.POSITION.TOP_RIGHT,
-        // })
-      }
-    } catch (err: any) {
-      console.error('err', err)
-
-      toast.error('Wallet Error', {
-        position: toast.POSITION.TOP_RIGHT,
-      })
-    }
-  }
 
   const handleClickUSB = async () => {
     try {

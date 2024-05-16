@@ -10,22 +10,18 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useChain } from '@cosmos-kit/react'
 
-import logo from 'assets/images/adaLogo.png'
+import logo from 'assets/images/seiLogo.png'
 import Button from 'design-systems/Atoms/Button'
 import { NovaLogo, PersonAvtar, PlusOutlined } from 'design-systems/Atoms/Icons'
 import Typography from 'design-systems/Atoms/Typography'
 import NavTabsMolecule from 'design-systems/Molecules/NavTabs/NavTabsMolecule'
 import OnSelect from 'design-systems/Molecules/OnSelect'
 import SearchMolecule from 'design-systems/Molecules/Search/SearchMolecule'
-import { ADAdata } from 'design-systems/data/data'
+import { Seidata } from 'design-systems/data/data'
 import { setCrypto, tabs } from 'lib/redux/slices/navToggleSlice'
 import { cryptoProps } from 'lib/redux/slices/navToggleSlice/interface'
 import { RootState, useDataSelector } from 'lib/redux/store'
-declare global {
-  interface Window {
-    cardano: any
-  }
-}
+
 const Header: React.FC<any> = ({ noComponent, hide, userData }) => {
   const { connect } = useChain('sei')
   const dispatch = useDispatch()
@@ -37,7 +33,7 @@ const Header: React.FC<any> = ({ noComponent, hide, userData }) => {
 
   // useEffect(() => {
   //   if(crypto){
-  //     dispatch(setCrypto({ img: ADAdata[0].img, label: ADAdata[0].label, symbol: ADAdata[0].symbol, value: ADAdata[0].value }));
+  //     dispatch(setCrypto({ img: Seidata[0].img, label: Seidata[0].label, symbol: Seidata[0].symbol, value: Seidata[0].value }));
   //   }
   // }, [dispatch]);
   // const { isEnabled, isConnected, enabledWallet, stakeAddress, signMessage, connect, disconnect } = useCardano()
@@ -57,7 +53,7 @@ const Header: React.FC<any> = ({ noComponent, hide, userData }) => {
     localStorage.clear()
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  const handleSelectADA = (selectedOption: cryptoProps) => {
+  const handleSelectSei = (selectedOption: cryptoProps) => {
     dispatch(setCrypto(selectedOption))
   }
   const handleSelect = (selectedOption: string) => {}
@@ -122,12 +118,12 @@ const Header: React.FC<any> = ({ noComponent, hide, userData }) => {
           {!hide && (
             <div className="h-[56px] min-w-[119px]">
               <OnSelect
-                className="font-Poppins h-[56px] "
+                className="font-Poppins h-[56px]"
                 imageHeight={24}
                 imageSrc={logo}
                 imageWidth={24}
-                optionIMG={ADAdata}
-                onSelect={handleSelectADA}
+                optionIMG={Seidata}
+                onSelect={handleSelectSei}
               />
             </div>
           )}

@@ -74,12 +74,12 @@ const NftTabSection: React.FC = () => {
                   </Typography>
                   <ul className="space-y-2">
                     {[
-                      { text: '0-5K ₳', icon: IMG.clm1 },
-                      { text: '5K-25k ₳', icon: IMG.clm2 },
-                      { text: '25K-100K ₳', icon: IMG.clm3 },
-                      { text: '100K-250K ₳', icon: IMG.clm4 },
-                      { text: '250K-1M ₳', icon: IMG.clm5 },
-                      { text: '1M+ ₳', icon: IMG.clm6 },
+                      { text: '0-5K SEI', icon: IMG.clm1 },
+                      { text: '5K-25k SEI', icon: IMG.clm2 },
+                      { text: '25K-100K SEI', icon: IMG.clm3 },
+                      { text: '100K-250K SEI', icon: IMG.clm4 },
+                      { text: '250K-1M SEI', icon: IMG.clm5 },
+                      { text: '1M+ SEI', icon: IMG.clm6 },
                     ].map(item => {
                       return (
                         <li className="flex items-center justify-start gap-2 text-md text-[#DBDBDB]" key={item.text}>
@@ -136,7 +136,7 @@ const NftTabSection: React.FC = () => {
                 </div>
               </div>
               <div className="flex flex-col justify-between rounded-[8px] border-[2px] border-black225_05 px-[8px] py-[5px]">
-                <Typography className="text-[18px] font-medium">₳</Typography>
+                <Typography className="text-[18px] font-medium">SEI</Typography>
                 <div className="h-[180px]">
                   <Speedometer
                     content={

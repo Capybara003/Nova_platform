@@ -69,7 +69,7 @@ const TokenChart: React.FC = () => {
                 <Typography>Price</Typography>
               </Typography>
               <Typography className="font-normal" size="subtitle">
-                5.463 ₳
+                5.463 SEI
               </Typography>
               <Typography className=" text-success-500" size="paragraph">
                 +225,53%
@@ -81,7 +81,7 @@ const TokenChart: React.FC = () => {
               Your Position
             </Typography>
             <Typography className="font-normal" size="subtitle">
-              5.463 ₳
+              5.463 SEI
             </Typography>
             <Typography className=" text-success-500" size="paragraph">
               +51,50%

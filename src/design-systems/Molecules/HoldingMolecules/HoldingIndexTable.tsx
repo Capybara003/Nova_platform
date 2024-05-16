@@ -29,13 +29,13 @@ interface HoldingIndexTableProps {
 const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({ data, headData, footerData, crypto, loading }) => {
   const [activeElement, setActiveElement] = useState<number>(-1)
   const [checkboxes, setCheckboxes] = useState<any>([])
-  const ADA = crypto.value
-  const TotalBuyPrice = footerData && footerData?.totalBuyPrice / ADA
-  const TotalFee = footerData && footerData?.totalFee / ADA
-  const TotalIncome = footerData && footerData?.totalIncome / ADA
-  const TotalUnRealizedGains = footerData && footerData?.totalUnRealizedGains / ADA
-  const TotalSinceTrade = footerData && footerData?.totalSinceTrade / ADA
-  const TotalWeight = footerData && footerData?.totalWeight / ADA
+  const SEI = crypto.value
+  const TotalBuyPrice = footerData && footerData?.totalBuyPrice / SEI
+  const TotalFee = footerData && footerData?.totalFee / SEI
+  const TotalIncome = footerData && footerData?.totalIncome / SEI
+  const TotalUnRealizedGains = footerData && footerData?.totalUnRealizedGains / SEI
+  const TotalSinceTrade = footerData && footerData?.totalSinceTrade / SEI
+  const TotalWeight = footerData && footerData?.totalWeight / SEI
 
   const handleClick = (value: number) => {
     if (value === activeElement) {
@@ -109,12 +109,12 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({ data, headData, f
         <tbody>
           {!loading &&
             data?.map((item, index: number) => {
-              const Floor = item?.floor / ADA
-              const BuyPrice = item?.buyPrice / ADA
-              const Fees = item?.fee / ADA
-              const Income = item?.income / ADA
-              const RealisedGain = item?.realizedGains / ADA
-              const SinceTrade = item?.sinceTrade / ADA
+              const Floor = item?.floor / SEI
+              const BuyPrice = item?.buyPrice / SEI
+              const Fees = item?.fee / SEI
+              const Income = item?.income / SEI
+              const RealisedGain = item?.realizedGains / SEI
+              const SinceTrade = item?.sinceTrade / SEI
               return (
                 <>
                   <tr className="cursor-pointer bg-[#181620]">
@@ -164,7 +164,7 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({ data, headData, f
                       </TETooltip>
                     </td>
                     <td className="w-[100px] overflow-hidden overflow-ellipsis">
-                      <TETooltip title={`${Floor} ₳`}>
+                      <TETooltip title={`${Floor} SEI`}>
                         <Typography className="w-max">
                           {item?.floor ? `${Floor.toFixed(3)} ${crypto.symbol}` : '--'}
                         </Typography>
@@ -249,11 +249,11 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({ data, headData, f
                             </tr>
                             <tr className="flex w-full items-center" key={index}>
                               <td></td>
-                              <td className="text-black7f">Yield Farming</td>
+                              <td className="text-black7f">Bought</td>
                               <td>
-                                <Image alt={'IMG'} src={res?.yieldFarming?.StakeIMG} />
+                                <Image alt={'IMG'} src={res?.bought?.StakeIMG} />
                               </td>
-                              <td>{res?.yieldFarming?.StakeName}</td>
+                              <td>{res?.bought?.StakeName}</td>
                             </tr>
                           </tbody>
                         </>

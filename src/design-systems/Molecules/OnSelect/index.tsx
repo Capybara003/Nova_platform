@@ -40,7 +40,7 @@ const OnSelect: React.FC<OnSelectProps> = ({
               <>
                 <div className={`h-[${imageHeight}px] w-[${imageWidth}px] flex items-center`}>
                   <IconAtom
-                    className={`!h-[${imageHeight}px] !w-[${imageWidth}px]`}
+                    className={`!h-[${imageHeight}px] !w-[${imageWidth}px] overflow-hidden rounded-full`}
                     height={imageHeight}
                     src={selectedValue.img || optionIMG[0].img}
                     width={imageWidth}
@@ -68,7 +68,7 @@ const OnSelect: React.FC<OnSelectProps> = ({
           {optionIMG ? (
             <>
               <div className="!h-[1px] !w-full !bg-bg25"></div>
-              <div className={`mt-[6px] !flex !max-h-[200px] !flex-col !gap-[7px] !overflow-auto !p-1`}>
+              <div className={`mt-[6px] !flex !max-h-[200px] !flex-col !gap-[7px] !overflow-auto !px-3 !py-2`}>
                 {optionIMG &&
                   optionIMG.map((option: any, index: number) => (
                     <TEDropdownItem
@@ -84,7 +84,12 @@ const OnSelect: React.FC<OnSelectProps> = ({
                         })
                       }}
                     >
-                      <IconAtom className="" height={imageHeight} src={option?.img} width={imageWidth} />
+                      <IconAtom
+                        className="overflow-hidden rounded-full"
+                        height={imageHeight}
+                        src={option?.img}
+                        width={imageWidth}
+                      />
                       <div className={``} key={index}>
                         {option.label}
                       </div>

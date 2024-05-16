@@ -112,11 +112,11 @@ const RevenuLendingTable: React.FC<TableProps> = ({ data, headData }) => {
                           </tr>
                           <tr className="flex w-full items-center" key={index}>
                             <td></td>
-                            <td className="text-black7f">Yield Farming</td>
+                            <td className="text-black7f">Bought</td>
                             <td>
-                              <Image alt={'IMG'} src={res?.yieldFarming?.StakeIMG} />
+                              <Image alt={'IMG'} src={res?.bought?.StakeIMG} />
                             </td>
-                            <td>{res?.yieldFarming?.StakeName}</td>
+                            <td>{res?.bought?.StakeName}</td>
                           </tr>
                         </tbody>
                       </>
@@ -132,12 +132,12 @@ const RevenuLendingTable: React.FC<TableProps> = ({ data, headData }) => {
             <td>Token: 1.024.241</td>
             <td>NFT: 46</td>
             <td></td>
-            <td>7.377,40 ₳</td>
+            <td>7.377,40 SEI</td>
             <td>168.080</td>
             <td></td>
-            <td>975.000 ₳</td>
+            <td>975.000 SEI</td>
             <td></td>
-            <td>975.000 ₳</td>
+            <td>975.000 SEI</td>
             <td></td>
             <td></td>
           </tr>

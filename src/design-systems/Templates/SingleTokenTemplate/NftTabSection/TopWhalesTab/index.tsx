@@ -61,8 +61,8 @@ const TopWhalesTab: React.FC<TopWhalesTabProps> = ({ topWhalesTableFilter }) => 
 
         buyVolume: item.buyVolume ? <Typography>{item.buyVolume}</Typography> : '',
 
-        paidEstFees: <Typography>{item.estFees + item.paidFees}₳</Typography>,
-        incomeFloorValue: <Typography>{item.income + item.floorPrice}₳</Typography>,
+        paidEstFees: <Typography>{item.estFees + item.paidFees}SEI</Typography>,
+        incomeFloorValue: <Typography>{item.income + item.floorPrice}SEI</Typography>,
         gains: (
           <div>
             <Typography>{item.gains.value}</Typography>
@@ -110,8 +110,8 @@ const TopWhalesTab: React.FC<TopWhalesTabProps> = ({ topWhalesTableFilter }) => 
 
         buyVolume: item.buyVolume ? <Typography>{item.buyVolume}</Typography> : '',
 
-        paidOrEstFees: <Typography>{item.paidOrEstFees}₳</Typography>,
-        incomeOrFloorValue: <Typography>{item.incomeOrFloorValue}₳</Typography>,
+        paidOrEstFees: <Typography>{item.paidOrEstFees}SEI</Typography>,
+        incomeOrFloorValue: <Typography>{item.incomeOrFloorValue}SEI</Typography>,
         gains: (
           <div>
             <Typography>{item.gains.value}</Typography>

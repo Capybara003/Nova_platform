@@ -4,7 +4,7 @@ import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react'
 import { WagmiConfig } from 'wagmi'
 import { bsc } from 'viem/chains'
 import { PropsWithChildren } from 'react'
-//  cardano, ada
+
 const projectId = '675de18eb0219de165421decbb53efa4'
 const chains = [bsc]
 const wagmiConfig = defaultWagmiConfig({ projectId, chains })

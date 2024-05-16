@@ -34,7 +34,7 @@ export const SingleProject = () => {
               </div>
               <div className="mt-2 flex w-full flex-row items-center gap-2">
                 <Typography className="text-left font-medium" size="lg">
-                  5.463 ₳
+                  5.463 SEI
                 </Typography>
                 <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                   +225,53%
@@ -73,7 +73,7 @@ export const SingleProject = () => {
               </div>
               <div className="mt-2 flex w-full flex-row items-center gap-2">
                 <Typography className="text-left font-medium" size="lg">
-                  5.463 ₳
+                  5.463 SEI
                 </Typography>
                 <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                   +225,53%
@@ -116,7 +116,7 @@ export const SingleProject = () => {
               </div>
               <div className="mt-2 flex w-full flex-row items-center gap-2">
                 <Typography className="text-left font-medium" size="lg">
-                  5.463 ₳
+                  5.463 SEI
                 </Typography>
                 <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                   +225,53%
@@ -167,7 +167,7 @@ export const SingleProject = () => {
               </div>
               <div className="mt-2 flex w-full flex-row items-center gap-2">
                 <Typography className="text-left font-medium" size="lg">
-                  5.463 ₳
+                  5.463 SEI
                 </Typography>
                 <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                   +225,53%

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import infographiclogo from 'assets/images/infographic.svg'
 import Button from 'design-systems/Atoms/Button'
-import { ADAIcon, NFTIcons, NovaLogo } from 'design-systems/Atoms/Icons'
+import { SeiIcon, NFTIcons, NovaLogo } from 'design-systems/Atoms/Icons'
 import IconAtom from 'design-systems/Atoms/Logo'
 import { Model } from 'design-systems/Atoms/Model'
 import { ModelProps } from 'design-systems/Atoms/Model/interface'
@@ -60,18 +60,18 @@ const AccountModal: React.FC<ModelProps> = ({ showModal, setShow }) => {
           <div className="grid w-full grid-cols-1 flex-row justify-between gap-5 md:!grid-cols-3">
             <div className="flex  flex-col items-center justify-between gap-8 rounded-[10px] bg-blackCardBg px-[22px] py-[24px] text-center">
               <div className="flex flex-col items-center justify-center ">
-                <ADAIcon />
+                <SeiIcon />
                 <Typography className="mt-[17px]" size="lg">
-                  ADA Subscription
+                  SEI Subscription
                 </Typography>
                 <Typography className="mt-[12px]" size="md">
-                  Pay your Market Analytics Premium with ADA.
+                  Pay your Market Analytics Premium with SEI.
                 </Typography>
-                <Typography className="mt-[16px] text-[14px] text-black7f">Monthly ADA Costs: 15 ₳</Typography>
+                <Typography className="mt-[16px] text-[14px] text-black7f">Monthly SEI Costs: 15 SEI</Typography>
               </div>
               <Button className="w-full rounded-[10px] bg-button-gradient p-2 px-2">
                 <Typography className="font-normal" size="md">
-                  Pay 250 ₳
+                  Pay 250 SEI
                 </Typography>
               </Button>
             </div>
@@ -84,7 +84,7 @@ const AccountModal: React.FC<ModelProps> = ({ showModal, setShow }) => {
                 <Typography className="mt-[12px]" size="md">
                   Pay your Market Analytics Premium with $NOVA and get a 20% discount.
                 </Typography>
-                <Typography className="mt-[16px] text-[14px] text-black7f">Monthly ADA Costs: 12 ₳</Typography>
+                <Typography className="mt-[16px] text-[14px] text-black7f">Monthly SEI Costs: 12 SEI</Typography>
               </div>
               <Button className="w-full rounded-[10px] bg-button-gradient p-2 px-2">
                 <Typography className="font-normal" size="md">
@@ -104,19 +104,19 @@ const AccountModal: React.FC<ModelProps> = ({ showModal, setShow }) => {
               </div>
               <Button className="w-full rounded-[10px] bg-button-gradient p-2 px-2">
                 <Typography className="font-normal" size="md">
-                  Buy on Jpg.store
+                  Buy on Pallet.exchange
                 </Typography>
               </Button>
             </div>
             {/* <div className="flex  rounded-[10px] bg-blackCardBg p-2">
               <div className="mt-2 flex flex-col items-center justify-center gap-2">
-                <IconAtom alt={''} className="flex-shrink-0" height={48} src={adaLogo} width={48} />
-                <Typography size="lg">ADA Subscription</Typography>
-                <Typography size="md">Pay your Market Analytics Premium with ADA.</Typography>
+                <IconAtom alt={''} className="flex-shrink-0" height={48} src={seiLogo} width={48} />
+                <Typography size="lg">SEI Subscription</Typography>
+                <Typography size="md">Pay your Market Analytics Premium with SEI.</Typography>
                 <div className="mt-4 flex w-10/12">
                   <Button className="mt-5 w-full rounded-[10px] bg-button-gradient p-2 px-2">
                     <Typography className="font-normal" size="md">
-                      Pay 250 ₳
+                      Pay 250 SEI
                     </Typography>
                   </Button>
                 </div>
@@ -144,7 +144,7 @@ const AccountModal: React.FC<ModelProps> = ({ showModal, setShow }) => {
                 <div className="mt-4 flex w-10/12">
                   <Button className="w-full rounded-xs bg-button-gradient p-2 px-2">
                     <Typography className="font-normal " size="md">
-                      Buy on Jpg.store
+                      Buy on Pallet.exchange
                     </Typography>
                   </Button>
                 </div>

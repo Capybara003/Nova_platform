@@ -8,7 +8,7 @@ const binanceData = async (api_key: string, api_secret: string) => {
   const BASE_URL = `https://api.binance.com`
   try {
     const client = new Spot(API_KEY, API_SECRET, { baseURL: BASE_URL, proxy: false })
-    const res = await client.recentTradesList('ADAUSDT', {
+    const res = await client.recentTradesList('SEIUSDT', {
       limit: 10,
     })
     return res

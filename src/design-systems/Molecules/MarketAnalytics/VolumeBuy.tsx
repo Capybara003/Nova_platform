@@ -62,7 +62,7 @@ export const VolumeBuy = () => {
                 </Typography>
                 <ul>
                   {Array(6)
-                    .fill('12.000.000 ₳')
+                    .fill('12.000.000 SEI')
                     .map((item, index) => {
                       return (
                         <li className="mt-2 flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={index}>
@@ -79,7 +79,7 @@ export const VolumeBuy = () => {
                 </Typography>
                 <ul>
                   {Array(6)
-                    .fill('12.000.000 ₳')
+                    .fill('12.000.000 SEI')
                     .map((item, index) => {
                       return (
                         <li className="mt-2 flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={index}>
@@ -94,7 +94,7 @@ export const VolumeBuy = () => {
                 <Typography className="mb-1 text-left font-Inter text-small uppercase text-[#ffffff99]">Net</Typography>
                 <ul>
                   {Array(6)
-                    .fill('12.000.000 ₳')
+                    .fill('12.000.000 SEI')
                     .map((item, index) => {
                       return (
                         <li className="mt-2 flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={index}>
@@ -122,13 +122,13 @@ export const VolumeBuy = () => {
 
             <div className="flex w-full flex-col items-center justify-center gap-6 md:flex-row">
               <div className="mt-2 flex items-center justify-start gap-1 text-md text-[#DBDBDB]">
-                <Typography>12.000.000 ₳</Typography>
+                <Typography>12.000.000 SEI</Typography>
               </div>
               <div className="mt-2 flex items-center justify-start gap-1 text-md text-[#DBDBDB]">
-                <Typography>12.000.000 ₳</Typography>
+                <Typography>12.000.000 SEI</Typography>
               </div>
               <div className="mt-2 flex items-center justify-start gap-1 text-md text-[#DBDBDB]">
-                <Typography>12.000.000 ₳</Typography>
+                <Typography>12.000.000 SEI</Typography>
               </div>
             </div>
           </div>
@@ -148,7 +148,7 @@ export const VolumeBuy = () => {
             </div>
             <div className="mt-2 flex w-full flex-row items-center gap-2">
               <Typography className="text-left font-medium" size="lg">
-                5.463 ₳
+                5.463 SEI
               </Typography>
               <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                 +225,53%

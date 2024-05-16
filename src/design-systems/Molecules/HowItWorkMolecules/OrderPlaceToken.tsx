@@ -60,11 +60,11 @@ export const OrderPlaceToken = () => {
                 <Typography size="body">Cost</Typography>
                 <RangeBar />
                 <div className="flex h-[32px] w-full items-center justify-center rounded-[6px] bg-black225_05">
-                  <Typography>ADA Amount</Typography>
+                  <Typography>SEI Amount</Typography>
                 </div>
               </div>
               <Typography size="body">
-                Users can choose the amount of ADA to send from their wallet using either the custom amount box or the
+                Users can choose the amount of SEI to send from their wallet using either the custom amount box or the
                 slider for a range of 0-100%.
               </Typography>
             </div>
@@ -76,7 +76,7 @@ export const OrderPlaceToken = () => {
                 </Typography>
               </div>
               <Typography size="body">
-                The estimated $NOVA amount represents the maximum distribution after payment. If the maximum ADA cap is
+                The estimated $NOVA amount represents the maximum distribution after payment. If the maximum SEI cap is
                 reached, participants will receive a percentage of their ordered volume based on the over allocation.
               </Typography>
             </div>
@@ -104,9 +104,9 @@ export const OrderPlaceToken = () => {
           </div>
           <div className="flex justify-between border-b-[1.155px] border-black225_05 py-[18px]">
             <Typography className="" size="body">
-              max. ADA Cap
+              max. SEI Cap
             </Typography>
-            <Typography size="body">4.000.000 ₳</Typography>
+            <Typography size="body">4.000.000 SEI</Typography>
           </div>
           <div className="flex justify-between border-b-[1.155px] border-black225_05 py-[18px]">
             <Typography className="" size="body">
@@ -118,13 +118,13 @@ export const OrderPlaceToken = () => {
             <Typography className="" size="body">
               Price
             </Typography>
-            <Typography size="body">0,25 ₳ </Typography>
+            <Typography size="body">0,25 SEI </Typography>
           </div>
           <div className="flex items-center justify-between gap-[10px] border-b-[1.155px] border-black225_05 py-[25px]">
             <Typography size="body">Cost</Typography>
             <RangeBar />
             <div className="flex h-[32px] w-full items-center justify-center rounded-[6px] bg-black225_05">
-              <Typography>ADA Amount</Typography>
+              <Typography>SEI Amount</Typography>
             </div>
           </div>
           <div className="flex justify-between border-b-[1.155px] border-black225_05 py-[18px]">

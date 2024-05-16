@@ -2,17 +2,17 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { cryptoProps, navToggleSliceState } from './interface'
 
-import { ADAdata } from 'design-systems/data/data'
+import { Seidata } from 'design-systems/data/data'
 
 const initialState: navToggleSliceState = {
   tabName: 0,
   moduleName: '',
   walletLoading: false,
   crypto: {
-    img: Array.isArray(crypto) && crypto.length ? crypto[0].img : ADAdata[0].img,
-    label: Array.isArray(crypto) && crypto.length ? crypto[0].label : ADAdata[0].label,
-    symbol: Array.isArray(crypto) && crypto.length ? crypto[0].symbol : ADAdata[0].symbol,
-    value: Array.isArray(crypto) && crypto.length ? crypto[0].value : ADAdata[0].value,
+    img: Array.isArray(crypto) && crypto.length ? crypto[0].img : Seidata[0].img,
+    label: Array.isArray(crypto) && crypto.length ? crypto[0].label : Seidata[0].label,
+    symbol: Array.isArray(crypto) && crypto.length ? crypto[0].symbol : Seidata[0].symbol,
+    value: Array.isArray(crypto) && crypto.length ? crypto[0].value : Seidata[0].value,
   },
 }
 

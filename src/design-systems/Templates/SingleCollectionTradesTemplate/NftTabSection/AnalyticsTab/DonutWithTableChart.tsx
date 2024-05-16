@@ -73,12 +73,12 @@ const DonutWithTableChart: React.FC<DonutWithTableChartProps> = ({
                       )
                     })
                   : [
-                      { key: 0, label: '0-5K ₳', icons: IMG.clm1 },
-                      { key: 1, label: '5K-25K ₳', icons: IMG.clm2 },
-                      { key: 2, label: '25K-100K ₳', icons: IMG.clm3 },
-                      { key: 3, label: '100K-250K ₳', icons: IMG.clm4 },
-                      { key: 4, label: '250K-1M ₳', icons: IMG.clm5 },
-                      { key: 5, label: '1M+ ₳', icons: IMG.clm6 },
+                      { key: 0, label: '0-5K SEI', icons: IMG.clm1 },
+                      { key: 1, label: '5K-25K SEI', icons: IMG.clm2 },
+                      { key: 2, label: '25K-100K SEI', icons: IMG.clm3 },
+                      { key: 3, label: '100K-250K SEI', icons: IMG.clm4 },
+                      { key: 4, label: '250K-1M SEI', icons: IMG.clm5 },
+                      { key: 5, label: '1M+ SEI', icons: IMG.clm6 },
                     ].map(item => {
                       return (
                         <li className="flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={item.label}>

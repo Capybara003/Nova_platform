@@ -13,27 +13,27 @@ import Typography from 'design-systems/Atoms/Typography'
 import { useHolding } from 'hooks/apis/useHolding'
 import { useDataSelector } from 'lib/redux/store'
 
-export const convertToADA = (value?: number, ADA?: number): number | undefined =>
-  value !== undefined && ADA !== undefined ? value / ADA : undefined
+export const convertToSEI = (value?: number, SEI?: number): number | undefined =>
+  value !== undefined && SEI !== undefined ? value / SEI : undefined
 
 const HoldingDataGroup: React.FC = () => {
   const { holdingDetails, isLoadingHoldingDetails } = useHolding()
   const [holdingDetail, setHoldingDetails] = useState<any>([])
   const { crypto } = useDataSelector('toggle')
-  const ADA = crypto.value
+  const SEI = crypto.value
 
   const holdingData: HoldingDetails | undefined = holdingDetail?.holdingDetails
   const soldDetails = holdingDetail?.soldDetails
-  const BuyPrice = convertToADA(holdingData?.buyPrice, ADA)
-  const EstFees = convertToADA(holdingData?.estFees, ADA)
-  const EstValue = convertToADA(holdingData?.estValue, ADA)
-  const UnrealizedGains = convertToADA(holdingData?.unrealizedGains, ADA)
-  const Percentage = convertToADA(holdingData?.percentage, ADA)
-  const SolidBuyPrice = convertToADA(soldDetails?.buyPrice, ADA)
-  const SolidEstFees = convertToADA(soldDetails?.estFees, ADA)
-  const SellPrice = convertToADA(soldDetails?.sellPrice, ADA)
-  const SolidRealizedGains = convertToADA(soldDetails?.realizedGains, ADA)
-  const SolidPercentage = convertToADA(soldDetails?.percentage, ADA)
+  const BuyPrice = convertToSEI(holdingData?.buyPrice, SEI)
+  const EstFees = convertToSEI(holdingData?.estFees, SEI)
+  const EstValue = convertToSEI(holdingData?.estValue, SEI)
+  const UnrealizedGains = convertToSEI(holdingData?.unrealizedGains, SEI)
+  const Percentage = convertToSEI(holdingData?.percentage, SEI)
+  const SolidBuyPrice = convertToSEI(soldDetails?.buyPrice, SEI)
+  const SolidEstFees = convertToSEI(soldDetails?.estFees, SEI)
+  const SellPrice = convertToSEI(soldDetails?.sellPrice, SEI)
+  const SolidRealizedGains = convertToSEI(soldDetails?.realizedGains, SEI)
+  const SolidPercentage = convertToSEI(soldDetails?.percentage, SEI)
 
   useMemo(() => holdingDetails && setHoldingDetails(holdingDetails), [holdingDetails, isLoadingHoldingDetails])
 

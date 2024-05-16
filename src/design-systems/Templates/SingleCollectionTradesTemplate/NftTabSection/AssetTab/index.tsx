@@ -17,7 +17,7 @@ const AssetTab: React.FC = () => {
           <Typography>{item.asset}</Typography>
         </div>
       ),
-      buyPrice: <Typography>{item.buyPrice}₳</Typography>,
+      buyPrice: <Typography>{item.buyPrice}SEI</Typography>,
 
       unrealizedProfitOrLoss: (
         <div>
@@ -43,7 +43,7 @@ const AssetTab: React.FC = () => {
         </div>
       ),
 
-      estFees: item.estFees ? <Typography>{item.estFees}₳</Typography> : '',
+      estFees: item.estFees ? <Typography>{item.estFees}SEI</Typography> : '',
     }))
   }, [])
   return (

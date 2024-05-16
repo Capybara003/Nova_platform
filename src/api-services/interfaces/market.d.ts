@@ -22,8 +22,8 @@ interface MarketTrendingData {
 }
 
 interface MarketAnalyticsData {
-  adaMarketCap: number
-  totalAdaStaked: number
+  seiMarketCap: number
+  totalSeiStaked: number
   totalStakePools: number
   rewardsDistributed: string
 }

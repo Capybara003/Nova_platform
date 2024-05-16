@@ -21,8 +21,8 @@ export interface HistoricalData {
   // Adjust this interface based on the actual structure of your historical data
 }
 
-interface adaData {
-  adaPrice: number
+interface seiData {
+  seiPrice: number
   changes: number
   lineChart: number[] | any
 }
@@ -40,7 +40,7 @@ interface marketActive {
 }
 export interface MarketProps {
   data: {
-    adaData: adaData
+    seiData: seiData
     marketData: marketData
     marketActive: marketActive
     blockchainLoad: number
@@ -48,7 +48,7 @@ export interface MarketProps {
   }
 }
 export interface MarketDataProps {
-  adaData: adaData
+  seiData: seiData
   marketData: marketData
   marketActive: marketActive
 }

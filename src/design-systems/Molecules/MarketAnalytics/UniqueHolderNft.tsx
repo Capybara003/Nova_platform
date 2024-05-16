@@ -27,7 +27,7 @@ const UniqueHolderMarketNft: React.FC<UniqueHolderMarketNftProps> = ({ data }) =
             </div>
             <div className="mt-2 flex w-full flex-row items-center gap-2">
               <Typography className="text-left font-medium" size="lg">
-                {data?.total} ₳
+                {data?.total} SEI
               </Typography>
               <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
                 +225,53%

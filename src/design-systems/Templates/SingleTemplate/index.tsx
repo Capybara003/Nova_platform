@@ -109,7 +109,7 @@ const SingleTemplate: React.FC = () => {
                     <Typography>Floor</Typography>
                   </Typography>
                   <Typography className=" font-normal" size="h3">
-                    5.463,56 ₳
+                    5.463,56 SEI
                   </Typography>
                   <Typography className=" text-success-500" size="paragraph">
                     +225,53%
@@ -122,7 +122,7 @@ const SingleTemplate: React.FC = () => {
                     <Typography>Listing</Typography>
                   </Typography>
                   <Typography className=" font-normal" size="h3">
-                    5.463,56 ₳
+                    5.463,56 SEI
                   </Typography>
                   <Typography className=" text-success-500" size="paragraph">
                     +225,53%
@@ -134,7 +134,7 @@ const SingleTemplate: React.FC = () => {
                   Your Position
                 </Typography>
                 <Typography className=" font-normal" size="h3">
-                  5.463,56 ₳
+                  5.463,56 SEI
                 </Typography>
                 <Typography className=" text-success-500" size="paragraph">
                   +225,53%

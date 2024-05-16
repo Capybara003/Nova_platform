@@ -159,10 +159,10 @@ const StakingTable: React.FC<TableProps> = ({ data, headData }) => {
             <td>100%</td>
             <td></td>
             <td></td>
-            <td>975.000 ₳</td>
-            <td>975.000 ₳</td>
-            <td>975.000 ₳</td>
-            <td>975.000 ₳</td>
+            <td>975.000 SEI</td>
+            <td>975.000 SEI</td>
+            <td>975.000 SEI</td>
+            <td>975.000 SEI</td>
             <td></td>
             <td></td>
             <td></td>

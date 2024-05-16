@@ -35,7 +35,7 @@ const HoldingTotalTable: React.FC<TableProps> = ({ data, headData }) => {
                 <th key={key} style={{ width: item.width }}>
                   <div className={`flex !w-full items-center gap-2 ${key === 0 ? 'justify-start' : 'justify-center'}`}>
                     {key === 0 && (
-                      <div className="mr-12">
+                      <div className="ml-4 mr-16">
                         <BookMarkButton isActive />
                       </div>
                     )}
@@ -66,14 +66,14 @@ const HoldingTotalTable: React.FC<TableProps> = ({ data, headData }) => {
           {data?.map((item: any, index: any) => (
             <>
               <tr className="cursor-pointer">
-                <td className="">
+                <td className="min-w-[230px]">
                   <div className="flex items-center justify-center gap-2">
                     <BookMarkButton isActive={false} />
                     <div className={`${activeElement === index && 'rotate-90'}`} onClick={() => handleClick(index)}>
                       <RightArrowIcons />
                     </div>
-                    <div className="flex items-center justify-center">
-                      <Image alt={'IMG'} height={48} src={item.img} width={48} />
+                    <div className="flex items-center justify-center gap-[3px]">
+                      <Image alt={'IMG'} height={40} src={item.img} width={40} />
                       {item?.name}
                     </div>
                   </div>
@@ -111,28 +111,25 @@ const HoldingTotalTable: React.FC<TableProps> = ({ data, headData }) => {
                       <>
                         <tbody>
                           <tr className="flex w-full items-center" key={index}>
-                            <td></td>
-                            <td className="text-black7f">AirDrop</td>
-                            <td>
+                            <td className="w-[100px] !pl-0 text-center text-[14px] text-black7f">AirDrop</td>
+                            <td className="w-[40px] !px-0">
                               <Image alt={'IMG'} src={res?.airdrop?.StakeIMG} />
                             </td>
-                            <td>{res?.airdrop?.StakeName}</td>
+                            <td className="w-[90px] !px-0 text-center">{res?.airdrop?.StakeName}</td>
                           </tr>
                           <tr className="flex w-full items-center" key={index}>
-                            <td></td>
-                            <td className="text-black7f">Mint</td>
-                            <td>
+                            <td className="w-[100px] !pl-0 text-center text-[14px] text-black7f">Mint</td>
+                            <td className="w-[40px] !px-0">
                               <Image alt={'IMG'} src={res?.mint?.StakeIMG} />
                             </td>
-                            <td>{res?.mint?.StakeName}</td>
+                            <td className="w-[90px] !px-0 text-center">{res?.mint?.StakeName}</td>
                           </tr>
                           <tr className="flex w-full items-center" key={index}>
-                            <td></td>
-                            <td className="text-black7f">Yield Farming</td>
-                            <td>
-                              <Image alt={'IMG'} src={res?.yieldFarming?.StakeIMG} />
+                            <td className="w-[100px] !pl-0 text-center text-[14px] text-black7f">Bought</td>
+                            <td className="w-[40px] !px-0">
+                              <Image alt={'IMG'} src={res?.bought?.StakeIMG} />
                             </td>
-                            <td>{res?.yieldFarming?.StakeName}</td>
+                            <td className="w-[90px] !px-0 text-center">{res?.bought?.StakeName}</td>
                           </tr>
                         </tbody>
                       </>
@@ -167,10 +164,10 @@ const HoldingTotalTable: React.FC<TableProps> = ({ data, headData }) => {
             <td>100%</td>
             <td></td>
             <td></td>
-            <td>975.000 ₳</td>
-            <td>975.000 ₳</td>
-            <td>975.000 ₳</td>
-            <td>975.000 ₳</td>
+            <td>975.000 SEI</td>
+            <td>975.000 SEI</td>
+            <td>975.000 SEI</td>
+            <td>975.000 SEI</td>
             <td></td>
             <td></td>
             <td></td>

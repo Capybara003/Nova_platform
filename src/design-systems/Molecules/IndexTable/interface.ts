@@ -40,7 +40,7 @@ export interface TableProps {
 export interface InnerData {
   airdrop: { StakeIMG: string; StakeName: string }
   mint: { StakeIMG: string; StakeName: string }
-  yieldFarming: { StakeIMG: string; StakeName: string }
+  bought: { StakeIMG: string; StakeName: string }
 }
 
 export default TableProps

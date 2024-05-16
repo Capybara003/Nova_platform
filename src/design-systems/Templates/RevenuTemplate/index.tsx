@@ -56,7 +56,7 @@ const RevenuTemplate: React.FC = () => {
                     </div>
                     <div className="flex flex-col items-start justify-center gap-2">
                       <Typography className="font-Poppins font-normal" size="h3">
-                        5.463,56 ₳
+                        5.463,56 SEI
                       </Typography>
                       <Typography className="font-Poppins text-success-500" size="paragraph">
                         +225,53%
@@ -112,7 +112,7 @@ const RevenuTemplate: React.FC = () => {
               </Button>
             </div>
           </div>
-          <Typography className="text-left text-[25px] font-medium ">Staking, Yield Farming</Typography>
+          <Typography className="text-left text-[25px] font-medium ">Staking, Bought</Typography>
           <div className="max-h-[599px]  overflow-auto pe-[12px] ">
             {activeTab === 0 && (
               <StakingTable

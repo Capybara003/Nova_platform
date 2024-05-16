@@ -21,7 +21,7 @@ const TradesTab: React.FC<TradesTabProps> = ({ tradesTableFilter }) => {
           <Typography className="text-left">{item.asset}</Typography>
         </div>
       ),
-      listedPrice: <Typography>{item.listedPrice}₳</Typography>,
+      listedPrice: <Typography>{item.listedPrice}SEI</Typography>,
       aboveFloor:
         item.aboveFloor > 0 ? (
           <Typography className="text-green">+{item.aboveFloor}%</Typography>
@@ -30,7 +30,7 @@ const TradesTab: React.FC<TradesTabProps> = ({ tradesTableFilter }) => {
         ),
       buyerPotentialGains: (
         <div>
-          <Typography>{item.buyerPotentialGains.value}₳</Typography>
+          <Typography>{item.buyerPotentialGains.value}SEI</Typography>
           {item.buyerPotentialGains.gainOrLoss > 0 ? (
             <Typography className="text-md text-green">+{item.buyerPotentialGains.gainOrLoss}%</Typography>
           ) : (
@@ -66,7 +66,7 @@ const TradesTab: React.FC<TradesTabProps> = ({ tradesTableFilter }) => {
         </div>
       ),
 
-      estOrPaidFees: <Typography>{item.estOrPaidFees}₳</Typography>,
+      estOrPaidFees: <Typography>{item.estOrPaidFees}SEI</Typography>,
     }))
   }, [])
 

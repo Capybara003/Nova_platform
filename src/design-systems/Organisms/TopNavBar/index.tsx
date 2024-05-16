@@ -19,7 +19,7 @@ import OnSelect from 'design-systems/Molecules/OnSelect'
 import SearchMolecule from 'design-systems/Molecules/Search/SearchMolecule'
 import { IMG } from 'assets/images'
 import { DownArrow, PersonAvtar, PlusOutlined } from 'design-systems/Atoms/Icons'
-import { ADAdata, SidebarData } from 'design-systems/data/data'
+import { Seidata, SidebarData } from 'design-systems/data/data'
 import { ModuleName, setCrypto } from 'lib/redux/slices/navToggleSlice'
 import { cryptoProps } from 'lib/redux/slices/navToggleSlice/interface'
 
@@ -37,7 +37,7 @@ export const TopNavbar: React.FC<HeaderProps> = ({ open, setOpen, setModelName, 
   const handleTabChange = (tab: number) => {
     setActiveTab(tab)
   }
-  const handleSelectADA = (selectedOption: cryptoProps) => {
+  const handleSelectSei = (selectedOption: cryptoProps) => {
     dispatch(setCrypto(selectedOption))
   }
 
@@ -46,26 +46,7 @@ export const TopNavbar: React.FC<HeaderProps> = ({ open, setOpen, setModelName, 
     // Remove the 'token' item from localStorage
     localStorage.clear()
   }
-  const enableWallet = async () => {
-    try {
-      // const newAPI = await window.cardano.eternl.enable();
-      // const newAPI = await window.cardano.nami.enable();
-      if (typeof window !== undefined) {
-        // debugger;
-        const newAPI = await window.cardano.vespr.enable()
-        toast.success('Wallet enabled', {
-          position: toast.POSITION.TOP_RIGHT,
-        })
-        setAPI(newAPI)
-      }
-      // console.log('Wallet enabled', stakeAddress);
-    } catch (err: any) {
-      toast.error('Wallet not enabled', {
-        position: toast.POSITION.TOP_RIGHT,
-      })
-      console.error(err, '>>>>>>>>>>>')
-    }
-  }
+
   const handleSelect = (item: any) => {
     setOpen(!open), dispatch(ModuleName(item.label)), setModelName?.(item.label)
     localStorage.setItem('label', item.label)
@@ -119,10 +100,10 @@ export const TopNavbar: React.FC<HeaderProps> = ({ open, setOpen, setModelName, 
                 imageHeight={24}
                 imageSrc={IMG.logo}
                 imageWidth={24}
-                // options={ADAdata}
-                optionIMG={ADAdata}
+                // options={Seidata}
+                optionIMG={Seidata}
                 onSelect={() => {
-                  handleSelectADA
+                  handleSelectSei
                 }}
               />
             </div>

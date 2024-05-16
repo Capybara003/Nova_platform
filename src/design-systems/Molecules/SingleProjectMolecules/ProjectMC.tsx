@@ -46,7 +46,7 @@ export const ProjectMC = () => {
         <div className="flex flex-col gap-5 rounded-[24px] bg-[#1e1c26] p-[22px]">
           <div className="flex flex-row items-center gap-2">
             <Typography className="text-left font-medium text-[#DBDBDB] drop-shadow" size="subtitle">
-              Asset Profit / Loss: ₳
+              Asset Profit / Loss: SEI
             </Typography>
             <InfoIcon />
           </div>

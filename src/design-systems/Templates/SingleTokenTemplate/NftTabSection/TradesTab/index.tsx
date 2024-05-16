@@ -19,7 +19,7 @@ const TradesTab: React.FC<TradesTabProps> = ({ tradesTableFilter }) => {
           <Typography>{item.type}</Typography>
         </div>
       ),
-      rarity: <Typography>{item.rarity}₳</Typography>,
+      rarity: <Typography>{item.rarity}SEI</Typography>,
       floor: item.floor,
       buyPrice:
         item.buyPrice > 0 ? (
@@ -27,11 +27,11 @@ const TradesTab: React.FC<TradesTabProps> = ({ tradesTableFilter }) => {
         ) : (
           <Typography className="text-md text-red">-{item.buyPrice}%</Typography>
         ),
-      estFeesOrPaidFees: <Typography>{item.estFeesOrPaidFees}₳</Typography>,
+      estFeesOrPaidFees: <Typography>{item.estFeesOrPaidFees}SEI</Typography>,
       floorVolumeIncome: <Typography>{item.floorVolumeIncome}</Typography>,
       gains: (
         <div>
-          <Typography>{item.gains.value}₳</Typography>
+          <Typography>{item.gains.value}SEI</Typography>
           {item.gains.gainOrLoss > 0 ? (
             <Typography className="text-md text-green">+{item.gains.gainOrLoss}%</Typography>
           ) : (
@@ -39,7 +39,7 @@ const TradesTab: React.FC<TradesTabProps> = ({ tradesTableFilter }) => {
           )}
         </div>
       ),
-      sinceTrade: `${item.sinceTrade}₳`,
+      sinceTrade: `${item.sinceTrade}SEI`,
       holdingTime: <Typography>{item.holdingTime}d</Typography>,
       date: <Typography>{item.date}</Typography>,
       seller: (
