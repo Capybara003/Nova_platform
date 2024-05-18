@@ -77,6 +77,7 @@ const Login: React.FC = () => {
     localStorage?.setItem('authName', registerType1 || '')
     setlogIn({ ...logIn, registerType: registerType1 })
   }
+
   useMemo(() => {
     if (session.status === 'authenticated' && local !== null && token === null) {
       setlogIn({
@@ -128,7 +129,6 @@ const Login: React.FC = () => {
   }
   useMemo(() => {
     if (
-      (logIn.profilePic && session.status === 'authenticated' && token === null && ButtonAuthLocal === 'buttonAuth') ||
       (logIn.profilePic && session.status === 'authenticated' && token === null && ButtonAuthLocal === 'buttonAuth')
     ) {
       handleAuth()

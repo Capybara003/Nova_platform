@@ -39,7 +39,6 @@ export async function getLedgerAddress(path: string): Promise<string> {
 }
 
 const WalletSignUp = ({ isOpen, setOpen, walletRepo }: WalletModalProps) => {
-  console.log(walletRepo)
   const [ShowWallet, setShowWallet] = useState<boolean>(false)
   const [mannulvalue, setMannulValue] = useState('')
   const [API, setAPI] = useState<any>(null)

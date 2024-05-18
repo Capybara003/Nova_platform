@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "db:push": "yarn prisma db push",
     "fc": "npx prettier --check ./src",
     "ff": "npx prettier --write ./src",
     "prepare": "npx husky install",
@@ -24,6 +25,7 @@
     "@ledgerhq/hw-app-eth": "^6.35.4",
     "@ledgerhq/hw-transport-webhid": "^6.28.0",
     "@popperjs/core": "^2.11.6",
+    "@prisma/client": "^5.14.0",
     "@reduxjs/toolkit": "^2.0.1",
     "@tailwindcss/typography": "^0.5.8",
     "@types/clipboard-js": "^0.3.2",
@@ -91,6 +93,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^2.8.0",
     "prettier-plugin-tailwindcss": "^0.2.0",
+    "prisma": "^5.14.0",
     "react-docgen-typescript": "^2.2.2",
     "tsconfig-paths-webpack-plugin": "^4.0.0",
     "typechain": "^8.1.1"

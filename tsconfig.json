@@ -39,7 +39,7 @@
     "**/*.jsx",
     "**/*.js",
     ".next/types/**/*.ts",
-    "src", "typings"
+    "src", "typings", "prisma"
   ],
   "exclude": [
     "node_modules"
