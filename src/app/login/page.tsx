@@ -128,9 +128,7 @@ const Login: React.FC = () => {
     }
   }
   useMemo(() => {
-    if (
-      (logIn.profilePic && session.status === 'authenticated' && token === null && ButtonAuthLocal === 'buttonAuth')
-    ) {
+    if (logIn.profilePic && session.status === 'authenticated' && token === null && ButtonAuthLocal === 'buttonAuth') {
       handleAuth()
     }
   }, [session.status, logIn.profilePic])
