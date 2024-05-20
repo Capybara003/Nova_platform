@@ -1,26 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import CoreAPIService from './CoreAPIService'
+import CoreNextAPIService from './CoreNextAPIService'
 
 import { profileBlock } from 'design-systems/Templates/AccountTemplate/interface'
 import { API_ENDPOINTS } from 'utils/api-integration'
 class UserServices {
   getUser = async (ID: string | null) => {
-    return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PRIVATE.GET_USER}${ID}`)
+    return CoreNextAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PRIVATE.GET_USER}${ID}`)
   }
   postUserName = async (userDetails: profileBlock) => {
-    return CoreAPIService.post<any>(
+    return CoreNextAPIService.post<any>(
       `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PRIVATE.POST_USER_NAME}`,
       userDetails
     )
   }
   passwordReset = async (emailData: profileBlock) => {
-    return CoreAPIService.post<any>(
+    return CoreNextAPIService.post<any>(
       `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PRIVATE.RESET_PASSWORD}`,
       emailData
     )
   }
   profilePicUpdate = async (Details: FormData) => {
-    return CoreAPIService.post<any>(
+    return CoreNextAPIService.post<any>(
       `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PRIVATE.UPDATE_PROFILE}`,
       Details
     )

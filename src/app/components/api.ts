@@ -2,7 +2,7 @@
 import axios, { AxiosInstance } from 'axios'
 import { useMutation, UseMutationResult } from 'react-query'
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL
+const baseURL = process.env.NEXT_PUBLIC_NEXT_API_URL
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL,

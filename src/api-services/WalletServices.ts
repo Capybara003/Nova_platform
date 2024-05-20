@@ -1,19 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import CoreAPIService from './CoreAPIService'
+import CoreNextAPIService from './CoreNextAPIService'
 
 import { API_ENDPOINTS } from 'utils/api-integration'
 class WalletServices {
   postWalletConnect = async (Details: any) => {
-    return CoreAPIService.post<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PRIVATE.POST_WALLET}`, Details)
+    return CoreNextAPIService.post<any>(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PRIVATE.POST_WALLET}`,
+      Details
+    )
   }
   postNonce = async (Details: any) => {
-    return CoreAPIService.post<any>(
+    return CoreNextAPIService.post<any>(
       `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PRIVATE.GENERATE_NONCE}`,
       Details
     )
   }
   postVerifySignature = async (verifyDetails: any) => {
-    return CoreAPIService.post<any>(
+    return CoreNextAPIService.post<any>(
       `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PRIVATE.VERIFY_SIGNATURE}`,
       verifyDetails
     )
