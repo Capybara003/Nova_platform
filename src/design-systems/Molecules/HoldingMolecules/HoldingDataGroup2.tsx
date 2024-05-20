@@ -19,17 +19,19 @@ import Typography from 'design-systems/Atoms/Typography'
 import { useHolding } from 'hooks/apis/useHolding'
 import { walletData } from 'lib/redux/slices/walletSlice'
 import { useDataSelector } from 'lib/redux/store'
+import { formatAddress } from 'utils/function'
 
 const HoldingDataGroup2: React.FC = () => {
+  const dispatch = useDispatch()
   const { connect } = useChain('sei')
   const { walletConnect } = useHolding()
+  const { binance, coinbase } = useDataSelector('exchange')
+  const { crypto } = useDataSelector('toggle')
+  const { wallets } = useDataSelector('walletSlice')
+
   const [walletList, setWalletList] = useState<any>([])
   const [loading, setLoading] = useState(false)
   const [showExchangeWallet, setShowExchangeWallet] = useState<boolean>(false)
-  const { binance, coinbase } = useDataSelector('exchange')
-  const { crypto } = useDataSelector('toggle')
-  const dispatch = useDispatch()
-  const { wallets } = useDataSelector('walletSlice')
   const [exchangeSetting, setExchangeSetting] = useState<ExchangeSettingType>({
     isBinance: binance.is_connected,
     isCoinbase: coinbase.is_connected,
@@ -273,8 +275,8 @@ const HoldingDataGroup2: React.FC = () => {
             </div>
             {loading === false ? (
               <>
-                {walletList?.userWallets?.map((item2: any, key: number) => {
-                  const address = `${item2?.walletAddress?.substring(0, 6)}...${item2.walletAddress?.slice(-6)}`
+                {walletList?.map((item2: any, key: number) => {
+                  const address = `${formatAddress(item2?.walletAddress)}`
                   const isActive = wallets?.some(w => w.walletName === item2.name && w.isActive)
                   return (
                     <div className="flex justify-between" key={key}>
@@ -286,7 +288,7 @@ const HoldingDataGroup2: React.FC = () => {
                           }}
                         />
                         <div className="text-left">
-                          <Typography>{item2.name} Wallet</Typography>
+                          <Typography>{item2.walletName} Wallet</Typography>
                           <Typography className="text-[11px] font-medium">{address}</Typography>
                         </div>
                       </div>

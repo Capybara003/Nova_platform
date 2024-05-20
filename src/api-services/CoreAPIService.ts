@@ -76,7 +76,7 @@ class CoreAPIService {
         data,
         headers: {
           'Authorization': Token ? Token : undefined,
-          'Content-Type': FormData ? 'multipart/form-data' : 'application/json',
+          'Content-Type': 'application/json',
         },
         ...config,
       })

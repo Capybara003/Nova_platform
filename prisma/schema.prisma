@@ -20,8 +20,8 @@ model Wallet {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  address   String
-  name      String?
+  walletAddress   String
+  walletName      String?
 
   owner   User? @relation(fields: [ownerId], references: [id])
   ownerId Int?

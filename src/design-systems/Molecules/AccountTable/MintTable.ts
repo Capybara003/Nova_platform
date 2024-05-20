@@ -6,7 +6,7 @@ interface MintTableProps {
     policyId: string
     project: string
     price: string
-    address: string
+    walletAddress: string
   }[]
 }
 

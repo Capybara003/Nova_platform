@@ -86,9 +86,9 @@ export const useHolding = () => {
   )
   const { isLoading: isLoadingWallet, data: walletConnect } = useQuery(
     [API_ENDPOINTS.PRIVATE.LIST],
-    () => HoldingServices.getWalletList(),
+    () => HoldingServices.getWalletList(token || ''),
     {
-      select: res => res.data,
+      select: res => res.wallet,
       refetchOnWindowFocus: false,
     }
   )

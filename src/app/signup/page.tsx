@@ -20,19 +20,17 @@ import { EmailregEx, PassRegEx } from 'utils/regex'
 const SignUP: React.FC = () => {
   const { register, signInAuth } = useApi()
   const local = localStorage.getItem('authName')
-  const [signUp, setsignUp] = useState<any>({
+  const [signUp, setSignUp] = useState<any>({
     userName: '',
     email: '',
     registerType: 'manual',
     password: '',
   })
-  // const [userName, setUserName] = useState<any>('')
-  // const [email, setEmail] = useState<any>('')
   const [userPass, setUserpass] = useState<string>('')
-  // const [password, setPassword] = useState<string>('')
-  const session = useSession()
 
+  const session = useSession()
   const router = useRouter()
+
   const handleSignup = async () => {
     try {
       // if (EmailregEx.test(email) && PassRegEx.test(userPass) && PassRegEx.test(password)) {
@@ -48,11 +46,6 @@ const SignUP: React.FC = () => {
           position: toast.POSITION.TOP_RIGHT,
         })
       }
-      // } else {
-      //   toast.error(data.message, {
-      //       position: toast.POSITION.TOP_RIGHT,
-      //     })
-      // }
     } catch (error: any) {
       // Handle error
       toast.error(error?.response?.data?.message, {
@@ -64,12 +57,12 @@ const SignUP: React.FC = () => {
   const handleSignIn = async (registerType1: string) => {
     await signIn(registerType1)
     localStorage?.setItem('authName', registerType1 || '')
-    setsignUp({ ...signUp, registerType: registerType1 })
+    setSignUp({ ...signUp, registerType: registerType1 })
   }
 
   useMemo(() => {
     if (session.status === 'authenticated' && local !== '') {
-      setsignUp({
+      setSignUp({
         ...signUp,
         userName: session.data.user?.name,
         email: session.data.user?.email,
@@ -146,7 +139,7 @@ const SignUP: React.FC = () => {
                   placeholder="User Name"
                   type="text"
                   value={signUp.userName}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => setsignUp({ ...signUp, userName: e.target.value })}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setSignUp({ ...signUp, userName: e.target.value })}
                 />
               </div>
               <div>
@@ -156,7 +149,7 @@ const SignUP: React.FC = () => {
                     placeholder="User Email"
                     type="email"
                     value={signUp.email}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setsignUp({ ...signUp, email: e.target.value })}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setSignUp({ ...signUp, email: e.target.value })}
                   />
                 </div>
                 {signUp.email && !EmailregEx.test(signUp.email) && (
@@ -188,7 +181,7 @@ const SignUP: React.FC = () => {
                     placeholder="Confirm Password"
                     type="password"
                     value={signUp.password}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setsignUp({ ...signUp, password: e.target.value })}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setSignUp({ ...signUp, password: e.target.value })}
                   />
                 </div>
                 {userPass && signUp.password && (

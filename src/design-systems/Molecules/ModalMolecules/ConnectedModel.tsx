@@ -12,6 +12,8 @@ import InputAtom from 'design-systems/Atoms/Input/InputAtom'
 import IconAtom from 'design-systems/Atoms/Logo'
 import { Model } from 'design-systems/Atoms/Model'
 import Typography from 'design-systems/Atoms/Typography'
+import { formatAddress } from 'utils/function'
+
 interface ConnectedModelProps {
   className?: string
   onClick?: any
@@ -69,8 +71,6 @@ export const ConnectedModel: React.FC<ConnectedModelProps> = ({ showModal, heade
             </thead>
             <tbody>
               {data.map((item: any, key: number) => {
-                const [saveCancle, setSaveCancle] = useState(item.name)
-
                 return (
                   <React.Fragment key={item.id}>
                     <tr>
@@ -83,7 +83,9 @@ export const ConnectedModel: React.FC<ConnectedModelProps> = ({ showModal, heade
                             src={IMG.Compass}
                             width={49}
                           />
-                          <Typography onClick={() => Clipboard(item.address)}>{item.address}</Typography>
+                          <Typography onClick={() => Clipboard(item.walletAddress)}>
+                            {formatAddress(item.walletAddress)}
+                          </Typography>
                         </div>
                       </td>
                       <td>
@@ -91,21 +93,21 @@ export const ConnectedModel: React.FC<ConnectedModelProps> = ({ showModal, heade
                           <InputAtom
                             className=" h-[30px] rounded-xs border-2 border-[#C517D1] bg-transparent p-[9.9px]"
                             // defaultValue={item.name}
-                            placeholder={item.name}
+                            placeholder={item.walletName}
                             type="text"
-                            value={saveCancle}
-                            onChange={e => {
-                              setSaveCancle(e.target.value)
-                            }}
+                            value={item.walletName}
+                            // onChange={e => {
+                            //   setSaveCancle(e.target.value)
+                            // }}
                           />
                         ) : (
-                          <>{item.name}</>
+                          <>{item.walletName}</>
                         )}
                       </td>
-                      <td>{item.floorValue}</td>
-                      <td>{item.tradeValue}</td>
-                      <td>{item.nft}</td>
-                      <td>{item.token}</td>
+                      <td>{1.975}</td>
+                      <td>{525.0}</td>
+                      <td>{1.975}</td>
+                      <td>{525.0}</td>
                       <td>
                         <div className="flex !w-full justify-center">
                           {toggle !== key ? (

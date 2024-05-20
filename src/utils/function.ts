@@ -22,3 +22,11 @@ export const removeEmptyKey = (data: objType): objType => {
   )
   return params
 }
+
+export const formatAddress = (address: string): string => {
+  const firstPart = address.slice(0, 6)
+  const lastPart = address.slice(-4)
+
+  // Return the formatted address
+  return `${firstPart}...${lastPart}`
+}

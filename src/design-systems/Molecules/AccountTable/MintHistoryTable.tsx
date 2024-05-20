@@ -77,8 +77,8 @@ const MintHistoryTable: React.FC<MintTableProps> = ({ data }) => {
               </td>
               <td>{item.project}</td>
               <td>{item.price}</td>
-              <td className="cursor-pointer hover:text-secondary-25" onClick={() => Clipboard(item.address)}>
-                {item.address}
+              <td className="cursor-pointer hover:text-secondary-25" onClick={() => Clipboard(item.walletAddress)}>
+                {item.walletAddress}
               </td>
             </tr>
           </React.Fragment>

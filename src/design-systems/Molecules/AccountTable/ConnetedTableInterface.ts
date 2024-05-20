@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface ConnectedTableProps {
   data: {
-    id: number
-    address: string
-    name: string
-    floorValue: string
-    tradeValue: string
-    nft: string
-    token: string
+    id?: number
+    walletAddress: string
+    walletName: string
+    // floorValue: string
+    // tradeValue: string
+    // nft: string
+    // token: string
   }[]
   header?: {
     name: string

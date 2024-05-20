@@ -4,14 +4,16 @@ import { useChain } from '@cosmos-kit/react'
 import ConnectedWalletTable from '../AccountTable/ConnectedWalletTable'
 import { ConnectedModel } from '../ModalMolecules/ConnectedModel'
 
-import { data } from 'app/account/utils'
 import editIcon from 'assets/images/tabler_edit.svg'
 import Button from 'design-systems/Atoms/Button'
 import IconAtom from 'design-systems/Atoms/Logo'
 import Typography from 'design-systems/Atoms/Typography'
+import { useDataSelector } from 'lib/redux/store'
 
 const ConnectedWallet: React.FC = () => {
   const { connect } = useChain('sei')
+  const { wallets } = useDataSelector('walletSlice')
+
   const [open, setOpen] = useState(false)
 
   const header = [
@@ -27,7 +29,7 @@ const ConnectedWallet: React.FC = () => {
   return (
     <div className="h-full ">
       <div
-        className="flex flex-col justify-between gap-[21px] rounded-[12px] bg-blackCardBg p-2 md:!rounded-md md:!p-[22px]"
+        className="flex flex-col gap-[21px] rounded-[12px] bg-blackCardBg p-2 md:!rounded-md md:!p-[22px]"
         style={{ height: 'inherit' }}
       >
         <div className="flex flex-col flex-wrap items-center justify-between gap-3 xsm:!flex-row">
@@ -50,8 +52,8 @@ const ConnectedWallet: React.FC = () => {
             </Button>
           </div>
         </div>
-        <div className="max-h-[300px] w-full overflow-y-auto rounded-xs pe-[12px]">
-          <ConnectedWalletTable data={data} header={header} />
+        <div className="h-full max-h-[300px] w-full overflow-y-auto rounded-xs pe-[12px]">
+          <ConnectedWalletTable data={wallets} header={header} />
         </div>
 
         <div className="flex w-full flex-col items-center gap-3 xxsm:!hidden">
@@ -69,7 +71,7 @@ const ConnectedWallet: React.FC = () => {
           </Button>
         </div>
       </div>
-      <ConnectedModel data={data} header={header} setShow={setOpen} showModal={open} />
+      <ConnectedModel data={wallets} header={header} setShow={setOpen} showModal={open} />
     </div>
   )
 }

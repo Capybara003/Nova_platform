@@ -11,7 +11,7 @@ const userData: Prisma.UserCreateInput[] = [
     wallets: {
       create: [
         {
-          address: 'sei14x4c4hxtwfq9r0dhzc8ktefvx7d665uadc8atz',
+          walletAddress: 'sei14x4c4hxtwfq9r0dhzc8ktefvx7d665uadc8atz',
         },
       ],
     },

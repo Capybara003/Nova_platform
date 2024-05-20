@@ -178,27 +178,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider attribute="class" defaultTheme="dark">
           <Providers>
-            <ChainProvider
-              assetLists={assets}
-              chains={chains}
-              signerOptions={signerOptions}
-              walletConnectOptions={{
-                signClient: {
-                  projectId: 'a8510432ebb71e6948cfd6cde54b70f7',
-                  relayUrl: 'wss://relay.walletconnect.org',
-                  metadata: {
-                    name: 'CosmosKit Template',
-                    description: 'CosmosKit dapp template',
-                    url: 'https://docs.cosmology.zone/cosmos-kit/',
-                    icons: [],
+            <AuthProvider>
+              <ChainProvider
+                assetLists={assets}
+                chains={chains}
+                signerOptions={signerOptions}
+                walletConnectOptions={{
+                  signClient: {
+                    projectId: 'a8510432ebb71e6948cfd6cde54b70f7',
+                    relayUrl: 'wss://relay.walletconnect.org',
+                    metadata: {
+                      name: 'CosmosKit Template',
+                      description: 'CosmosKit dapp template',
+                      url: 'https://docs.cosmology.zone/cosmos-kit/',
+                      icons: [],
+                    },
                   },
-                },
-              }}
-              walletModal={WalletSignUp}
-              wallets={[...compass, ...keplr, ...leap, ...ledger, ...metamask]}
-            >
-              <NoFirstRender>
-                <AuthProvider>
+                }}
+                walletModal={WalletSignUp}
+                wallets={[...compass, ...keplr, ...leap, ...ledger, ...metamask]}
+              >
+                <NoFirstRender>
                   <RestrictedRoute>
                     {!noComponent && (
                       <div className="fixed z-[1000] w-full  font-Lexend ">
@@ -252,9 +252,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     {!noComponent && <Footer />}
                   </RestrictedRoute>
                   <ToastContainer />
-                </AuthProvider>
-              </NoFirstRender>
-            </ChainProvider>
+                </NoFirstRender>
+              </ChainProvider>
+            </AuthProvider>
           </Providers>
         </ThemeProvider>
       </body>

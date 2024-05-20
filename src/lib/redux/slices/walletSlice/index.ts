@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 interface Wallet {
+  id?: number
   walletName: string
   walletAddress: string
   isActive: boolean

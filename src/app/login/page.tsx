@@ -40,6 +40,7 @@ const Login: React.FC = () => {
           delete logIn.userName
           delete logIn.registerType
         }
+
         const { data } = await login.mutateAsync(logIn)
 
         // If login successful, navigate to homepage
@@ -47,7 +48,6 @@ const Login: React.FC = () => {
           localStorage.setItem('token', data.user.token)
           localStorage.setItem('id', data.user.id)
           localStorage.setItem('UserData', JSON.stringify(data.user))
-          // eslint-disable-next-line no-console
 
           toast.success(data.message, {
             position: toast.POSITION.TOP_RIGHT,
@@ -58,8 +58,6 @@ const Login: React.FC = () => {
             position: toast.POSITION.TOP_RIGHT,
           })
         }
-
-        // router.push('/')
       } else {
         toast.warning('Already Login', {
           position: toast.POSITION.TOP_RIGHT,
@@ -165,7 +163,7 @@ const Login: React.FC = () => {
                     <input
                       className="w-full rounded-xs !bg-gradient-pink   p-2"
                       placeholder="Enter Password"
-                      type="text"
+                      type="password"
                       value={logIn.password}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => setlogIn({ ...logIn, password: e.target.value })}
                     />
