@@ -8,20 +8,23 @@ datasource db {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
-  userName     String?
-  password     String?
-  registerType String
-  wallets      Wallet[]
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  userName      String?
+  password      String?
+  registerType  String
+  otp           String?
+  emailVerified Boolean  @default(false)
+  isDeleted     Boolean  @default(false)
+  wallets       Wallet[]
 }
 
 model Wallet {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  walletAddress   String
-  walletName      String?
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  walletAddress String
+  walletName    String?
 
   owner   User? @relation(fields: [ownerId], references: [id])
   ownerId Int?
