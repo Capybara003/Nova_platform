@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useMemo, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useChain } from '@cosmos-kit/react'
 
 import ConnectedWalletTable from '../AccountTable/ConnectedWalletTable'
@@ -9,12 +11,32 @@ import Button from 'design-systems/Atoms/Button'
 import IconAtom from 'design-systems/Atoms/Logo'
 import Typography from 'design-systems/Atoms/Typography'
 import { useDataSelector } from 'lib/redux/store'
+import { useHolding } from 'hooks/apis/useHolding'
+import { walletData, Wallet } from 'lib/redux/slices/walletSlice'
 
 const ConnectedWallet: React.FC = () => {
+  const dispatch = useDispatch()
   const { connect } = useChain('sei')
   const { wallets } = useDataSelector('walletSlice')
 
   const [open, setOpen] = useState(false)
+
+  const { walletConnect, refetchWallet } = useHolding()
+
+  useMemo(() => refetchWallet(), [refetchWallet])
+
+  useMemo(() => {
+    if (walletConnect) {
+      const mergedArray = wallets.concat(walletConnect).reduce((acc: Wallet[], obj) => {
+        const existingObj = acc.find(item => item.id === obj.id)
+        if (!existingObj) {
+          acc.push(obj)
+        }
+        return acc
+      }, [])
+      dispatch(walletData(mergedArray))
+    }
+  }, [walletConnect])
 
   const header = [
     { name: 'Address', key: 'Address', isInfo: false, isSort: false, width: '25%' },

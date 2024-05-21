@@ -24,7 +24,7 @@ import { formatAddress } from 'utils/function'
 const HoldingDataGroup2: React.FC = () => {
   const dispatch = useDispatch()
   const { connect } = useChain('sei')
-  const { walletConnect } = useHolding()
+  const { walletConnect, refetchWallet } = useHolding()
   const { binance, coinbase } = useDataSelector('exchange')
   const { crypto } = useDataSelector('toggle')
   const { wallets } = useDataSelector('walletSlice')
@@ -37,6 +37,8 @@ const HoldingDataGroup2: React.FC = () => {
     isCoinbase: coinbase.is_connected,
     selectAll: binance.is_connected && coinbase.is_connected,
   })
+
+  useMemo(() => refetchWallet(), [refetchWallet])
 
   useMemo(() => {
     if (walletConnect) {

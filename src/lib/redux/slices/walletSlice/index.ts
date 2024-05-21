@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-interface Wallet {
+export interface Wallet {
   id?: number
   walletName: string
   walletAddress: string

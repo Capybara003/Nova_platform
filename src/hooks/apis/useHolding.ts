@@ -21,7 +21,7 @@ export const useHolding = () => {
   const { wallets } = useDataSelector('walletSlice')
   const [walletUpdate, setWalletUpdate] = useState<string[]>([])
   useMemo(() => {
-    const activeWallets = wallets?.filter(item => item.isActive)
+    const activeWallets = wallets?.filter(item => item?.isActive)
     setWalletUpdate(activeWallets?.map(item => item?.walletAddress) || [])
   }, [wallets])
 
@@ -84,14 +84,14 @@ export const useHolding = () => {
   const { isLoading: isLoadingIncome, data: Income } = useQuery([API_ENDPOINTS.PUBLIC.GET_PORTFOLIO_V2], () =>
     HoldingServices.getIncome({ type: 'nft' })
   )
-  const { isLoading: isLoadingWallet, data: walletConnect } = useQuery(
-    [API_ENDPOINTS.PRIVATE.LIST],
-    () => HoldingServices.getWalletList(token || ''),
-    {
-      select: res => res.wallet,
-      refetchOnWindowFocus: false,
-    }
-  )
+  const {
+    isLoading: isLoadingWallet,
+    data: walletConnect,
+    refetch: refetchWallet,
+  } = useQuery([API_ENDPOINTS.PRIVATE.LIST], () => HoldingServices.getWalletList(token || ''), {
+    select: res => res.wallet,
+    refetchOnWindowFocus: false,
+  })
   const { isLoading: isLoadingHoldingDetails, data: holdingDetails } = useQuery(
     [API_ENDPOINTS.PRIVATE.GET_USER_PORFOLIO],
     () => HoldingServices.getUserPortfolio(),
@@ -126,6 +126,7 @@ export const useHolding = () => {
     isLoadingIncome,
     Income,
     refetchHolding,
+    refetchWallet,
     walletConnect,
     isLoadingWallet,
     isFetchingHolding,

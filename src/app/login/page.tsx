@@ -174,7 +174,9 @@ const Login: React.FC = () => {
                     </Typography>
                   )}
                 </div>
-                <Button className="text-right font-normal">Forgot Password?</Button>
+                <Button className="text-right font-normal" onClick={() => router.push('/resetpassword')}>
+                  Forgot Password?
+                </Button>
               </div>
               <div className="flex w-full flex-col gap-4">
                 <Button

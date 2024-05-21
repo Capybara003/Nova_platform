@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CoreAPIService from './CoreAPIService'
+import CoreNextAPIService from './CoreNextAPIService'
 
 import { AssetsDetailsBlock } from 'design-systems/Templates/HoldingPageTemplate/interface'
 import { API_ENDPOINTS } from 'utils/api-integration'
@@ -30,7 +31,7 @@ class HoldingServices {
   }
   getWalletList = async (userId: string) => {
     // return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_INCOME}`)
-    return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PRIVATE.LIST}/${userId}`)
+    return CoreNextAPIService.get<any>(`${process.env.NEXT_PUBLIC_NEXT_API_URL}${API_ENDPOINTS.PRIVATE.LIST}/${userId}`)
   }
   getUserPortfolio = async () => {
     return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PRIVATE.GET_USER_PORFOLIO}`)
