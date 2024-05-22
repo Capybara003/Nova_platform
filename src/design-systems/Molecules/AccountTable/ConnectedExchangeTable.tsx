@@ -62,7 +62,7 @@ const ConnectedExchangeTable: React.FC<ConnectedTableProps> = ({ data, header })
                 <td>{1.975}</td>
                 <td>{525.0}</td>
                 <td>{1.975}</td>
-                <td>
+                <td className="min-w-[70px]">
                   <div
                     className="flex cursor-pointer items-center justify-center rounded-[8px] bg-black225_05 p-[7px]"
                     onClick={() => {

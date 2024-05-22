@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import ClipboardJS from 'clipboard-js'
 import { toast } from 'react-toastify'
 
@@ -12,10 +13,19 @@ import IconAtom from 'design-systems/Atoms/Logo'
 import Typography from 'design-systems/Atoms/Typography'
 import { DeleteIcon } from 'design-systems/Atoms/Icons'
 import { formatAddress } from 'utils/function'
+import { useWallet } from 'hooks/apis/useWallet'
+import { useDataSelector } from 'lib/redux/store'
+import { walletData } from 'lib/redux/slices/walletSlice'
 
 const ConnectedWalletTable: React.FC<ConnectedTableProps> = ({ data, header }) => {
+  const dispatch = useDispatch()
+  const { wallets } = useDataSelector('walletSlice')
   const [open, setOpen] = useState(false)
   const [text, setText] = useState('')
+  const [selectedId, setSelectedId] = useState(0)
+
+  const { deleteWalletConnect } = useWallet()
+
   const Clipboard = (item: string) => {
     ClipboardJS.copy(item)
     if (ClipboardJS) {
@@ -25,6 +35,26 @@ const ConnectedWalletTable: React.FC<ConnectedTableProps> = ({ data, header }) =
       })
     }
   }
+
+  const handleDeleteConnectedWallet = async () => {
+    if (selectedId !== 0) {
+      const response = await deleteWalletConnect({ id: selectedId })
+      if (response.success === true) {
+        const newWallet = wallets.filter(item => item.id !== selectedId)
+        dispatch(walletData(newWallet))
+
+        toast.success(response.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        })
+      } else {
+        toast.error(response.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        })
+      }
+    }
+    setOpen(false)
+  }
+
   return (
     <table className="rounded-corners h-full w-full">
       <thead className="h-16">
@@ -65,11 +95,11 @@ const ConnectedWalletTable: React.FC<ConnectedTableProps> = ({ data, header }) =
               <td>{525.0}</td>
               <td>{1.975}</td>
               <td>{525.0}</td>
-              <td>
+              <td className="min-w-[70px]">
                 <div
                   className="flex cursor-pointer items-center justify-center rounded-[8px] bg-black225_05 p-[7px]"
                   onClick={() => {
-                    setOpen(!open), setText(item.walletName)
+                    setOpen(!open), setText(item.walletName), setSelectedId(item.id || 0)
                   }}
                 >
                   <div>
@@ -86,7 +116,7 @@ const ConnectedWalletTable: React.FC<ConnectedTableProps> = ({ data, header }) =
           <td colSpan={7}></td>
         </tr>
       </tfoot>
-      <ConfirmationModal setShow={setOpen} showModal={open} text={text} onClick={() => setOpen(false)} />
+      <ConfirmationModal setShow={setOpen} showModal={open} text={text} onClick={handleDeleteConnectedWallet} />
     </table>
   )
 }

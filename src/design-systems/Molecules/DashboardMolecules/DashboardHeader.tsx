@@ -1,10 +1,9 @@
 import { signOut, useSession } from 'next-auth/react'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import Button from 'design-systems/Atoms/Button'
-import { BigDownArrow, NovaLogo, PersonAvtar } from 'design-systems/Atoms/Icons'
+import { BigDownArrow, NovaLogo } from 'design-systems/Atoms/Icons'
 import Typography from 'design-systems/Atoms/Typography'
 import { UserBlock } from 'design-systems/Templates/AccountTemplate/interface'
 
@@ -14,7 +13,7 @@ const data = [
   { key: 2, label: 'Dashboard' },
 ]
 
-const DashBoardHeader: React.FC<UserBlock> = ({ userData }) => {
+const DashBoardHeader: React.FC<UserBlock> = () => {
   const router = useRouter()
   const session = useSession()
   const [index, setIndex] = useState<number>(2)
@@ -111,24 +110,11 @@ const DashBoardHeader: React.FC<UserBlock> = ({ userData }) => {
         </div>
         <div className="flex items-center space-x-4">
           {session.status === 'authenticated' || hasToken ? (
-            <Button className="" onClick={handleSignOut}>
-              {userData.profilePic && userData.profilePic !== '' ? (
-                <div>
-                  <Image
-                    alt="Avatar"
-                    className="inline-block h-[50px] w-[50px] rounded-full ring-2 ring-whiteE8 "
-                    height={50}
-                    src={userData.profilePic}
-                    width={50}
-                  />
-                </div>
-              ) : (
-                <>
-                  <div className="h-12 w-12">
-                    <PersonAvtar height={'64px'} width={'64px'} />
-                  </div>
-                </>
-              )}
+            <Button
+              className="min-w-[126px] rounded-[5px] bg-button-gradient px-[22px] py-[10px] font-Lexend"
+              onClick={handleSignOut}
+            >
+              <Typography>Log Out</Typography>
             </Button>
           ) : (
             <Button

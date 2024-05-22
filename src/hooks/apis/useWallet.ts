@@ -8,6 +8,9 @@ export const useWallet = () => {
   const postWalletCreateMutation = useMutation((WalletDetails: any) => {
     return WalletServices.postWalletConnect(WalletDetails)
   })
+  const deleteWalletCreateMutation = useMutation((WalletId: any) => {
+    return WalletServices.deleteWalletConnect(WalletId)
+  })
   const postGenerateNonce = useMutation((WalletDetails: any) => {
     return WalletServices.postNonce(WalletDetails)
   })
@@ -17,6 +20,14 @@ export const useWallet = () => {
   const postWalletConnect = async (Details: any) => {
     try {
       const response = await postWalletCreateMutation.mutateAsync(Details)
+      return response
+    } catch (error) {
+      throw error
+    }
+  }
+  const deleteWalletConnect = async (id: any) => {
+    try {
+      const response = await deleteWalletCreateMutation.mutateAsync(id)
       return response
     } catch (error) {
       throw error
@@ -41,6 +52,7 @@ export const useWallet = () => {
   return {
     isLoadingWalletConnect: postWalletCreateMutation.isLoading,
     postWalletConnect,
+    deleteWalletConnect,
     postNonceWallet,
     postVerifySignature,
     isLoadingNounce: postGenerateNonce.isLoading,

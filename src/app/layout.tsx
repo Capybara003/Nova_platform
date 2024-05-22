@@ -137,7 +137,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      if (allowedPathnames.includes(pathname)) {
+      if (allowedPathnames.includes(pathname) || pathname.includes('/reset-password/')) {
         setNoComponent(true)
       }
     }

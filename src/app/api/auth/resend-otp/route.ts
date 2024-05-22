@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     NOVA`
 
     await sendMail(email, message, 'Verify your OTP')
-    NextResponse.json(
+    return NextResponse.json(
       {
         success: true,
         message: 'OTP send to registered email address.',
@@ -61,6 +61,6 @@ export async function POST(request: NextRequest) {
     )
   } catch (error) {
     console.error('Error:', error)
-    NextResponse.json({ success: false, user: null, message: 'Internal Server Error' }, { status: 500 })
+    return NextResponse.json({ success: false, user: null, message: 'Internal Server Error' }, { status: 500 })
   }
 }

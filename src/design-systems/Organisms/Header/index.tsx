@@ -128,22 +128,8 @@ const Header: React.FC<any> = ({ noComponent, hide, userData }) => {
             </div>
           )}
           {session.status === 'authenticated' || hasToken ? (
-            <Button className="" onClick={handleSignOut}>
-              {userData.profilePic && userData.profilePic !== '' ? (
-                <div className="h-[50px] w-[50px]">
-                  <Image
-                    alt="Avatar"
-                    className="inline-block h-[50px] w-[50px] rounded-full ring-2 ring-whiteE8 "
-                    height={50}
-                    src={userData.profilePic}
-                    width={50}
-                  />
-                </div>
-              ) : (
-                <div className="h-[40px] w-[40px] md:!h-[54px] md:!w-[54px]">
-                  <PersonAvtar height={'64px'} width={'64px'} />
-                </div>
-              )}
+            <Button className="font-Poppins h-[52px] w-[126px] rounded bg-button-gradient" onClick={handleSignOut}>
+              Log Out
             </Button>
           ) : (
             <Button

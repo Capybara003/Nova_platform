@@ -21,7 +21,7 @@ export async function generatePassword() {
   const characters = 'abc01BCFDE2AIJ34LMG5NOPQRpqvwSTUVZ6klmn7WXY8hidej9fgoHxyzK@rstu'
   let randomString = ''
 
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 16; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length)
     randomString += characters.charAt(randomIndex)
   }

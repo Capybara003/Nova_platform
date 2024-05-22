@@ -6,6 +6,7 @@ export const API_ENDPOINTS = {
     POST_USER_NAME: 'auth/update-profile',
     RESET_PASSWORD: 'auth/change-password',
     POST_WALLET: 'wallet/create-wallet',
+    DELETE_WALLET: 'wallet/delete-wallet',
     BINANCE_TOKEN: 'collections/getHoldingAsset',
     COINBASE_TOKEN: 'collections/getHoldingAsset',
     GENERATE_NONCE: 'wallet/generate-nonce',

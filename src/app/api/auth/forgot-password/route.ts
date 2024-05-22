@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import prisma from 'lib/prisma'
-import { generatePassword, hashPassword } from 'utils/password'
+import { generatePassword } from 'utils/password'
 import sendMail from 'utils/sendMail'
 
 // POST /api/auth/forgot-password
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     }
 
     const newPassword = await generatePassword()
-    const hashPass = await hashPassword(newPassword)
+    const hashPass = `${newPassword}-${Date.now()}`
     await prisma.user.update({
       where: {
         id: user.id,
@@ -32,29 +32,24 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    const BASE_URL = process.env.BASE_URL
+
     const message = `Dear ${user.userName},
 
     We hope this message finds you well.
     
-    As requested, here is your temporary password: ${newPassword}
+    As requested, here is your password reset link: ${BASE_URL}reset-password/${user.id}$${newPassword}
     
-    Please use this temporary password to log in to your account. 
-    We recommend changing your password to something more secure once you've logged in.
+    Please use this link to reset your password. This link is available for 15 minutes.
                 
     Thank you for using our services!
     
     Best regards,
     NOVA`
-    await sendMail(email, message, 'Password Recovery: Your Temporary Password')
-    NextResponse.json(
-      {
-        success: true,
-        message: 'Password updated successfully.',
-      },
-      { status: 200 }
-    )
+    await sendMail(email, message, 'Password Recovery: Password reset')
+    return NextResponse.json({ success: true, message: 'Password reset link sent.' }, { status: 200 })
   } catch (error) {
     console.error('Error:', error)
-    NextResponse.json({ success: false, user: null, message: 'Internal Server Error' }, { status: 500 })
+    return NextResponse.json({ success: false, user: null, message: 'Internal Server Error' }, { status: 500 })
   }
 }

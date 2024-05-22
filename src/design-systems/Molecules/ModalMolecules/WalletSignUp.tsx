@@ -64,7 +64,10 @@ const WalletSignUp = ({ isOpen, setOpen, walletRepo }: WalletModalProps) => {
   }, [isOpen])
 
   const handleWalletConnect = (wallet: ChainWalletBase) => {
-    if (wallet.walletStatus === 'Connected') {
+    if (
+      wallet.walletStatus === 'Connected' &&
+      wallets.find(item => item.walletAddress === wallet.address) !== undefined
+    ) {
       toast.error('Wallet already connected', { position: toast.POSITION.TOP_RIGHT })
       setOpen(false)
     } else {

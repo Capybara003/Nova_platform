@@ -9,6 +9,12 @@ class WalletServices {
       Details
     )
   }
+  deleteWalletConnect = async (id: any) => {
+    return CoreNextAPIService.post<any>(
+      `${process.env.NEXT_PUBLIC_NEXT_API_URL}${API_ENDPOINTS.PRIVATE.DELETE_WALLET}`,
+      id
+    )
+  }
   postNonce = async (Details: any) => {
     return CoreNextAPIService.post<any>(
       `${process.env.NEXT_PUBLIC_NEXT_API_URL}${API_ENDPOINTS.PRIVATE.GENERATE_NONCE}`,
