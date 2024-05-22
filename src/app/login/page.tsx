@@ -67,6 +67,9 @@ const Login: React.FC = () => {
       toast.error(error?.response?.data?.message, {
         position: toast.POSITION.TOP_RIGHT,
       })
+      if (error?.response?.data?.message === 'Email not verified, please verify your email.') {
+        router.push(`/otpverification?email=${encodeURIComponent(error?.response?.data?.user?.email)}`)
+      }
     }
   }
 

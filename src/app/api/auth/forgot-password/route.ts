@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     We hope this message finds you well.
     
-    As requested, here is your password reset link: ${BASE_URL}reset-password/${user.id}$${newPassword}
+    As requested, here is your password reset link: ${BASE_URL}reset-password?token=${user.id}$${newPassword}
     
     Please use this link to reset your password. This link is available for 15 minutes.
                 

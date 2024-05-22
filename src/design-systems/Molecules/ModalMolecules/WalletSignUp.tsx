@@ -64,38 +64,30 @@ const WalletSignUp = ({ isOpen, setOpen, walletRepo }: WalletModalProps) => {
   }, [isOpen])
 
   const handleWalletConnect = (wallet: ChainWalletBase) => {
-    if (
-      wallet.walletStatus === 'Connected' &&
-      wallets.find(item => item.walletAddress === wallet.address) !== undefined
-    ) {
-      toast.error('Wallet already connected', { position: toast.POSITION.TOP_RIGHT })
-      setOpen(false)
-    } else {
-      wallet
-        .connect()
-        .then(async () => {
-          if (wallet.walletStatus === 'Connected') {
-            const localUserData = localStorage.getItem('id')
-            if (localUserData && localUserData !== undefined && localUserData !== null) {
-              const response = await postWalletConnect({
-                walletAddress: wallet.address,
-                walletName: wallet.username,
-                ownerId: Number(localUserData),
-              })
-              if (response.success) {
-                if (wallets.find(item => item.id === response.wallet.id) === undefined) {
-                  dispatch(walletData([...wallets, response.wallet]))
-                }
+    wallet
+      .connect()
+      .then(async () => {
+        if (wallet.walletStatus === 'Connected') {
+          const localUserData = localStorage.getItem('id')
+          if (localUserData && localUserData !== undefined && localUserData !== null) {
+            const response = await postWalletConnect({
+              walletAddress: wallet.address,
+              walletName: wallet.username,
+              ownerId: Number(localUserData),
+            })
+            if (response.success) {
+              if (wallets.find(item => item.id === response.wallet.id) === undefined) {
+                dispatch(walletData([...wallets, response.wallet]))
               }
             }
-            toast.success('Wallet connected', { position: toast.POSITION.TOP_RIGHT })
-          } else {
-            toast.error('Connect Failed', { position: toast.POSITION.TOP_RIGHT })
           }
-        })
-        .catch(() => toast.error('Connect Failed', { position: toast.POSITION.TOP_RIGHT }))
-        .finally(() => setOpen(false))
-    }
+          toast.success('Wallet connected', { position: toast.POSITION.TOP_RIGHT })
+        } else {
+          toast.error('Connect Failed', { position: toast.POSITION.TOP_RIGHT })
+        }
+      })
+      .catch(() => toast.error('Connect Failed', { position: toast.POSITION.TOP_RIGHT }))
+      .finally(() => setOpen(false))
   }
 
   return (

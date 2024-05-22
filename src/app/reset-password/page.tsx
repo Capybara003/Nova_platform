@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 
-import ResetPPasswordLayout from '../layout'
+import ResetPPasswordLayout from './layout'
 
 import Button from 'design-systems/Atoms/Button'
 import Typography from 'design-systems/Atoms/Typography'
@@ -16,13 +16,13 @@ import InputAtom from 'design-systems/Atoms/Input/InputAtom'
 import useApi from 'app/components/api'
 import { PassRegEx } from 'utils/regex'
 
-const ResetPPassword: React.FC<{ params: { token: string } }> = ({ params }) => {
-  const { token } = params
+const ResetPPassword: React.FC = () => {
   const [password, setPassword] = useState('')
   const [userPass, setUserPass] = useState('')
   const [email, setEmail] = useState('')
   const { resetPassword, validateLink } = useApi()
   const router = useRouter()
+  const token = new URLSearchParams(location.search).get('token')
 
   useEffect(() => {
     ;(async () => {

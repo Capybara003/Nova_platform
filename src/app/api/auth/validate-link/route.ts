@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Invalid Link', user: '', success: false }, { status: 400 })
     }
 
-    const [id, password] = token.split('%24')
+    const [id, password] = token.split('$')
     if (!id || !password) {
       return NextResponse.json({ message: 'Invalid Link', user: '', success: false }, { status: 400 })
     }

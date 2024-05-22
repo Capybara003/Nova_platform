@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 
 import prisma from 'lib/prisma'
-import { comparePasswords } from 'utils/password'
+import { comparePasswords, generateOTP } from 'utils/password'
+import sendMail from 'utils/sendMail'
 
 // POST /api/auth/login
 export async function POST(request: NextRequest) {
@@ -31,8 +32,44 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Incorrect email or password.', success: false }, { status: 400 })
     }
     if (!user.emailVerified) {
+      const otp = generateOTP()
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          otp,
+        },
+      })
+
+      const message = `Dear ${user.userName},
+
+      We noticed that you recently requested an OTP (One-Time Password) for your account but might not have received it. 
+      To ensure a seamless experience, we're resending your OTP to the email address or phone number associated with your account.
+      
+      Your OTP: ${otp}
+      
+      Please use this OTP to complete your intended action. If you did not request this OTP or have any concerns about your account's security, 
+      please contact our support team immediately at nova@nova.com.
+      
+      Thank you for using our services, and we apologize for any inconvenience. 
+      If you have any further questions or need assistance, feel free to reach out to us.
+      
+      Best regards,
+      NOVA`
+
+      await sendMail(email, message, 'Verify your OTP')
+
       return NextResponse.json(
-        { message: 'Email not verified, please verify your email.', success: false },
+        {
+          user: {
+            id: user.id,
+            userName: user.userName,
+            email: user.email,
+          },
+          message: 'Email not verified, please verify your email.',
+          success: false,
+        },
         { status: 400 }
       )
     }
