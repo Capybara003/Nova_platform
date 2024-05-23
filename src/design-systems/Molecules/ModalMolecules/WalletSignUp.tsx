@@ -78,10 +78,12 @@ const WalletSignUp = ({ isOpen, setOpen, walletRepo }: WalletModalProps) => {
             if (response.success) {
               if (wallets.find(item => item.id === response.wallet.id) === undefined) {
                 dispatch(walletData([...wallets, response.wallet]))
+                toast.success('Wallet connected', { position: toast.POSITION.TOP_RIGHT })
+              } else {
+                toast.success('Wallet already connected', { position: toast.POSITION.TOP_RIGHT })
               }
             }
           }
-          toast.success('Wallet connected', { position: toast.POSITION.TOP_RIGHT })
         } else {
           toast.error('Connect Failed', { position: toast.POSITION.TOP_RIGHT })
         }

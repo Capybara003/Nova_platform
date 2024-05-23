@@ -9,9 +9,19 @@ export async function POST(request: NextRequest) {
   let wallet = await prisma.wallet.findFirst({
     where: {
       walletAddress,
-      ownerId,
     },
   })
+
+  if (wallet?.ownerId !== Number(ownerId)) {
+    wallet = await prisma.wallet.update({
+      where: {
+        id: wallet?.id,
+      },
+      data: {
+        ownerId: Number(ownerId),
+      },
+    })
+  }
 
   if (!wallet) {
     wallet = await prisma.wallet.create({

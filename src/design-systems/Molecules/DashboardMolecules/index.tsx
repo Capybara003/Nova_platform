@@ -38,31 +38,16 @@ const DashboardIndex: React.FC = () => {
               <Typography className="font-Inter text-[14px]">
                 Redefine your knowledge about your portfolio and the market
               </Typography>
-              {!LocalToken ? (
-                <Button
-                  className=" w-full max-w-[232px] rounded-xs bg-button-gradient p-[12px] px-[30px]"
-                  // disabled={disable}
-                  onClick={() => {
-                    router.push('/login')
-                  }}
-                >
-                  <Typography className="font-normal " size="md">
-                    Log In
-                  </Typography>
-                </Button>
-              ) : (
-                <Button
-                  className=" w-full max-w-[232px] rounded-xs bg-button-gradient p-[12px] px-[30px]"
-                  // disabled={disable}
-                  onClick={() => {
-                    router.push('/market-analitics')
-                  }}
-                >
-                  <Typography className="font-normal " size="md">
-                    Launch
-                  </Typography>
-                </Button>
-              )}
+              <Button
+                className=" w-full max-w-[232px] rounded-xs bg-button-gradient p-[12px] px-[30px]"
+                onClick={() => {
+                  router.push('/market-analitics')
+                }}
+              >
+                <Typography className="font-normal " size="md">
+                  Launch
+                </Typography>
+              </Button>
             </div>
 
             <div className="maskingBorder-on-top absolute left-[-4px] top-[-4px] h-[50px] w-[50px] rounded-tl-[inherit] border-[4px] border-b-0 border-r-0 bg-transparent"></div>

@@ -31,7 +31,7 @@ interface Api {
   forgotPassword: UseMutationResult<any, unknown, { email: string }, unknown>
   resetPassword: UseMutationResult<any, unknown, ResetPasswordData, unknown>
   validateLink: UseMutationResult<any, unknown, { token: string }, unknown>
-  resendOtp: UseMutationResult<any, unknown, { userId: string }, unknown>
+  resendOtp: UseMutationResult<any, unknown, { email: string }, unknown>
   verifyEmail: UseMutationResult<any, unknown, any, unknown>
   signInAuth: UseMutationResult<any, unknown, any, unknown>
 }
@@ -44,7 +44,7 @@ export const useApi = (): Api => {
     axiosInstance.post('/auth/reset-password', resetData)
   )
   const validateLink = useMutation((token: { token: string }) => axiosInstance.post('/auth/validate-link', token))
-  const resendOtp = useMutation((userId: { userId: string }) => axiosInstance.post('/auth/resend-otp', userId))
+  const resendOtp = useMutation((email: { email: string }) => axiosInstance.post('/auth/resend-otp', email))
   const verifyEmail = useMutation((verificationData: any) => axiosInstance.post('/auth/verify-email', verificationData))
   const signInAuth = useMutation((signInAuth: any) => axiosInstance.post('/auth/registerWithGoogle', signInAuth))
 
