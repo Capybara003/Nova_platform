@@ -500,14 +500,16 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                   collection?.userHoldingNfts?.map((nft: any) => (
                     <tr className={`${activeElement === index ? 'table-row' : 'hidden'} cursor-pointer`} key={nft.key}>
                       <td className="!p-0">
-                        <div className="flex w-full items-center">
-                          <div className="w-[100px] !pl-0 text-center text-[14px] text-black7f">
-                            {nft?.status?.status}
+                        <div>
+                          <div className="flex w-full items-center">
+                            <div className="w-[100px] !pl-0 text-center text-[14px] text-black7f">
+                              {nft?.status?.status}
+                            </div>
+                            <div className="w-[40px] !px-0">
+                              <Image alt={'IMG'} height={40} src={nft?.imageLink} width={40} />
+                            </div>
+                            <div className="w-[90px] !px-0 text-center">{nft?.name}</div>
                           </div>
-                          <div className="w-[40px] !px-0">
-                            <Image alt={'IMG'} height={40} src={nft?.imageLink} width={40} />
-                          </div>
-                          <div className="w-[90px] !px-0 text-center">{nft?.name}</div>
                         </div>
                       </td>
                       <td></td>

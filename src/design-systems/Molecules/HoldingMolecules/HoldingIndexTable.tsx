@@ -323,9 +323,7 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({ data, headData, f
                             <Link
                               className="flex flex-col items-center justify-center"
                               href={item && item?.link}
-                              target={`${
-                                item ? (item?.link !== '' && item?.link !== null ? '_blank' : '') : ''
-                              }`}
+                              target={`${item ? (item?.link !== '' && item?.link !== null ? '_blank' : '') : ''}`}
                             >
                               <div className="rounded-[8px] bg-black225_05 p-1">
                                 <LinkIcon />
@@ -335,56 +333,8 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({ data, headData, f
                             '--'
                           )}
                         </td>
-                        <td>
-                          {/* <div
-                          className="flex !w-full justify-end"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            handleCheckboxChange(collection?.seiAddress, e)
-                          }
-                        >
-                          <Checkbox checked={checkboxes.includes(collection?.seiAddress)} />
-                        </div>{' '} */}
-                        </td>
                       </tr>
                     ))}
-                  <tr>
-                    <TECollapse
-                      className=" Collapse !mt-0 !rounded-b-none text-left !shadow-none"
-                      show={activeElement === index}
-                    >
-                      {/* {item.innerData &&
-                      item.innerData?.map((res: any, index: number) => (
-                        <>
-                          <tbody>
-                            <tr className="flex w-full items-center" key={index}>
-                              <td></td>
-                              <td className="text-black7f">AirDrop</td>
-                              <td>
-                                <Image alt={'IMG'} src={res?.airdrop?.StakeIMG} />
-                              </td>
-                              <td>{res?.airdrop?.StakeName}</td>
-                            </tr>
-                            <tr className="flex w-full items-center" key={index}>
-                              <td></td>
-                              <td className="text-black7f">Mint</td>
-                              <td>
-                                <Image alt={'IMG'} src={res?.mint?.StakeIMG} />
-                              </td>
-                              <td>{res?.mint?.StakeName}</td>
-                            </tr>
-                            <tr className="flex w-full items-center" key={index}>
-                              <td></td>
-                              <td className="text-black7f">Bought</td>
-                              <td>
-                                <Image alt={'IMG'} src={res?.bought?.StakeIMG} />
-                              </td>
-                              <td>{res?.bought?.StakeName}</td>
-                            </tr>
-                          </tbody>
-                        </>
-                      ))} */}
-                    </TECollapse>
-                  </tr>
                 </>
               )
             })}
