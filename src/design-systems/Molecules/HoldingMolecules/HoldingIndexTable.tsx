@@ -108,13 +108,24 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({ data, headData, f
         </thead>
         <tbody>
           {!loading &&
-            data?.map((item, index: number) => {
+            data?.map((item: any, index: number) => {
               const Floor = item?.floor / SEI
               const BuyPrice = item?.buyPrice / SEI
               const Fees = item?.fee / SEI
               const Income = item?.income / SEI
               const RealisedGain = item?.realizedGains / SEI
               const SinceTrade = item?.sinceTrade / SEI
+
+              const info =
+                item?.userHoldingNfts &&
+                item?.userHoldingNfts?.reduce((acc: any, nft: any) => {
+                  acc.rank = (acc.rank || 0) + (nft?.rarity?.rank || 0) / item.userHoldingAmount
+                  acc.buyPrice = (acc.buyPrice || 0) + nft?.buyPrice?.amount / SEI || 0
+                  acc.estFee = (acc.estFee || 0) + nft?.estFee?.amount / SEI || 0
+                  acc.unrealizedGains = (acc.unrealizedGains || 0) + nft?.unrealizedGains?.amount / SEI || 0
+                  acc.holdingTime = (acc.holdingTime || 0) + nft?.holdingTime || 0
+                  return acc
+                }, {})
               return (
                 <>
                   <tr className="cursor-pointer bg-[#181620]">
@@ -126,7 +137,7 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({ data, headData, f
                       </div>
                     </div>
                   </td> */}
-                    <td>
+                    <td className="min-w-[230px]">
                       <div className="flex items-center justify-center gap-2">
                         <BookMarkButton isActive={false} />
                         <div className={`${activeElement === index && 'rotate-90'}`} onClick={() => handleClick(index)}>
@@ -147,7 +158,7 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({ data, headData, f
                             alt={'IMG'}
                             className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
                             height={48}
-                            src={item.thumbnail ? item.thumbnail : '/images/placeholder.png'}
+                            src={item?.pfp ? item?.pfp : '/images/placeholder.png'}
                             style={{ objectFit: 'cover' }}
                             width={48}
                           />
@@ -156,7 +167,7 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({ data, headData, f
                       </div>
                     </td>
                     <td className="!w-[20px] !overflow-hidden !overflow-ellipsis">
-                      {item?.amount ? item?.amount : '--'}
+                      {item?.userHoldingAmount ? item?.userHoldingAmount : '--'}
                     </td>
                     <td className="w-[40px] overflow-hidden overflow-ellipsis">
                       <TETooltip title={`${item?.weight}%`}>
@@ -166,20 +177,20 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({ data, headData, f
                     <td className="w-[100px] overflow-hidden overflow-ellipsis">
                       <TETooltip title={`${Floor} SEI`}>
                         <Typography className="w-max">
-                          {item?.floor ? `${Floor.toFixed(3)} ${crypto.symbol}` : '--'}
+                          {item?.floor ? `${item?.floor.toFixed(3)} ${crypto.symbol}` : '--'}
                         </Typography>
                       </TETooltip>
                     </td>
-                    <td>{item.rarity ? item.rarity : '--'}</td>
+                    <td>{info.rank ? info.rank.toFixed(2) : '--'}</td>
                     <td>
                       <TETooltip title={`${BuyPrice} ${crypto.symbol}`}>
                         <Typography className="w-max">
-                          {item.buyPrice ? `${BuyPrice.toFixed(3)} ${crypto.symbol}` : '--'}
+                          {info?.buyPrice ? `${info?.buyPrice.toFixed(3)} ${crypto.symbol}` : '--'}
                         </Typography>
                       </TETooltip>
                     </td>
                     <td>
-                      <Typography>{item.fee ? `${Fees.toFixed(3)} ${crypto.symbol}` : '--'}</Typography>{' '}
+                      <Typography>{info?.estFee ? `${info?.estFee.toFixed(3)} ${crypto.symbol}` : '--'}</Typography>{' '}
                     </td>
                     <td className="w-[100px] overflow-hidden overflow-ellipsis">
                       <Typography>{item?.income ? `${Income.toFixed(3)} ${crypto.symbol}` : '--'}</Typography>
@@ -187,7 +198,7 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({ data, headData, f
                     <td>
                       <div className="flex flex-col gap-[4px]">
                         <Typography>
-                          {item?.realizedGains ? `${RealisedGain.toFixed(3)} ${crypto.symbol}` : '--'}
+                          {info?.unrealizedGains ? `${info.unrealizedGains.toFixed(3)} ${crypto.symbol}` : '--'}
                         </Typography>
                         {item?.sinceTradePercent ? (
                           <Typography className={item?.sinceTradePercent < 0 ? 'text-warning-300' : 'text-green'}>
@@ -222,44 +233,108 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({ data, headData, f
                       </div>{' '}
                     </td>
                   </tr>
-                  <tr>
-                    <TECollapse
-                      className=" Collapse !mt-0 !rounded-b-none text-left !shadow-none"
-                      show={activeElement === index}
-                    >
-                      {/* {item.innerData &&
-                      item.innerData?.map((res: any, index: number) => (
-                        <>
-                          <tbody>
-                            <tr className="flex w-full items-center" key={index}>
-                              <td></td>
-                              <td className="text-black7f">AirDrop</td>
-                              <td>
-                                <Image alt={'IMG'} src={res?.airdrop?.StakeIMG} />
-                              </td>
-                              <td>{res?.airdrop?.StakeName}</td>
-                            </tr>
-                            <tr className="flex w-full items-center" key={index}>
-                              <td></td>
-                              <td className="text-black7f">Mint</td>
-                              <td>
-                                <Image alt={'IMG'} src={res?.mint?.StakeIMG} />
-                              </td>
-                              <td>{res?.mint?.StakeName}</td>
-                            </tr>
-                            <tr className="flex w-full items-center" key={index}>
-                              <td></td>
-                              <td className="text-black7f">Bought</td>
-                              <td>
-                                <Image alt={'IMG'} src={res?.bought?.StakeIMG} />
-                              </td>
-                              <td>{res?.bought?.StakeName}</td>
-                            </tr>
-                          </tbody>
-                        </>
-                      ))} */}
-                    </TECollapse>
-                  </tr>
+                  {item?.userHoldingNfts &&
+                    item?.userHoldingNfts?.map((nft: any) => (
+                      <tr
+                        className={`${activeElement === index ? 'table-row' : 'hidden'} cursor-pointer`}
+                        key={nft.key}
+                      >
+                        {/* avatar, name */}
+                        <td className="!p-0">
+                          <div className="flex w-full items-center">
+                            <div className="w-[100px] !pl-0 text-center text-[14px] text-black7f">
+                              {nft?.status?.status}
+                            </div>
+                            <div className="w-[40px] !px-0">
+                              <Image alt={'IMG'} height={40} src={nft?.imageLink} width={40} />
+                            </div>
+                            <div className="w-[90px] !px-0 text-center">{nft?.name}</div>
+                          </div>
+                        </td>
+                        {/* Amount, Weight */}
+                        <td></td>
+                        <td></td>
+                        {/* Floor */}
+                        <td className="overflow-hidden overflow-ellipsis">
+                          <div>
+                            {nft?.floor !== undefined && nft?.floor !== null
+                              ? `${Number(nft.floor)?.toFixed(2)} ${crypto?.symbol}`
+                              : '--'}
+                          </div>
+                        </td>
+                        {/* Rarity */}
+                        <td>{nft?.rarity?.rank && nft?.rarity?.rank !== null ? nft?.rarity?.rank.toFixed(2) : '--'}</td>
+                        {/* Buy Price */}
+                        <td>
+                          <div>
+                            <TETooltip title={info.buyPrice}>
+                              {nft?.buyPrice?.amount
+                                ? `${Number(nft?.buyPrice?.amount / SEI)?.toFixed(2)} ${crypto?.symbol}`
+                                : '--'}
+                            </TETooltip>
+                          </div>
+                        </td>
+                        {/* Paid Fees */}
+                        <td>
+                          {nft?.estFee && nft?.estFee !== null
+                            ? `${Number(nft?.estFee.amount / SEI)?.toFixed(2)} ${crypto?.symbol}`
+                            : '--'}
+                        </td>
+                        {/* Income */}
+                        <td className="w-[100px] overflow-hidden overflow-ellipsis">
+                          <div>
+                            {/* {nft?.floor && nft?.floor !== null
+                              ? `${Number(nft.floor)?.toFixed(2)} ${crypto?.symbol}`
+                              : '--'} */}
+                          </div>
+                        </td>
+                        {/* Unrealized Gains */}
+                        <td>
+                          <div className="flex flex-col gap-[4px]">
+                            <div>
+                              <Typography>
+                                {nft?.unrealizedGains && nft?.unrealizedGains !== null
+                                  ? `${Number(nft?.unrealizedGains.amount / SEI).toFixed(2)} ${crypto?.symbol}`
+                                  : '--'}
+                              </Typography>
+                            </div>
+                          </div>
+                        </td>
+                        <td>{/* Since Trade */}</td>
+                        {/* <td className={percentageChange < 0 ? 'text-warning-300' : 'text-green'}>
+                          <TETooltip title={formattedPercentageChange}>
+                            <Typography>
+                              {item?.sinceTrade && item?.sinceTrade !== null
+                                ? `${formattedPercentageChange}`
+                                : '--'}
+                            </Typography>
+                          </TETooltip>
+                        </td> */}
+                        {/* Holding Time */}
+                        <td>
+                          {item && item?.holdingTime !== null
+                            ? item?.holdingTime
+                              ? `${item?.holdingTime} d`
+                              : '--'
+                            : '--'}
+                        </td>
+                        <td>
+                          {item?.link && item?.link !== null ? (
+                            <Link
+                              className="flex flex-col items-center justify-center"
+                              href={item && item?.link}
+                              target={`${item ? (item?.link !== '' && item?.link !== null ? '_blank' : '') : ''}`}
+                            >
+                              <div className="rounded-[8px] bg-black225_05 p-1">
+                                <LinkIcon />
+                              </div>
+                            </Link>
+                          ) : (
+                            '--'
+                          )}
+                        </td>
+                      </tr>
+                    ))}
                 </>
               )
             })}
