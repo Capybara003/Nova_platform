@@ -49,7 +49,7 @@ export const useHolding = () => {
     COINBASE_SECRET_KEY: coinbase.api_secret,
     marketplace: coinbase.api_key ? 'coinbase' : binance.api_key ? 'binance' : '',
     userId: token,
-    walletAddress: walletUpdate,
+    userAddress: walletUpdate,
     search: globalData.search,
     tab: tabs[tabName],
     // wallets?.filter(walletItem => walletItem.isActive)?.map(walletItem => walletItem.walletAddress) || [],
@@ -71,18 +71,17 @@ export const useHolding = () => {
     refetch: refetchHolding,
     isFetching: isFetchingHolding,
   } = useQuery(
-    [data],
-    () => HoldingServices.getHolding(data),
-
+    [API_ENDPOINTS.PUBLIC.GET_HOLDING_ASSETS],
+    () => HoldingServices.getHolding({ user_address: 'sei1ttgt5stzv37pv6lpz3etm68jmsm8l0raynpkku' }),
     {
-      // select: res => res,
+      select: res => res,
       refetchOnWindowFocus: false,
       // enabled: coinbase.is_connected || binance.is_connected || data.walletAddress.length > 0,
     }
   )
 
   const { isLoading: isLoadingIncome, data: Income } = useQuery([API_ENDPOINTS.PUBLIC.GET_PORTFOLIO_V2], () =>
-    HoldingServices.getIncome({ type: 'nft' })
+    HoldingServices.getIncome({ user_address: 'sei1ttgt5stzv37pv6lpz3etm68jmsm8l0raynpkku' })
   )
   const {
     isLoading: isLoadingWallet,

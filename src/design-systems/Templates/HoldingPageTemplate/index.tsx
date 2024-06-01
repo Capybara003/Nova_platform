@@ -66,8 +66,13 @@ const HoldingPageTemplate: React.FC = () => {
   }, [LocalWallet])
 
   const totalItems = useMemo(
-    () => (activeTab === 0 ? Holding?.data?.length : activeTab === 1 ? incomeData?.data?.length : StakingData1.length),
-    [activeTab, Holding?.data?.length, incomeData?.data?.length]
+    () =>
+      activeTab === 0
+        ? Holding?.collection?.length
+        : activeTab === 1
+        ? incomeData?.collection?.length
+        : StakingData1.length,
+    [activeTab, Holding?.collection?.length, incomeData?.collection?.length]
   )
   const handlePageChange = ({ selected }: { selected: number }) => setCurrentPage(selected)
 
@@ -85,7 +90,7 @@ const HoldingPageTemplate: React.FC = () => {
   }
 
   const openModal = () => setIsModalOpen(true)
-  const DataLength = Holding?.data.length || Income?.data.length
+  const DataLength = Holding?.collection?.length || Income?.collection?.length
 
   return (
     <>
@@ -245,9 +250,9 @@ const HoldingPageTemplate: React.FC = () => {
                   <ExportPopOver
                     data={
                       activeTab === 0
-                        ? holdingData.data
+                        ? holdingData.collection
                         : activeTab === 1
-                        ? incomeData.data
+                        ? incomeData.collection
                         : activeTab === 2
                         ? StakingData
                         : activeTab === 3
@@ -275,14 +280,14 @@ const HoldingPageTemplate: React.FC = () => {
                     <>
                       <HoldingTable
                         crypto={crypto}
-                        data={Holding?.data?.slice(startIndex, endIndex)}
+                        data={Holding?.collection?.slice(startIndex, endIndex)}
                         footerData={Holding}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                           { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
                           { name: 'Weight', key: 'Weight', isInfo: false, isSort: false, width: '100px' },
                           { name: 'Floor', key: 'Floor', isInfo: false, isSort: false, width: '100px' },
-                          { name: 'Rarity', key: 'Rarity', isInfo: false, isSort: false, width: '100px' },
+                          { name: 'Rank', key: 'Rank', isInfo: false, isSort: false, width: '100px' },
                           { name: 'Buy Price', key: 'BuyPrice', isInfo: false, isSort: false, width: '100px' },
                           { name: 'Est. Fees', key: 'EstFees', isInfo: false, isSort: false, width: '100px' },
                           { name: 'Floor Value', key: 'FloorValue', isInfo: false, isSort: true, width: '150px' },
@@ -306,7 +311,7 @@ const HoldingPageTemplate: React.FC = () => {
                     <>
                       <HoldingIndexTable
                         crypto={crypto}
-                        data={incomeData?.data?.slice(startIndex, endIndex)}
+                        data={incomeData?.collection?.slice(startIndex, endIndex)}
                         footerData={incomeData}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
@@ -383,8 +388,8 @@ const HoldingPageTemplate: React.FC = () => {
                     />
                   )}
                 </div>
-                {((Holding?.data?.length > 9 && activeTab === 0) ||
-                  (incomeData?.data?.length > 9 && activeTab === 1) ||
+                {((Holding?.collection?.length > 9 && activeTab === 0) ||
+                  (incomeData?.collection?.length > 9 && activeTab === 1) ||
                   (StakingData1.length > 9 && activeTab === 3) ||
                   (StakingData.length > 9 && activeTab === 2)) && (
                   <Pagination pageCount={pageCount} onPageChange={handlePageChange} />

@@ -9,10 +9,7 @@ class HoldingServices {
   getHolding = async (data: {}) => {
     // return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING}`)
     // return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_ASSETS}`)
-    return CoreAPIService.post<any>(
-      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_COLLECTION}`,
-      data
-    )
+    return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_ASSETS}`, data)
   }
   postAssetDetails = async (AssetsDetails: AssetsDetailsBlock) => {
     return CoreAPIService.post<any>(
@@ -24,7 +21,7 @@ class HoldingServices {
     return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_PORTFOLIO}`)
   }
   getIncome = async (data: object) => {
-    return CoreAPIService.post<NFTData>(
+    return CoreAPIService.get<NFTData>(
       `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_PORTFOLIO_V2}`,
       data
     )

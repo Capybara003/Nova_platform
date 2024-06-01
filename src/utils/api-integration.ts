@@ -30,9 +30,8 @@ export const API_ENDPOINTS = {
       'assets/income?address=addr1zyq0kyrml023kwjk8zr86d5gaxrt5w8lxnah8r6m6s4jp4g3r6dxnzml343sx8jweqn4vn3fz2kj8kgu9czghx0jrsyqqktyhv',
     GET_TAXES_CAPITAL:
       'assets/tax-capital?address=addr1qxgscmhpp7qnnc0qv6rs2fk34tgath7nzhjq90x9ens233cxtaluc9l6as5lfvm7njvs05fqr0lkedye7lszfepzehusmucnm6',
-    GET_PORTFOLIO_V2: 'collections/sold-assets',
-    GET_HOLDING_ASSETS:
-      'assets/userHoldingAssets?address=addr1qxgscmhpp7qnnc0qv6rs2fk34tgath7nzhjq90x9ens233cxtaluc9l6as5lfvm7njvs05fqr0lkedye7lszfepzehusmucnm6',
+    GET_PORTFOLIO_V2: 'user/nfts/get_user_income_assets',
+    GET_HOLDING_ASSETS: 'user/nfts/get_holding_assets',
     GET_TAXIABLE_GAIN:
       'assets/getTaxableGain?address=addr1qxgscmhpp7qnnc0qv6rs2fk34tgath7nzhjq90x9ens233cxtaluc9l6as5lfvm7njvs05fqr0lkedye7lszfepzehusmucnm6',
     GET_HOLDING_COLLECTION: 'collections/getHoldingAsset',

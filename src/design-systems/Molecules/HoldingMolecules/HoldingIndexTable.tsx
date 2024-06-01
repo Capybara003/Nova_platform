@@ -19,7 +19,7 @@ import { cryptoProps } from 'lib/redux/slices/navToggleSlice/interface'
 import { NoData } from 'design-systems/Atoms/NoData'
 
 interface HoldingIndexTableProps {
-  data: NFTData['data']
+  data: NFTData['collection']
   headData: any[]
   loading?: boolean
   footerData?: Omit<NFTData, 'data'>

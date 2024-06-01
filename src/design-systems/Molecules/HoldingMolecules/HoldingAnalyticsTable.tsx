@@ -16,6 +16,7 @@ import { Checkbox } from 'design-systems/Atoms/CheckBox'
 
 const HoldingAnalyticsTable: React.FC<TableProps> = ({ data, headData }) => {
   const [activeElement, setActiveElement] = useState<string>('')
+  const [checkboxes, setCheckboxes] = useState<any>([])
 
   const handleClick = (value: string) => {
     if (value === activeElement) {
@@ -24,9 +25,19 @@ const HoldingAnalyticsTable: React.FC<TableProps> = ({ data, headData }) => {
       setActiveElement(value)
     }
   }
+
+  const handleSelectAllChange = (checked: boolean) => {
+    if (checked) {
+      const allIds = data.map((item: any) => item.id)
+      setCheckboxes(allIds)
+    } else {
+      setCheckboxes([])
+    }
+  }
+
   return (
     <>
-      <table className="rounded-corners w-full rounded-sm    font-Lexend">
+      <table className="rounded-corners w-full rounded-sm font-Lexend">
         <thead>
           <tr>
             {headData?.map((item: any, key: number) => {
@@ -34,9 +45,9 @@ const HoldingAnalyticsTable: React.FC<TableProps> = ({ data, headData }) => {
                 <th key={key} style={{ width: item.width }}>
                   <div className={`flex !w-full items-center gap-2 ${key === 0 ? 'justify-start' : 'justify-center'}`}>
                     {key === 0 && (
-                      <span className="ml-4 mr-16">
+                      <Typography className="ml-4 mr-16">
                         <BookMarkButton isActive={true} />
-                      </span>
+                      </Typography>
                     )}
                     {item.isInfo && <FiInfo className="text-md" />}
 
@@ -55,7 +66,11 @@ const HoldingAnalyticsTable: React.FC<TableProps> = ({ data, headData }) => {
                   <Typography className={`line-clamp-2 overflow-hidden text-ellipsis`} size="md">
                     All
                   </Typography>
-                  <Checkbox checked={true} />
+                  <Checkbox
+                    checked={checkboxes?.length === data?.length}
+                    name="All"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSelectAllChange(e.target.checked)}
+                  />
                 </div>
               </div>
             </th>

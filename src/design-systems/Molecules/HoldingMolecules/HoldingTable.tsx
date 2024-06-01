@@ -91,20 +91,22 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
           {headData?.map((item: any, key: number) => {
             return (
               <th key={key} style={{ width: item.width }}>
-                <div className={`flex !w-full items-center ${key === 0 ? 'justify-start' : 'justify-center'} gap-2`}>
+                <div
+                  className={`flex !w-full items-center gap-2 ${key === 0 ? 'justify-start' : 'justify-center'} gap-2`}
+                >
                   {key === 0 && (
-                    <Typography className="mr-12">
+                    <Typography className="ml-4 mr-16">
                       <BookMarkButton isActive={true} />
                     </Typography>
                   )}
 
-                  {item.isInfo && <FiInfo className="text-lg" />}
+                  {item.isInfo && <FiInfo className="text-md" />}
 
                   <Typography className={`line-clamp-2 overflow-hidden text-ellipsis`} size="md">
                     {item.name}
                   </Typography>
 
-                  {item.isSort && <RxCaretSort className="text-lg" />}
+                  {item.isSort && <RxCaretSort className="text-md" />}
                 </div>
               </th>
             )
@@ -127,13 +129,19 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
       </thead>
       <tbody>
         {!loading &&
-          data?.map((item: any, index: any) => {
-            const Floor = item?.floor / SEI
-            const BuyPrice = item.buyPrice / SEI
-            const Fees = item.fee / SEI
-            const FloorValue = item?.floorValue / SEI
-            const UnRealizedGains = item?.unrealizedGains / SEI
-            const SinceTrade = item?.sinceTrade / SEI
+          data?.map((collection: any, index: any) => {
+            const info =
+              collection?.userHoldingNfts &&
+              collection?.userHoldingNfts?.reduce((acc: any, nft: any) => {
+                acc.rank = (acc.rank || 0) + nft?.rarity?.rank || 0
+                acc.buyPrice = (acc.buyPrice || 0) + nft?.buyPrice?.amount / SEI || 0
+                acc.estFee = (acc.estFee || 0) + nft?.estFee?.amount / SEI || 0
+                acc.unrealizedGains = (acc.unrealizedGains || 0) + nft?.unrealizedGains?.amount / SEI || 0
+                acc.holdingTime = (acc.holdingTime || 0) + nft?.holdingTime || 0
+                return acc
+              }, {})
+
+            const SinceTrade = collection?.sinceTrade / SEI
 
             const percentageChange = (SinceTrade - baseValue) / baseValue
             const formattedPercentageChange = `${
@@ -145,15 +153,15 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
             }%`
 
             if (tabName === 2) {
-              if (!item?.asset?.includes(crypto?.label)) return <></>
+              if (!collection?.asset?.includes(crypto?.label)) return <></>
               return (
                 <React.Fragment key={index}>
                   <tr className="cursor-pointer">
-                    <td className="">
+                    <td className="min-w-[230px]">
                       <>
                         <div className="flex items-center justify-center gap-2">
-                          <div onClick={() => handleBookMark(item?.id)}>
-                            {bookmarkedItems.includes(item?.id) ? (
+                          <div onClick={() => handleBookMark(collection?.seiAddress)}>
+                            {bookmarkedItems.includes(collection?.seiAddress) ? (
                               <div>
                                 <BookMarkFill />
                               </div>
@@ -176,10 +184,10 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                             href={{
                               pathname: '/single-collection-trades',
                               query: {
-                                asset_name: item?.name && item?.name !== null ? item?.name : '',
+                                asset_name: collection?.name && collection?.name !== null ? collection?.name : '',
                                 // item?.assetNameAscii,
-                                policy: item?.policy && item?.policy !== null ? item?.policy : '',
-                                current_value: item?.id && item?.id !== null ? item?.id : '',
+                                policy: collection?.policy && collection?.policy !== null ? collection?.policy : '',
+                                current_value: collection?.id && collection?.id !== null ? collection?.id : '',
                               }, // Add your custom props as query parameters
                             }}
                           >
@@ -187,38 +195,40 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                               alt={'IMG'}
                               className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
                               height={48}
-                              src={'/sei-logo.jpg'}
+                              src={collection?.pfp}
                               width={48}
                             />
-                            SEI {item.type ? `(${item.type})`.toUpperCase() : ''}
+                            SEI {collection.type ? `(${collection.type})`.toUpperCase() : ''}
                           </Link>
                         </div>
                       </>
                     </td>
                     <td className="">
-                      <TETooltip title={item?.free}>
-                        {item?.free ? `${parseInt(item?.free).toFixed(2)}%` : '--'}
+                      <TETooltip title={collection?.free}>
+                        {collection?.free ? `${parseInt(collection?.free).toFixed(2)}%` : '--'}
                       </TETooltip>
                     </td>
                     <td className="">
-                      <TETooltip title={item?.size}>{item?.size ? parseInt(item?.size).toFixed(2) : '--'}</TETooltip>
+                      <TETooltip title={collection?.size}>
+                        {collection?.size ? parseInt(collection?.size).toFixed(2) : '--'}
+                      </TETooltip>
                     </td>
                     <td className=" overflow-hidden overflow-ellipsis">
-                      <div>{item?.floor ? `${Number(item.floor)?.toFixed(2)} $` : '--'}</div>
+                      <div>{collection?.floor ? `${Number(collection.floor)?.toFixed(2)} $` : '--'}</div>
                     </td>
-                    <td className="">{item?.rarity && item?.rarity !== null ? item?.rarity?.toFixed(2) : '--'}</td>
+                    <td className="">{info?.rank && info?.rank !== null ? info?.rank?.toFixed(2) : '--'}</td>
                     <td className="">
-                      <div>{item?.price ? `${Number(item.price)?.toFixed(2)} $` : '--'}</div>
+                      <div>{collection?.price ? `${Number(collection.price)?.toFixed(2)} $` : '--'}</div>
                     </td>
                     <td className="">
                       <div>
-                        {item?.fee && item?.fee !== null ? `${Number(Fees)?.toFixed(2)} ${crypto?.symbol}` : '--'}
+                        {info?.fee && info?.fee !== null ? `${Number(info.fee)?.toFixed(2)} ${crypto?.symbol}` : '--'}
                       </div>
                     </td>
                     <td className=" overflow-hidden overflow-ellipsis">
                       <div>
-                        {item?.floorValue && item?.floorValue !== null
-                          ? `${Number(FloorValue)?.toFixed(2)} ${crypto?.symbol}`
+                        {collection?.floor && collection?.floor !== null
+                          ? `${Number(collection.floor * collection.userHoldingAmount)?.toFixed(2)} ${crypto?.symbol}`
                           : '--'}
                       </div>
                     </td>
@@ -226,32 +236,38 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                       <div className="flex flex-col gap-[4px]">
                         <div>
                           <Typography>
-                            {item?.unrealizedGains && item?.unrealizedGains !== null
-                              ? `${Number(UnRealizedGains).toFixed(2)} ${crypto?.symbol}`
+                            {info?.unrealizedGains && info?.unrealizedGains !== null
+                              ? `${Number(info.unrealizedGains).toFixed(2)} ${crypto?.symbol}`
                               : '--'}
                           </Typography>
                           <Typography className={percentageChange < 0 ? 'text-warning-300' : 'text-green'}>
-                            {item?.sinceTrade && item?.sinceTrade !== null ? `${formattedPercentageChange}` : '--'}
+                            {collection?.sinceTrade && collection?.sinceTrade !== null
+                              ? `${formattedPercentageChange}`
+                              : '--'}
                           </Typography>
                         </div>
                       </div>
                     </td>
                     <td className={` ${percentageChange < 0 ? 'text-warning-300' : 'text-green'}`}>
-                      {item?.sinceTrade && item?.sinceTrade !== null ? `${formattedPercentageChange}` : '--'}
+                      {collection?.sinceTrade && collection?.sinceTrade !== null
+                        ? `${formattedPercentageChange}`
+                        : '--'}
                     </td>
                     <td className="">
-                      {item && item?.holdingTime !== null
-                        ? item?.holdingTime
-                          ? `${item?.holdingTime} d`
+                      {collection && collection?.holdingTime !== null
+                        ? collection?.holdingTime
+                          ? `${collection?.holdingTime} d`
                           : '--'
                         : '--'}
                     </td>
                     <td className="">
-                      {item?.link && item?.link !== null ? (
+                      {collection?.link && collection?.link !== null ? (
                         <Link
                           className="flex flex-col items-center justify-center"
-                          href={item && item?.link}
-                          target={`${item ? (item?.link !== '' && item?.link !== null ? '_blank' : '') : ''}`}
+                          href={collection && collection?.link}
+                          target={`${
+                            collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
+                          }`}
                         >
                           <div className="rounded-[8px] bg-black225_05 p-1">
                             <LinkIcon />
@@ -329,28 +345,10 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
             return (
               <React.Fragment key={index}>
                 <tr className="cursor-pointer">
-                  {/* <td className="">
-                  <div className="flex">
-                    <div onClick={() => handleBookMark(item?.id)}>
-                      {bookmarkedItems.includes(item?.id) ? (
-                        <div>
-                          <BookMarkFill />
-                        </div>
-                      ) : (
-                        <div>
-                          <BookMarkEmpty />
-                        </div>
-                      )}
-                    </div>
-                    <div className={`${activeElement === index && 'rotate-90'}`} onClick={() => handleClick(index)}>
-                      <RightArrowIcons />
-                    </div>
-                  </div>
-                </td> */}
-                  <td>
+                  <td className="min-w-[230px]">
                     <div className="flex items-center justify-center gap-2">
-                      <div onClick={() => handleBookMark(item?.id)}>
-                        {bookmarkedItems.includes(item?.id) ? (
+                      <div onClick={() => handleBookMark(collection?.id)}>
+                        {bookmarkedItems.includes(collection?.id) ? (
                           <div>
                             <BookMarkFill />
                           </div>
@@ -364,24 +362,24 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                         <RightArrowIcons />
                       </div>
                       <Link
-                        className="flex items-center gap-3 text-ellipsis"
+                        className="flex items-center justify-center gap-2 text-ellipsis"
                         href={{
                           pathname: '/single-collection-trades',
                           query: {
-                            asset_name: item?.name && item?.name !== null ? item?.name : '',
+                            asset_name: collection?.name && collection?.name !== null ? collection?.name : '',
                             // item?.assetNameAscii,
-                            policy: item?.policy && item?.policy !== null ? item?.policy : '',
-                            current_value: item?.id && item?.id !== null ? item?.id : '',
+                            policy: collection?.policy && collection?.policy !== null ? collection?.policy : '',
+                            current_value: collection?.id && collection?.id !== null ? collection?.id : '',
                           }, // Add your custom props as query parameters
                         }}
                       >
-                        {item?.thumbnail && item?.thumbnail !== null ? (
+                        {collection?.pfp && collection?.pfp !== null ? (
                           <Image
                             alt={'IMG'}
                             className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
-                            height={48}
-                            src={item?.thumbnail}
-                            width={48}
+                            height={40}
+                            src={collection?.pfp}
+                            width={40}
                           />
                         ) : (
                           <Image
@@ -393,50 +391,53 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                           />
                         )}
                         <Typography className="w-max">
-                          {item?.name && item?.name !== null ? item?.name || '--' : '--'}
+                          {collection?.name && collection?.name !== null ? collection?.name || '--' : '--'}
                         </Typography>
                       </Link>
                     </div>
                   </td>
-                  <td className="">{item?.amount && item?.amount !== null ? item?.amount : '--'}</td>
+                  <td className="">
+                    {collection?.userHoldingAmount && collection?.userHoldingAmount !== null
+                      ? collection?.userHoldingAmount
+                      : '--'}
+                  </td>
                   <td>
                     <div className="tooltip !w-[60px]">
-                      <TETooltip title={item?.weight}>
-                        {item?.weight !== undefined && item?.weight !== null ? `${item?.weight?.toFixed(2)}%` : '--'}
-                      </TETooltip>
-                      {/* <div className=" overflow-hidden text-ellipsis whitespace-nowrap">
-                    </div>
-                    <span className="tooltiptext">
-                      {item?.weight !== undefined && item?.weight !== null ? `${item?.weight}%` : '--'}
-                    </span> */}
-                    </div>
-                  </td>
-                  <td className="overflow-hidden overflow-ellipsis">
-                    <div>
-                      <TETooltip title={Floor}>
-                        {item?.floor !== undefined && item?.floor !== null
-                          ? `${Number(Floor)?.toFixed(2)} ${crypto?.symbol}`
+                      <TETooltip title={collection?.weight}>
+                        {collection?.weight !== undefined && collection?.weight !== null
+                          ? `${collection?.weight?.toFixed(2)}%`
                           : '--'}
                       </TETooltip>
                     </div>
                   </td>
-                  <td>{item?.rarity && item?.rarity !== null ? item?.rarity?.toFixed(2) : '--'}</td>
+                  <td className="overflow-hidden overflow-ellipsis">
+                    <div>
+                      <TETooltip title={collection?.floor}>
+                        {collection?.floor !== undefined && collection?.floor !== null
+                          ? `${Number(collection.floor)?.toFixed(2)} ${crypto?.symbol}`
+                          : '--'}
+                      </TETooltip>
+                    </div>
+                  </td>
+                  <td>{info?.rank && info?.rank !== null ? info?.rank : '--'}</td>
                   <td>
                     <div>
-                      <TETooltip title={BuyPrice}>
-                        {BuyPrice ? `${Number(BuyPrice)?.toFixed(2)} ${crypto?.symbol}` : '--'}
+                      <TETooltip title={info.buyPrice}>
+                        {info.buyPrice ? `${Number(info.buyPrice)?.toFixed(2)} ${crypto?.symbol}` : '--'}
                       </TETooltip>
                     </div>
                   </td>
                   <td>
                     <div>
-                      {item?.fee && item?.fee !== null ? `${Number(Fees)?.toFixed(2)} ${crypto?.symbol}` : '--'}
+                      {info?.estFee && info?.estFee !== null
+                        ? `${Number(info.estFee)?.toFixed(2)} ${crypto?.symbol}`
+                        : '--'}
                     </div>
                   </td>
                   <td className="w-[100px] overflow-hidden overflow-ellipsis">
                     <div>
-                      {item?.floorValue && item?.floorValue !== null
-                        ? `${Number(FloorValue)?.toFixed(2)} ${crypto?.symbol}`
+                      {collection?.floor && collection?.floor !== null
+                        ? `${Number(collection.floor * collection.userHoldingAmount)?.toFixed(2)} ${crypto?.symbol}`
                         : '--'}
                     </div>
                   </td>
@@ -444,12 +445,9 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                     <div className="flex flex-col gap-[4px]">
                       <div>
                         <Typography>
-                          {item?.unrealizedGains && item?.unrealizedGains !== null
-                            ? `${Number(UnRealizedGains).toFixed(2)} ${crypto?.symbol}`
+                          {info?.unrealizedGains && info?.unrealizedGains !== null
+                            ? `${Number(info.unrealizedGains).toFixed(2)} ${crypto?.symbol}`
                             : '--'}
-                        </Typography>
-                        <Typography className={percentageChange < 0 ? 'text-warning-300' : 'text-green'}>
-                          {item?.sinceTrade && item?.sinceTrade !== null ? `${formattedPercentageChange}` : '--'}
                         </Typography>
                       </div>
                     </div>
@@ -457,19 +455,27 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                   <td className={percentageChange < 0 ? 'text-warning-300' : 'text-green'}>
                     <TETooltip title={formattedPercentageChange}>
                       <Typography>
-                        {item?.sinceTrade && item?.sinceTrade !== null ? `${formattedPercentageChange}` : '--'}
+                        {collection?.sinceTrade && collection?.sinceTrade !== null
+                          ? `${formattedPercentageChange}`
+                          : '--'}
                       </Typography>
                     </TETooltip>
                   </td>
                   <td>
-                    {item && item?.holdingTime !== null ? (item?.holdingTime ? `${item?.holdingTime} d` : '--') : '--'}
+                    {collection && collection?.holdingTime !== null
+                      ? collection?.holdingTime
+                        ? `${collection?.holdingTime} d`
+                        : '--'
+                      : '--'}
                   </td>
                   <td>
-                    {item?.link && item?.link !== null ? (
+                    {collection?.link && collection?.link !== null ? (
                       <Link
                         className="flex flex-col items-center justify-center"
-                        href={item && item?.link}
-                        target={`${item ? (item?.link !== '' && item?.link !== null ? '_blank' : '') : ''}`}
+                        href={collection && collection?.link}
+                        target={`${
+                          collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
+                        }`}
                       >
                         <div className="rounded-[8px] bg-black225_05 p-1">
                           <LinkIcon />
@@ -482,50 +488,120 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                   <td>
                     <div
                       className="flex !w-full justify-end"
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCheckboxChange(item.id, e)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        handleCheckboxChange(collection?.seiAddress, e)
+                      }
                     >
-                      <Checkbox checked={checkboxes.includes(item.id)} />
+                      <Checkbox checked={checkboxes.includes(collection?.seiAddress)} />
                     </div>{' '}
                   </td>
                 </tr>
-                <tr>
-                  <TECollapse
-                    className=" Collapse !mt-0 !rounded-b-none text-left !shadow-none"
-                    show={activeElement === index}
-                  >
-                    {item?.innerData &&
-                      item?.innerData?.map((res: any, index: number) => (
-                        <React.Fragment key={index}>
-                          <tbody>
-                            <tr className="flex w-full items-center" key={index}>
-                              <td></td>
-                              <td className="text-black7f">AirDrop</td>
-                              <td>
-                                <Image alt={'IMG'} src={res?.airdrop?.StakeIMG} />
-                              </td>
-                              <td>{res?.airdrop?.StakeName}</td>
-                            </tr>
-                            <tr className="flex w-full items-center" key={index}>
-                              <td></td>
-                              <td className="text-black7f">Mint</td>
-                              <td>
-                                <Image alt={'IMG'} src={res?.mint?.StakeIMG} />
-                              </td>
-                              <td>{res?.mint?.StakeName}</td>
-                            </tr>
-                            <tr className="flex w-full items-center" key={index}>
-                              <td></td>
-                              <td className="text-black7f">Bought</td>
-                              <td>
-                                <Image alt={'IMG'} src={res?.bought?.StakeIMG} />
-                              </td>
-                              <td>{res?.bought?.StakeName}</td>
-                            </tr>
-                          </tbody>
-                        </React.Fragment>
-                      ))}
-                  </TECollapse>
-                </tr>
+                {collection?.userHoldingNfts &&
+                  collection?.userHoldingNfts?.map((nft: any) => (
+                    <tr className={`${activeElement === index ? 'table-row' : 'hidden'} cursor-pointer`} key={nft.key}>
+                      <td className="!p-0">
+                        <div>
+                          <div className="flex w-full items-center">
+                            <div className="w-[100px] !pl-0 text-center text-[14px] text-black7f">
+                              {nft?.status?.status}
+                            </div>
+                            <div className="w-[40px] !px-0">
+                              <Image alt={'IMG'} height={40} src={nft?.imageLink} width={40} />
+                            </div>
+                            <div className="w-[90px] !px-0 text-center">{nft?.name}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td></td>
+                      <td></td>
+                      <td className="overflow-hidden overflow-ellipsis">
+                        <div>
+                          {nft?.floor !== undefined && nft?.floor !== null
+                            ? `${Number(nft.floor)?.toFixed(2)} ${crypto?.symbol}`
+                            : '--'}
+                        </div>
+                      </td>
+                      <td>{nft?.rarity?.rank && nft?.rarity?.rank !== null ? nft?.rarity?.rank : '--'}</td>
+                      <td>
+                        <div>
+                          <TETooltip title={info.buyPrice}>
+                            {nft?.buyPrice?.amount
+                              ? `${Number(nft?.buyPrice?.amount / SEI)?.toFixed(2)} ${crypto?.symbol}`
+                              : '--'}
+                          </TETooltip>
+                        </div>
+                      </td>
+                      <td>
+                        <div>
+                          {nft?.estFee && nft?.estFee !== null
+                            ? `${Number(nft?.estFee.amount / SEI)?.toFixed(2)} ${crypto?.symbol}`
+                            : '--'}
+                        </div>
+                      </td>
+                      <td className="w-[100px] overflow-hidden overflow-ellipsis">
+                        <div>
+                          {nft?.floor && nft?.floor !== null
+                            ? `${Number(nft.floor)?.toFixed(2)} ${crypto?.symbol}`
+                            : '--'}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="flex flex-col gap-[4px]">
+                          <div>
+                            <Typography>
+                              {nft?.unrealizedGains && nft?.unrealizedGains !== null
+                                ? `${Number(nft?.unrealizedGains.amount / SEI).toFixed(2)} ${crypto?.symbol}`
+                                : '--'}
+                            </Typography>
+                          </div>
+                        </div>
+                      </td>
+                      <td className={percentageChange < 0 ? 'text-warning-300' : 'text-green'}>
+                        <TETooltip title={formattedPercentageChange}>
+                          <Typography>
+                            {collection?.sinceTrade && collection?.sinceTrade !== null
+                              ? `${formattedPercentageChange}`
+                              : '--'}
+                          </Typography>
+                        </TETooltip>
+                      </td>
+                      <td>
+                        {collection && collection?.holdingTime !== null
+                          ? collection?.holdingTime
+                            ? `${collection?.holdingTime} d`
+                            : '--'
+                          : '--'}
+                      </td>
+                      <td>
+                        {collection?.link && collection?.link !== null ? (
+                          <Link
+                            className="flex flex-col items-center justify-center"
+                            href={collection && collection?.link}
+                            target={`${
+                              collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
+                            }`}
+                          >
+                            <div className="rounded-[8px] bg-black225_05 p-1">
+                              <LinkIcon />
+                            </div>
+                          </Link>
+                        ) : (
+                          '--'
+                        )}
+                      </td>
+                      <td>
+                        <div
+                          className="flex !w-full justify-end"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            handleCheckboxChange(collection?.seiAddress, e)
+                          }
+                        >
+                          <Checkbox checked={checkboxes.includes(collection?.seiAddress)} />
+                        </div>{' '}
+                      </td>
+                      {/* </TECollapse> */}
+                    </tr>
+                  ))}
               </React.Fragment>
             )
           })}

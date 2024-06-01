@@ -5,7 +5,6 @@ import { TETooltip } from 'tw-elements-react'
 
 import { TableSkeletan } from '../Skeletan/TableSkeletan'
 
-import { HoldingDetails } from './interface'
 import HoldingDetailsSection from './HoldingDetailsSection'
 
 import Line from 'design-systems/Atoms/Line'
@@ -17,55 +16,74 @@ export const convertToSEI = (value?: number, SEI?: number): number | undefined =
   value !== undefined && SEI !== undefined ? value / SEI : undefined
 
 const HoldingDataGroup: React.FC = () => {
-  const { holdingDetails, isLoadingHoldingDetails } = useHolding()
+  const { Holding, isLoadingHolding } = useHolding()
   const [holdingDetail, setHoldingDetails] = useState<any>([])
   const { crypto } = useDataSelector('toggle')
   const SEI = crypto.value
+  const holdingData = {
+    amount: 0,
+    buyPrice: 0,
+    estFee: 0,
+    unrealizedGains: 0,
+  }
 
-  const holdingData: HoldingDetails | undefined = holdingDetail?.holdingDetails
+  Holding?.collection?.map((collection: any) => {
+    const info =
+      collection?.userHoldingNfts &&
+      collection?.userHoldingNfts?.reduce((acc: any, nft: any) => {
+        acc.buyPrice = (acc.buyPrice || 0) + nft?.buyPrice?.amount / SEI || 0
+        acc.estFee = (acc.estFee || 0) + nft?.estFee?.amount / SEI || 0
+        acc.unrealizedGains = (acc.unrealizedGains || 0) + nft?.unrealizedGains?.amount / SEI || 0
+        return acc
+      }, {})
+    holdingData.amount += Number(collection?.userHoldingAmount) || 0
+    holdingData.buyPrice += Number(info?.buyPrice) || 0
+    holdingData.estFee += Number(info?.estFee) || 0
+    holdingData.unrealizedGains += Number(info?.unrealizedGains) || 0
+  }, {})
+  const BuyPrice = convertToSEI(Holding?.buyPrice, SEI)
+  const EstFees = convertToSEI(Holding?.estFees, SEI)
+  const EstValue = convertToSEI(Holding?.estValue, SEI)
+  const UnrealizedGains = convertToSEI(Holding?.unrealizedGains, SEI)
+  const Percentage = convertToSEI(Holding?.percentage, SEI)
   const soldDetails = holdingDetail?.soldDetails
-  const BuyPrice = convertToSEI(holdingData?.buyPrice, SEI)
-  const EstFees = convertToSEI(holdingData?.estFees, SEI)
-  const EstValue = convertToSEI(holdingData?.estValue, SEI)
-  const UnrealizedGains = convertToSEI(holdingData?.unrealizedGains, SEI)
-  const Percentage = convertToSEI(holdingData?.percentage, SEI)
   const SolidBuyPrice = convertToSEI(soldDetails?.buyPrice, SEI)
   const SolidEstFees = convertToSEI(soldDetails?.estFees, SEI)
   const SellPrice = convertToSEI(soldDetails?.sellPrice, SEI)
   const SolidRealizedGains = convertToSEI(soldDetails?.realizedGains, SEI)
   const SolidPercentage = convertToSEI(soldDetails?.percentage, SEI)
 
-  useMemo(() => holdingDetails && setHoldingDetails(holdingDetails), [holdingDetails, isLoadingHoldingDetails])
+  useMemo(() => Holding && setHoldingDetails(Holding), [Holding, isLoadingHolding])
 
   return (
     <div className="flex h-full w-full flex-col content-between rounded-[12px] bg-blackCardBg p-2 text-[#DBDBDB] md:!rounded-md md:!p-[22px] lg:col-span-2 ">
-      {!isLoadingHoldingDetails ? (
+      {!isLoadingHolding ? (
         <div className="flex flex-col gap-4">
           <div className="flex justify-between font-Lexend !font-medium">
             <Typography className="!font-medium" size="lg">
               Holding Assets:
             </Typography>
             <Typography className="!font-medium" size="lg">
-              {holdingDetail?.holdingDetails ? holdingDetail?.holdingDetails?.holdingAsset : '--'}
+              {holdingData?.amount ? holdingData.amount : '--'}
             </Typography>
           </div>
           <div className="flex flex-col gap-3 font-Inter font-normal">
             <HoldingDetailsSection
               crypto={crypto}
               title="Buy Price"
-              tooltipTitle={`${BuyPrice} ${crypto.symbol}`}
-              value={BuyPrice}
+              tooltipTitle={`${holdingData.buyPrice} ${crypto.symbol}`}
+              value={holdingData.buyPrice}
             />
             <HoldingDetailsSection
               crypto={crypto}
               title="Est. Fees"
-              tooltipTitle={`${EstFees} ${crypto.symbol}`}
-              value={EstFees}
+              tooltipTitle={`${holdingData.estFee} ${crypto.symbol}`}
+              value={holdingData.estFee}
             />
             <HoldingDetailsSection
               crypto={crypto}
-              title="Est. Value:"
-              tooltipTitle={`${EstValue} ${crypto.symbol}`}
+              title="Est. Value"
+              tooltipTitle={`${holdingData.estFee} ${crypto.symbol}`}
               value={EstValue}
             />
             <div className="flex justify-between">
@@ -76,11 +94,11 @@ const HoldingDataGroup: React.FC = () => {
                 } `}
                 size="body"
               >
-                <TETooltip title={`${UnrealizedGains} ${crypto.symbol}`}>
+                <TETooltip title={`${holdingData.unrealizedGains} ${crypto.symbol}`}>
                   <Typography>
-                    {holdingDetail?.holdingDetails ? (
+                    {holdingData.unrealizedGains ? (
                       <>
-                        {UnrealizedGains?.toFixed(3)} {crypto.symbol}
+                        {holdingData.unrealizedGains?.toFixed(3)} {crypto.symbol}
                       </>
                     ) : (
                       '--'
@@ -107,7 +125,7 @@ const HoldingDataGroup: React.FC = () => {
         <TableSkeletan limit={5} />
       )}
       <Line />
-      {!isLoadingHoldingDetails ? (
+      {!isLoadingHolding ? (
         <div className="flex flex-col gap-4">
           <div className="flex justify-between font-Lexend font-medium">
             <Typography className="!font-medium" size="lg">
@@ -175,7 +193,7 @@ const HoldingDataGroup: React.FC = () => {
         <TableSkeletan limit={5} />
       )}
       <Line />
-      {!isLoadingHoldingDetails ? (
+      {!isLoadingHolding ? (
         <div className="flex flex-col gap-4 text-left">
           <div className="flex justify-between font-Lexend font-medium">
             <Typography className="!font-medium" size="lg">

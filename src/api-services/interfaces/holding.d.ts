@@ -26,7 +26,7 @@ interface AssetsData {
 // Income
 
 interface NFTData {
-  data: NFTItem[]
+  collection: NFTItem[]
   message: string
   nftTotal: number
   success: boolean

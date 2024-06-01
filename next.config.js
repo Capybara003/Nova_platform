@@ -18,7 +18,7 @@ module.exports = {
       'cdn.discordapp.com',
       'images.jpgstoreapis.com',
       "storage.googleapis.com",
-      '',
+      'arweave.net',
     ],
     unoptimized: true,
   },
