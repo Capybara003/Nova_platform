@@ -181,7 +181,7 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({ data, headData, f
                         </Typography>
                       </TETooltip>
                     </td>
-                    <td>{info.rank ? info.rank.toFixed(2) : '--'}</td>
+                    <td>{info?.rank ? info.rank.toFixed(2) : '--'}</td>
                     <td>
                       <TETooltip title={`${BuyPrice} ${crypto.symbol}`}>
                         <Typography className="w-max">

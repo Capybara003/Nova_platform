@@ -140,6 +140,7 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                 acc.holdingTime = (acc.holdingTime || 0) + nft?.holdingTime || 0
                 return acc
               }, {})
+            info.rank = info.rank / collection?.userHoldingNfts?.length || 0
 
             const SinceTrade = collection?.sinceTrade / SEI
 
@@ -524,7 +525,7 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                       <td>{nft?.rarity?.rank && nft?.rarity?.rank !== null ? nft?.rarity?.rank : '--'}</td>
                       <td>
                         <div>
-                          <TETooltip title={info.buyPrice}>
+                          <TETooltip title={Number(nft?.buyPrice?.amount / SEI)?.toFixed(2)}>
                             {nft?.buyPrice?.amount
                               ? `${Number(nft?.buyPrice?.amount / SEI)?.toFixed(2)} ${crypto?.symbol}`
                               : '--'}

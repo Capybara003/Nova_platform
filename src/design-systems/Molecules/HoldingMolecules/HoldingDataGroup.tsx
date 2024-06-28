@@ -27,7 +27,7 @@ const HoldingDataGroup: React.FC = () => {
     unrealizedGains: 0,
   }
 
-  Holding?.collection?.map((collection: any) => {
+  Holding?.map((collection: any) => {
     const info =
       collection?.userHoldingNfts &&
       collection?.userHoldingNfts?.reduce((acc: any, nft: any) => {

@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo, useState } from 'react'
 import Image from 'next/image'
 import { RxCaretSort } from 'react-icons/rx'
@@ -16,9 +17,67 @@ import Typography from 'design-systems/Atoms/Typography'
 import { BookMarkEmpty, InfoIcons } from 'design-systems/Atoms/Icons'
 import NavTabsMolecule from 'design-systems/Molecules/NavTabs/NavTabsMolecule'
 import Table from 'design-systems/Atoms/Table'
+import { useHolding } from 'hooks/apis/useHolding'
 
 const AnalyticsBottomSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState<number>(0)
+  const [collectionData, setCollectionData] = useState<any>([])
+  const [topGainerData, setTopGainerData] = useState<any>([])
+
+  const { isLoadingCollections, Collections, isLoadingHoldingTime, HoldingTime, isLoadingTopGainer, TopGainer } =
+    useHolding()
+
+  useMemo(() => Collections && setCollectionData(Collections), [Collections, isLoadingCollections])
+  useMemo(() => TopGainer && setTopGainerData(TopGainer), [TopGainer, isLoadingTopGainer])
+
+  const collectionChartData = useMemo(() => {
+    return (
+      Collections &&
+      Collections.length > 0 &&
+      Collections.reduce((acc: any, item: any) => {
+        acc['total'] = Number(acc['total'] || 0 + item.volume || 0).toFixed(3)
+        if (item.volume < 5_000) {
+          acc[0] = (acc[0] || 0) + 1
+        } else if (item.volume < 25_000) {
+          acc[1] = (acc[1] || 0) + 1
+        } else if (item.volume < 100_000) {
+          acc[2] = (acc[2] || 0) + 1
+        } else if (item.volume < 250_000) {
+          acc[3] = (acc[3] || 0) + 1
+        } else if (item.volume < 1_000_000) {
+          acc[4] = (acc[4] || 0) + 1
+        } else {
+          acc[5] = (acc[5] || 0) + 1
+        }
+        return acc
+      }, {})
+    )
+  }, [Collections, isLoadingCollections])
+
+  const timeChartData = useMemo(() => {
+    return (
+      HoldingTime &&
+      HoldingTime.length > 0 &&
+      HoldingTime.reduce((acc: any, item: any) => {
+        const time = (new Date().getTime() - new Date(item.ts).getTime()) / 1000
+        acc['total'] = Number((acc['total'] || 0) + (time / 3600 / 24 || 0))
+        if (time < 7 * 24 * 60 * 60) {
+          acc[0] = (acc[0] || 0) + 1
+        } else if (time < 4 * 7 * 24 * 60 * 60) {
+          acc[1] = (acc[1] || 0) + 1
+        } else if (time < 3 * 30 * 24 * 60 * 60) {
+          acc[2] = (acc[2] || 0) + 1
+        } else if (time < 6 * 30 * 24 * 60 * 60) {
+          acc[3] = (acc[3] || 0) + 1
+        } else if (time < 12 * 30 * 24 * 60 * 60) {
+          acc[4] = (acc[4] || 0) + 1
+        } else {
+          acc[5] = (acc[5] || 0) + 1
+        }
+        return acc
+      }, {})
+    )
+  }, [HoldingTime, isLoadingHoldingTime])
 
   const realTimeNftTableData = useMemo(() => {
     return portfolioProfitTableData.map(item => ({
@@ -72,6 +131,7 @@ const AnalyticsBottomSection: React.FC = () => {
       holdingTime: item.holdingTime ? <Typography>{item.holdingTime}d</Typography> : '',
     }))
   }, [portfolioProfitTableData])
+
   return (
     <div>
       <div className="mt-4 !rounded-md bg-[#181620] p-4">
@@ -88,7 +148,7 @@ const AnalyticsBottomSection: React.FC = () => {
           <NavTabsMolecule
             activeTab={activeTab}
             className="whitespace-nowrap"
-            tabs={['Collection', 'Project', 'Type', 'Category', 'Market Cap']}
+            tabs={['Collection', 'Type', 'Category', 'Market Cap']}
             onTabChange={tab => {
               setActiveTab(tab)
             }}
@@ -101,18 +161,27 @@ const AnalyticsBottomSection: React.FC = () => {
               centerContent={
                 <>
                   <p>Total</p>
-                  <p className="text-xl text-white font-medium">115.000.000 SEI</p>
+                  <p className="text-xl text-white font-medium">
+                    {(collectionChartData && `${collectionChartData['total']}`) || 0} SEI
+                  </p>
                 </>
               }
               colors={['#5A3FFF', '#2592D9', '#1ED6FF', '#F466FE', '#C517D1', '#6B0090']}
               height={550}
               labels={['0-5K ', '5K-25k', '25K-100K', '100K-250K', '250K-1M', '1M+']}
-              series={[22, 20, 20, 22, 32, 51]}
+              series={[
+                collectionChartData[0] || 0,
+                collectionChartData[1] || 0,
+                collectionChartData[2] || 0,
+                collectionChartData[3] || 0,
+                collectionChartData[4] || 0,
+                collectionChartData[5] || 0,
+              ]}
               width={550}
             />
           </div>
 
-          <div className="relative h-auto items-center justify-center overflow-y-scroll pe-[12px] md:!flex md:!h-[630px]">
+          <div className="relative h-auto items-center justify-center pe-[12px] md:!flex">
             <table className="h-full w-[1000px] rounded-md font-Lexend">
               <thead className="sticky top-0 bg-[#24222b]">
                 <tr>
@@ -139,138 +208,46 @@ const AnalyticsBottomSection: React.FC = () => {
                 </tr>
               </thead>
 
-              <tbody className="mt-5 [&>*>td:first-child]:border-s-0 [&>*>td:last-child]:border-e-0">
-                <tr>
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">
-                      <div className="h-5 w-5 rounded bg-red"></div>
-                      <Image alt="Image" height={48} src={IMG.webump} width={48} />
-                      <Typography>WeBump</Typography>
-                    </div>
-                  </td>
+              <tbody className="mt-5 overflow-y-scroll md:!h-[500px] [&>*>td:first-child]:border-s-0 [&>*>td:last-child]:border-e-0">
+                {!isLoadingCollections &&
+                  collectionData &&
+                  collectionData?.map((collection: any) => (
+                    <tr key={collection.seiAddress}>
+                      <td className="text-white text-left font-medium">
+                        <div className="flex items-center justify-start gap-2">
+                          <div className="h-5 w-5 rounded bg-red"></div>
+                          {collection?.pfp && collection?.pfp !== null ? (
+                            <Image alt={'IMG'} height={48} src={collection?.pfp} width={48} />
+                          ) : (
+                            <Image alt={'IMG'} height={48} src={IMG.webump} width={48} />
+                          )}
+                          <Typography>
+                            {collection?.name && collection?.name !== null ? collection?.name || '--' : '--'}
+                          </Typography>
+                        </div>
+                      </td>
 
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">97</div>
-                  </td>
+                      <td className="text-white text-left font-medium">
+                        <div className="flex items-center justify-start gap-2">
+                          {collection?.holdingNftAmount && collection?.holdingNftAmount !== null
+                            ? collection?.holdingNftAmount || '--'
+                            : '--'}
+                        </div>
+                      </td>
 
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">96.7%</div>
-                  </td>
+                      <td className="text-white text-left font-medium">
+                        <div className="flex items-center justify-start gap-2">96.7%</div>
+                      </td>
 
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">165.87.7SEI</div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">
-                      <div className="h-5 w-5 rounded bg-red"></div>
-                      <Image alt="Image" height={48} src={IMG.webump} width={48} />
-                      <Typography>WeBump</Typography>
-                    </div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">97</div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">96.7%</div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">165.87.7SEI</div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">
-                      <div className="h-5 w-5 rounded bg-red"></div>
-                      <Image alt="Image" height={48} src={IMG.webump} width={48} />
-                      <Typography>WeBump</Typography>
-                    </div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">97</div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">96.7%</div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">165.87.7SEI</div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">
-                      <div className="h-5 w-5 rounded bg-red"></div>
-                      <Image alt="Image" height={48} src={IMG.webump} width={48} />
-                      <Typography>WeBump</Typography>
-                    </div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">97</div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">96.7%</div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">165.87.7SEI</div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">
-                      <div className="h-5 w-5 rounded bg-red"></div>
-                      <Image alt="Image" height={48} src={IMG.webump} width={48} />
-                      <Typography>WeBump</Typography>
-                    </div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">97</div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">96.7%</div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">165.87.7SEI</div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">
-                      <div className="h-5 w-5 rounded bg-red"></div>
-                      <Image alt="Image" height={48} src={IMG.webump} width={48} />
-                      <Typography>WeBump</Typography>
-                    </div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">97</div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">96.7%</div>
-                  </td>
-
-                  <td className="text-white text-left font-medium">
-                    <div className="flex items-center justify-start gap-2">165.87.7SEI</div>
-                  </td>
-                </tr>
+                      <td className="text-white text-left font-medium">
+                        <div className="flex items-center justify-start gap-2">
+                          {collection?.holdingNftAmount && collection?.holdingNftAmount !== null
+                            ? `${Number(collection?.holdingNftAmount * collection?.floor)?.toFixed(2)} SEI` || '--'
+                            : '--'}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
 
               <tfoot className="[&>*>*]:py-5">
@@ -311,27 +288,34 @@ const AnalyticsBottomSection: React.FC = () => {
             </thead>
 
             <tbody className="mt-5">
-              {Array(6)
-                .fill('')
-                .map((_, key) => {
+              {!isLoadingTopGainer &&
+                topGainerData.slice(0, 6).map((item: any, key: any) => {
                   return (
-                    <tr key={key}>
+                    <tr key={item.key}>
                       <td className="text-white text-left font-medium">
                         <div className="flex items-center justify-center gap-2">
                           <div className="flex items-center gap-1">
                             <BookMarkEmpty /> {key + 1}
                           </div>
-                          <Image alt="Image" height={48} src={IMG.webump} width={48} />
-                          <Typography>WeBump</Typography>
+                          {item.imageLink ? (
+                            <Image alt="Image" height={48} src={item.imageLink} width={48} />
+                          ) : (
+                            <Image alt="Image" height={48} src={IMG.webump} width={48} />
+                          )}
+                          {item?.name ? <Typography>{item.name}</Typography> : <Typography>WeBump</Typography>}
                         </div>
                       </td>
 
                       <td className="text-white text-left font-medium">
-                        <div className="flex items-center justify-center gap-2">97</div>
+                        <div className="flex items-center justify-center gap-2">
+                          {item?.price ? `${item.price} SEI` : '--'}
+                        </div>
                       </td>
 
                       <td className="text-white text-left font-medium">
-                        <div className="flex items-center justify-center gap-2">96.7%</div>
+                        <div className="flex items-center justify-center gap-2">
+                          {item?.floor ? `${item.floor} SEI` : '--'}
+                        </div>
                       </td>
 
                       <td className="text-white text-left font-medium">
@@ -361,45 +345,55 @@ const AnalyticsBottomSection: React.FC = () => {
                   <div className="flex !w-full items-center justify-center">Price</div>
                 </th>
                 <th className="font-medium text-[#DBDBDB]" style={{ width: '24%' }}>
-                  <div className="flex !w-full items-center justify-center">Volume</div>
+                  <div className="flex !w-full items-center justify-center">Total Value</div>
                 </th>
                 <th className="font-medium text-[#DBDBDB]" style={{ width: '24%' }}>
-                  <div className="flex !w-full items-center justify-center">Seller</div>
+                  <div className="flex !w-full items-center justify-center">Value Impact</div>
                 </th>
               </tr>
             </thead>
 
             <tbody className="mt-5">
-              {Array(6)
-                .fill('')
-                .map((_, key) => {
-                  return (
-                    <tr key={key}>
-                      <td className="text-white text-left font-medium">
-                        <div className="flex items-center justify-center gap-2">
-                          <div className="flex items-center gap-1">
-                            <BookMarkEmpty />
-                            {key + 1}
+              {!isLoadingTopGainer &&
+                topGainerData
+                  .reverse()
+                  .slice(0, 6)
+                  .map((item: any, key: any) => {
+                    return (
+                      <tr key={item.key}>
+                        <td className="text-white text-left font-medium">
+                          <div className="flex items-center justify-center gap-2">
+                            <div className="flex items-center gap-1">
+                              <BookMarkEmpty />
+                              {key + 1}
+                            </div>
+                            {item.imageLink ? (
+                              <Image alt="Image" height={48} src={item.imageLink} width={48} />
+                            ) : (
+                              <Image alt="Image" height={48} src={IMG.webump} width={48} />
+                            )}
+                            {item?.name ? <Typography>{item.name}</Typography> : <Typography>WeBump</Typography>}
                           </div>
-                          <Image alt="Image" height={48} src={IMG.webump} width={48} />
-                          <Typography>WeBump</Typography>
-                        </div>
-                      </td>
+                        </td>
 
-                      <td className="text-white text-left font-medium">
-                        <div className="flex items-center justify-center gap-2">97</div>
-                      </td>
+                        <td className="text-white text-left font-medium">
+                          <div className="flex items-center justify-center gap-2">
+                            {item?.price ? `${item.price} SEI` : '--'}
+                          </div>
+                        </td>
 
-                      <td className="text-white text-left font-medium">
-                        <div className="flex items-center justify-center gap-2">96.7%</div>
-                      </td>
+                        <td className="text-white text-left font-medium">
+                          <div className="flex items-center justify-center gap-2">
+                            {item?.floor ? `${item.floor} SEI` : '--'}
+                          </div>
+                        </td>
 
-                      <td className="text-white text-left font-medium">
-                        <div className="flex items-center justify-center gap-2">165.87.7SEI</div>
-                      </td>
-                    </tr>
-                  )
-                })}
+                        <td className="text-white text-left font-medium">
+                          <div className="flex items-center justify-center gap-2">165.87.7SEI</div>
+                        </td>
+                      </tr>
+                    )
+                  })}
             </tbody>
             <tfoot className="transparent-footer-bg">
               <tr>
@@ -429,9 +423,20 @@ const AnalyticsBottomSection: React.FC = () => {
               chartCenterContent={
                 <>
                   <p>Avg. Age</p>
-                  <p className="text-2xl text-white font-medium">379 Days</p>
+                  <p className="text-2xl text-white font-medium">
+                    {(timeChartData && `${(timeChartData['total'] / HoldingTime.length).toFixed(3)}`) || 0} Days
+                  </p>
                 </>
               }
+              chartData={[
+                timeChartData[0] || 0,
+                timeChartData[1] || 0,
+                timeChartData[2] || 0,
+                timeChartData[3] || 0,
+                timeChartData[4] || 0,
+                timeChartData[5] || 0,
+              ]}
+              chartLabel={['< 1W ', '1W-4W', '1M-3M', '3M-6M', '6M-12M', '1Y+']}
               columnHeadingFirst="Amount"
               columnHeadingSecond="Assets"
               isBg={false}
@@ -439,7 +444,7 @@ const AnalyticsBottomSection: React.FC = () => {
                 {
                   icon: (
                     <>
-                      <div className="h-3 w-3 rounded-full bg-red"></div>
+                      <div className="h-3 w-3 rounded-full bg-[#5A3FFF]"></div>
                     </>
                   ),
                   title: '< 1 Week',
@@ -447,7 +452,7 @@ const AnalyticsBottomSection: React.FC = () => {
                 {
                   icon: (
                     <>
-                      <div className="h-3 w-3 rounded-full bg-red"></div>
+                      <div className="h-3 w-3 rounded-full bg-[#2592D9]"></div>
                     </>
                   ),
                   title: '1-4 Weeks',
@@ -455,7 +460,7 @@ const AnalyticsBottomSection: React.FC = () => {
                 {
                   icon: (
                     <>
-                      <div className="h-3 w-3 rounded-full bg-red"></div>
+                      <div className="h-3 w-3 rounded-full bg-[#1ED6FF]"></div>
                     </>
                   ),
                   title: '1 - 3 Month',
@@ -463,7 +468,7 @@ const AnalyticsBottomSection: React.FC = () => {
                 {
                   icon: (
                     <>
-                      <div className="h-3 w-3 rounded-full bg-red"></div>
+                      <div className="h-3 w-3 rounded-full bg-[#F466FE]"></div>
                     </>
                   ),
                   title: '3 - 6 Month',
@@ -471,7 +476,7 @@ const AnalyticsBottomSection: React.FC = () => {
                 {
                   icon: (
                     <>
-                      <div className="h-3 w-3 rounded-full bg-red"></div>
+                      <div className="h-3 w-3 rounded-full bg-[#C517D1]"></div>
                     </>
                   ),
                   title: '6 - 12 Month',
@@ -479,14 +484,16 @@ const AnalyticsBottomSection: React.FC = () => {
                 {
                   icon: (
                     <>
-                      <div className="h-3 w-3 rounded-full bg-red"></div>
+                      <div className="h-3 w-3 rounded-full bg-[#6B0090]"></div>
                     </>
                   ),
                   title: '1 Year +',
                 },
               ]}
               totalHeading="Total Average"
-              totalValue="379 Days"
+              totalValue={
+                (timeChartData && `${(timeChartData['total'] / HoldingTime.length).toFixed(3)} Days`) || '0 Days'
+              }
             />
           </div>
         </div>

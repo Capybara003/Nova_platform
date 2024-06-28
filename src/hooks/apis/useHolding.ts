@@ -72,16 +72,16 @@ export const useHolding = () => {
     isFetching: isFetchingHolding,
   } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_HOLDING_ASSETS],
-    () => HoldingServices.getHolding({ user_address: 'sei1ttgt5stzv37pv6lpz3etm68jmsm8l0raynpkku' }),
+    () => HoldingServices.getHolding({ user_address: 'sei1krvjk3r790dcsqkr96ymd44v04w9zz5dlr66z7' }),
     {
-      select: res => res,
+      select: res => res.collection,
       refetchOnWindowFocus: false,
       // enabled: coinbase.is_connected || binance.is_connected || data.walletAddress.length > 0,
     }
   )
 
-  const { isLoading: isLoadingIncome, data: Income } = useQuery([API_ENDPOINTS.PUBLIC.GET_PORTFOLIO_V2], () =>
-    HoldingServices.getIncome({ user_address: 'sei1ttgt5stzv37pv6lpz3etm68jmsm8l0raynpkku' })
+  const { isLoading: isLoadingIncome, data: Income } = useQuery([API_ENDPOINTS.PUBLIC.GET_SOLD_ASSETS], () =>
+    HoldingServices.getIncome({ user_address: 'sei1krvjk3r790dcsqkr96ymd44v04w9zz5dlr66z7' })
   )
   const {
     isLoading: isLoadingWallet,
@@ -117,6 +117,33 @@ export const useHolding = () => {
     }
   )
 
+  const { isLoading: isLoadingCollections, data: Collections } = useQuery(
+    [API_ENDPOINTS.PUBLIC.GET_HOLDING_COLLECTIONS],
+    () => HoldingServices.getCollections({ user_address: 'sei1krvjk3r790dcsqkr96ymd44v04w9zz5dlr66z7' }),
+    {
+      select: res => res.collections,
+      refetchOnWindowFocus: false,
+    }
+  )
+
+  const { isLoading: isLoadingTopGainer, data: TopGainer } = useQuery(
+    [API_ENDPOINTS.PUBLIC.GET_USER_NFT_HOLDING_TOP],
+    () => HoldingServices.getTopGainers({ user_address: 'sei1krvjk3r790dcsqkr96ymd44v04w9zz5dlr66z7' }),
+    {
+      select: res => res.userHoldingTop,
+      refetchOnWindowFocus: false,
+    }
+  )
+
+  const { isLoading: isLoadingHoldingTime, data: HoldingTime } = useQuery(
+    [API_ENDPOINTS.PUBLIC.GET_USER_NFT_HOLDING_TIME],
+    () => HoldingServices.getHoldingTime({ user_address: 'sei1krvjk3r790dcsqkr96ymd44v04w9zz5dlr66z7' }),
+    {
+      select: res => res.nftHoldingTime,
+      refetchOnWindowFocus: false,
+    }
+  )
+
   return {
     isLoadingAssetDetails: postAssetDetailsMutation.isLoading,
     isLoadingHolding,
@@ -135,5 +162,11 @@ export const useHolding = () => {
     soldDetails,
     HoldingGraph,
     isLoadingHoldingGraph,
+    isLoadingCollections,
+    Collections,
+    isLoadingTopGainer,
+    TopGainer,
+    isLoadingHoldingTime,
+    HoldingTime,
   }
 }
