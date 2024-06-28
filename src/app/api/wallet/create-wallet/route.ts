@@ -12,10 +12,10 @@ export async function POST(request: NextRequest) {
     },
   })
 
-  if (wallet?.ownerId !== Number(ownerId)) {
+  if (wallet && wallet.ownerId !== Number(ownerId)) {
     wallet = await prisma.wallet.update({
       where: {
-        id: wallet?.id,
+        id: wallet.id,
       },
       data: {
         ownerId: Number(ownerId),

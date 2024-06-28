@@ -19,6 +19,7 @@ import { wallets as leap } from '@cosmos-kit/leap'
 import { wallets as ledger } from '@cosmos-kit/ledger'
 import { wallets as metamask } from '@cosmos-kit/leap-metamask-cosmos-snap'
 import { GasPrice } from '@cosmjs/stargate'
+import { ThirdwebProvider } from "thirdweb/react";
 
 import 'react-multi-carousel/lib/styles.css'
 import 'react-toastify/dist/ReactToastify.css'
@@ -179,81 +180,82 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider attribute="class" defaultTheme="dark">
           <Providers>
             <AuthProvider>
-              <ChainProvider
-                assetLists={assets}
-                chains={chains}
-                signerOptions={signerOptions}
-                walletConnectOptions={{
-                  signClient: {
-                    projectId: 'a8510432ebb71e6948cfd6cde54b70f7',
-                    relayUrl: 'wss://relay.walletconnect.org',
-                    metadata: {
-                      name: 'CosmosKit Template',
-                      description: 'CosmosKit dapp template',
-                      url: 'https://docs.cosmology.zone/cosmos-kit/',
-                      icons: [],
+              <ThirdwebProvider>
+                <ChainProvider
+                  assetLists={assets}
+                  chains={chains}
+                  signerOptions={signerOptions}
+                  walletConnectOptions={{
+                    signClient: {
+                      projectId: 'a8510432ebb71e6948cfd6cde54b70f7',
+                      relayUrl: 'wss://relay.walletconnect.org',
+                      metadata: {
+                        name: 'CosmosKit Template',
+                        description: 'CosmosKit dapp template',
+                        url: 'https://docs.cosmology.zone/cosmos-kit/',
+                        icons: [],
+                      },
                     },
-                  },
-                }}
-                walletModal={WalletSignUp}
-                wallets={[...compass, ...keplr, ...leap, ...ledger, ...metamask]}
-              >
-                <NoFirstRender>
-                  <RestrictedRoute>
-                    {!noComponent && (
-                      <div className="fixed z-[1000] w-full  font-Lexend ">
-                        <div className="hidden xm:!flex">
-                          <Header hide={hide} noComponent={noComponent} userData={userData} />
-                        </div>
-                        <div>
-                          <div className="flex xm:!hidden">
-                            <MobileHeader ModelName={ModelName} open={open} setOpen={setOpen} />
+                  }}
+                  walletModal={WalletSignUp}
+                  wallets={[...compass, ...keplr, ...leap, ...ledger, ...metamask]}
+                >
+                  <NoFirstRender>
+                    <RestrictedRoute>
+                      {!noComponent && (
+                        <div className="fixed z-[1000] w-full  font-Lexend ">
+                          <div className="hidden xm:!flex">
+                            <Header hide={hide} noComponent={noComponent} userData={userData} />
                           </div>
-                          {open && (
+                          <div>
                             <div className="flex xm:!hidden">
-                              <TopNavbar
-                                hide={hide}
-                                open={open}
-                                setModelName={setModelName}
-                                setOpen={setOpen}
-                                userData={userData}
-                              />
+                              <MobileHeader ModelName={ModelName} open={open} setOpen={setOpen} />
                             </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    <div
-                      className={
-                        pathname === '/mint'
-                          ? ''
-                          : pathname === '/' || pathname === '/login'
-                          ? 'h-screen'
-                          : 'flex h-[calc(100vh_-_70px)] overflow-scroll'
-                      }
-                    >
-                      {!noComponent && !hide && (
-                        <>
-                          <div className="!hidden md:!flex md:flex-row">
-                            <SideNavbar />
+                            {open && (
+                              <div className="flex xm:!hidden">
+                                <TopNavbar
+                                  hide={hide}
+                                  open={open}
+                                  setModelName={setModelName}
+                                  setOpen={setOpen}
+                                  userData={userData}
+                                />
+                              </div>
+                            )}
                           </div>
-                        </>
+                        </div>
                       )}
-                      <div className="m-0 flex min-h-full w-full overflow-scroll p-0 text-center">
-                        <div
-                          className={` ${
-                            !noComponent && !hide && '!mt-[87px] !py-[22px] px-[22px] md:!px-[36px]'
-                          } w-full`}
-                        >
-                          {children}
+                      <div
+                        className={
+                          pathname === '/mint'
+                            ? ''
+                            : pathname === '/' || pathname === '/login'
+                              ? 'h-screen'
+                              : 'flex h-[calc(100vh_-_70px)] overflow-scroll'
+                        }
+                      >
+                        {!noComponent && !hide && (
+                          <>
+                            <div className="!hidden md:!flex md:flex-row">
+                              <SideNavbar />
+                            </div>
+                          </>
+                        )}
+                        <div className="m-0 flex min-h-full w-full overflow-scroll p-0 text-center">
+                          <div
+                            className={` ${!noComponent && !hide && '!mt-[87px] !py-[22px] px-[22px] md:!px-[36px]'
+                              } w-full`}
+                          >
+                            {children}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    {!noComponent && <Footer />}
-                  </RestrictedRoute>
-                  <ToastContainer />
-                </NoFirstRender>
-              </ChainProvider>
+                      {!noComponent && <Footer />}
+                    </RestrictedRoute>
+                    <ToastContainer />
+                  </NoFirstRender>
+                </ChainProvider>
+              </ThirdwebProvider>
             </AuthProvider>
           </Providers>
         </ThemeProvider>

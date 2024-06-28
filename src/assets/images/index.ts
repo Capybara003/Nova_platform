@@ -7,6 +7,7 @@ import Flint from './Flint.png'
 import Nami from './Nami.png'
 import Eternl from './Eternl.png'
 import Compass from './Compass.png'
+import Rabby from './rabby.svg'
 import begin from './begin.png'
 import Gego from './Gego.png'
 import Exodus from './Exodus.png'
@@ -60,6 +61,7 @@ export const IMG = {
   Nami,
   Eternl,
   Compass,
+  Rabby,
   legand,
   begin,
   Exodus,

@@ -17,6 +17,8 @@ interface DonutWithTableChartProps {
   totalValue?: string
   tableLeftList?: { icon: React.ReactNode; title: string }[]
   tableRightList?: string[]
+  chartLabel?: string[]
+  chartData?: number[]
 }
 
 const DonutWithTableChart: React.FC<DonutWithTableChartProps> = ({
@@ -29,7 +31,11 @@ const DonutWithTableChart: React.FC<DonutWithTableChartProps> = ({
   className,
   totalValue,
   tableLeftList,
+  chartLabel = ['0-5K ', '5K-25k', '25K-100K', '100K-250K', '250K-1M', '1M+'],
+  chartData = [22, 20, 20, 22, 32, 51],
 }) => {
+  const totalCount = chartData.reduce((a, b) => a + b, 0)
+
   return (
     <div className={` ${className} rounded-[24px] p-5 ${isBg ? 'bg-[#1e1c26]' : ''}`}>
       <div className="flex flex-row flex-wrap justify-between gap-3">
@@ -52,8 +58,8 @@ const DonutWithTableChart: React.FC<DonutWithTableChartProps> = ({
           centerContent={chartCenterContent}
           colors={['#5A3FFF', '#2592D9', '#1ED6FF', '#F466FE', '#C517D1', '#6B0090']}
           height={300}
-          labels={['0-5K ', '5K-25k', '25K-100K', '100K-250K', '250K-1M', '1M+']}
-          series={[22, 20, 20, 22, 32, 51]}
+          labels={chartLabel}
+          series={chartData}
           width={300}
         />
         <div className="w-full flex-1">
@@ -95,15 +101,13 @@ const DonutWithTableChart: React.FC<DonutWithTableChartProps> = ({
                 {columnHeadingSecond ?? 'Heading'}
               </Typography>
               <ul className="flex flex-col gap-y-2">
-                {Array(6)
-                  .fill('12% / 600')
-                  .map((item, index) => {
-                    return (
-                      <li className="flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={index}>
-                        <Typography>{item}</Typography>
-                      </li>
-                    )
-                  })}
+                {chartData.map((item, index) => {
+                  return (
+                    <li className="flex items-center justify-start gap-1 text-md text-[#DBDBDB]" key={index}>
+                      <Typography>{`${item} / ${((item * 100) / totalCount).toFixed(1)}%`}</Typography>
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           </div>

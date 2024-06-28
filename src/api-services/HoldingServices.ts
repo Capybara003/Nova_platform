@@ -9,7 +9,10 @@ class HoldingServices {
   getHolding = async (data: {}) => {
     // return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING}`)
     // return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_ASSETS}`)
-    return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_ASSETS}`, data)
+    return CoreAPIService.post<any>(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_ASSETS}`,
+      data
+    )
   }
   postAssetDetails = async (AssetsDetails: AssetsDetailsBlock) => {
     return CoreAPIService.post<any>(
@@ -21,11 +24,30 @@ class HoldingServices {
     return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_PORTFOLIO}`)
   }
   getIncome = async (data: object) => {
-    return CoreAPIService.get<NFTData>(
-      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_PORTFOLIO_V2}`,
+    return CoreAPIService.post<NFTData>(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_SOLD_ASSETS}`,
       data
     )
   }
+  getCollections = async (data: object) => {
+    return CoreAPIService.post<any>(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_COLLECTIONS}`,
+      data
+    )
+  }
+  getTopGainers = async (data: object) => {
+    return CoreAPIService.post<any>(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_USER_NFT_HOLDING_TOP}`,
+      data
+    )
+  }
+  getHoldingTime = async (data: object) => {
+    return CoreAPIService.post<any>(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_USER_NFT_HOLDING_TIME}`,
+      data
+    )
+  }
+
   getWalletList = async (userId: string) => {
     // return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_INCOME}`)
     return CoreNextAPIService.get<any>(`${process.env.NEXT_PUBLIC_NEXT_API_URL}${API_ENDPOINTS.PRIVATE.LIST}/${userId}`)
