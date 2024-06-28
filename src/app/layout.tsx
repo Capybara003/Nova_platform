@@ -19,7 +19,7 @@ import { wallets as leap } from '@cosmos-kit/leap'
 import { wallets as ledger } from '@cosmos-kit/ledger'
 import { wallets as metamask } from '@cosmos-kit/leap-metamask-cosmos-snap'
 import { GasPrice } from '@cosmjs/stargate'
-import { ThirdwebProvider } from "thirdweb/react";
+import { ThirdwebProvider } from 'thirdweb/react'
 
 import 'react-multi-carousel/lib/styles.css'
 import 'react-toastify/dist/ReactToastify.css'
@@ -230,8 +230,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                           pathname === '/mint'
                             ? ''
                             : pathname === '/' || pathname === '/login'
-                              ? 'h-screen'
-                              : 'flex h-[calc(100vh_-_70px)] overflow-scroll'
+                            ? 'h-screen'
+                            : 'flex h-[calc(100vh_-_70px)] overflow-scroll'
                         }
                       >
                         {!noComponent && !hide && (
@@ -243,8 +243,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         )}
                         <div className="m-0 flex min-h-full w-full overflow-scroll p-0 text-center">
                           <div
-                            className={` ${!noComponent && !hide && '!mt-[87px] !py-[22px] px-[22px] md:!px-[36px]'
-                              } w-full`}
+                            className={` ${
+                              !noComponent && !hide && '!mt-[87px] !py-[22px] px-[22px] md:!px-[36px]'
+                            } w-full`}
                           >
                             {children}
                           </div>
