@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
   try {
     const { userName, email, password, registerType } = await request.json()
 
-    const user = await prisma.user.findFirst({
+    const user = await prisma.account.findFirst({
       where: {
         email,
         isDeleted: false,
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (registerType === 'google' || registerType === 'discord') {
-      const newUser = await prisma.user.create({
+      const newUser = await prisma.account.create({
         data: {
           userName,
           email,
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     const otp = generateOTP()
     const hashedPassword = await hashPassword(password)
 
-    const newUser = await prisma.user.create({
+    const newUser = await prisma.account.create({
       data: {
         userName,
         email,

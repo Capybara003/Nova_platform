@@ -71,18 +71,33 @@ export const useHolding = () => {
     refetch: refetchHolding,
     isFetching: isFetchingHolding,
   } = useQuery(
-    [API_ENDPOINTS.PUBLIC.GET_HOLDING_ASSETS],
-    () => HoldingServices.getHolding({ user_address: 'sei1krvjk3r790dcsqkr96ymd44v04w9zz5dlr66z7' }),
+    [API_ENDPOINTS.PUBLIC.GET_HOLDING_NFTS],
+    () => HoldingServices.getHolding({ wallet_address: 'sei18d56etelkz5w0hu82l8lzl6jnucd8pz8dwh44f' }),
     {
-      select: res => res.collection,
+      select: res => res.collections,
       refetchOnWindowFocus: false,
       // enabled: coinbase.is_connected || binance.is_connected || data.walletAddress.length > 0,
     }
   )
 
-  const { isLoading: isLoadingIncome, data: Income } = useQuery([API_ENDPOINTS.PUBLIC.GET_SOLD_ASSETS], () =>
-    HoldingServices.getIncome({ user_address: 'sei1krvjk3r790dcsqkr96ymd44v04w9zz5dlr66z7' })
+  const { isLoading: isLoadingIncome, data: Income } = useQuery(
+    [API_ENDPOINTS.PUBLIC.GET_INCOME_NFTS],
+    () => HoldingServices.getIncome({ wallet_address: 'sei18d56etelkz5w0hu82l8lzl6jnucd8pz8dwh44f' }),
+    {
+      select: res => res.collections,
+      refetchOnWindowFocus: false,
+    }
   )
+
+  const { isLoading: isLoadingTopGainer, data: TopGainer } = useQuery(
+    [API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_NFTS_TOP],
+    () => HoldingServices.getTopGainers({ wallet_address: 'sei18d56etelkz5w0hu82l8lzl6jnucd8pz8dwh44f' }),
+    {
+      select: res => res.top_gainers,
+      refetchOnWindowFocus: false,
+    }
+  )
+
   const {
     isLoading: isLoadingWallet,
     data: walletConnect,
@@ -122,15 +137,6 @@ export const useHolding = () => {
     () => HoldingServices.getCollections({ user_address: 'sei1krvjk3r790dcsqkr96ymd44v04w9zz5dlr66z7' }),
     {
       select: res => res.collections,
-      refetchOnWindowFocus: false,
-    }
-  )
-
-  const { isLoading: isLoadingTopGainer, data: TopGainer } = useQuery(
-    [API_ENDPOINTS.PUBLIC.GET_USER_NFT_HOLDING_TOP],
-    () => HoldingServices.getTopGainers({ user_address: 'sei1krvjk3r790dcsqkr96ymd44v04w9zz5dlr66z7' }),
-    {
-      select: res => res.userHoldingTop,
       refetchOnWindowFocus: false,
     }
   )

@@ -8,7 +8,7 @@
   },
   "eslint.format.enable": true,
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "files.associations": {
     "*.css": "tailwindcss",

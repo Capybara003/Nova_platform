@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
 
   if (registerType == 'google' || registerType == 'discord') {
     try {
-      let user = await prisma.user.findFirst({
+      let user = await prisma.account.findFirst({
         where: {
           email,
           isDeleted: false,
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
       })
 
       if (!user) {
-        user = await prisma.user.create({
+        user = await prisma.account.create({
           data: {
             userName,
             email,

@@ -6,14 +6,26 @@ import CoreNextAPIService from './CoreNextAPIService'
 import { AssetsDetailsBlock } from 'design-systems/Templates/HoldingPageTemplate/interface'
 import { API_ENDPOINTS } from 'utils/api-integration'
 class HoldingServices {
-  getHolding = async (data: {}) => {
+  getHolding = async (data: { wallet_address: string }) => {
     // return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING}`)
     // return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_ASSETS}`)
-    return CoreAPIService.post<any>(
-      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_ASSETS}`,
-      data
+    return CoreAPIService.get<any>(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_NFTS}/${data.wallet_address}`
     )
   }
+
+  getIncome = async (data: { wallet_address: string }) => {
+    return CoreAPIService.get<any>(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_INCOME_NFTS}/${data.wallet_address}`
+    )
+  }
+
+  getTopGainers = async (data: { wallet_address: string }) => {
+    return CoreAPIService.get<any>(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_NFTS_TOP}/${data.wallet_address}`
+    )
+  }
+
   postAssetDetails = async (AssetsDetails: AssetsDetailsBlock) => {
     return CoreAPIService.post<any>(
       `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.POST_ASSETS_DETAILS}`,
@@ -23,21 +35,9 @@ class HoldingServices {
   getPortFolio = async () => {
     return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_PORTFOLIO}`)
   }
-  getIncome = async (data: object) => {
-    return CoreAPIService.post<NFTData>(
-      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_SOLD_ASSETS}`,
-      data
-    )
-  }
   getCollections = async (data: object) => {
     return CoreAPIService.post<any>(
       `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_COLLECTIONS}`,
-      data
-    )
-  }
-  getTopGainers = async (data: object) => {
-    return CoreAPIService.post<any>(
-      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_USER_NFT_HOLDING_TOP}`,
       data
     )
   }

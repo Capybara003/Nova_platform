@@ -19,6 +19,7 @@ import Typography from 'design-systems/Atoms/Typography'
 import { useDataSelector } from 'lib/redux/store'
 import { IMG } from 'assets/images'
 import { NoData } from 'design-systems/Atoms/NoData'
+import { formatUSei } from 'utils/formatUnit'
 
 const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerData, crypto }) => {
   const [activeElement, setActiveElement] = useState<string>('')
@@ -131,16 +132,17 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
         {!loading &&
           data?.map((collection: any, index: any) => {
             const info =
-              collection?.userHoldingNfts &&
-              collection?.userHoldingNfts?.reduce((acc: any, nft: any) => {
-                acc.rank = (acc.rank || 0) + nft?.rarity?.rank || 0
-                acc.buyPrice = (acc.buyPrice || 0) + nft?.buyPrice?.amount / SEI || 0
-                acc.estFee = (acc.estFee || 0) + nft?.estFee?.amount / SEI || 0
-                acc.unrealizedGains = (acc.unrealizedGains || 0) + nft?.unrealizedGains?.amount / SEI || 0
+              collection?.nftsHolding &&
+              collection?.nftsHolding?.reduce((acc: any, nft: any) => {
+                // acc.rank = (acc.rank || 0) + nft?.rarity?.rank || 0
+                acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
+                acc.estFee = (acc.estFee || 0) + formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01 || 0
+                acc.unrealizedGains = (acc.unrealizedGains || 0) + formatUSei(nft?.unrealizedGains) || 0
                 acc.holdingTime = (acc.holdingTime || 0) + nft?.holdingTime || 0
+                acc.floorPrice = (acc.floorPrice || 0) + formatUSei(nft?.floorPrice) || 0
                 return acc
               }, {})
-            info.rank = info.rank / collection?.userHoldingNfts?.length || 0
+            // info.rank = info.rank / collection?.userHoldingNfts?.length || 0
 
             const SinceTrade = collection?.sinceTrade / SEI
 
@@ -398,9 +400,7 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                     </div>
                   </td>
                   <td className="">
-                    {collection?.userHoldingAmount && collection?.userHoldingAmount !== null
-                      ? collection?.userHoldingAmount
-                      : '--'}
+                    {collection?.nftsHolding && collection?.nftsHolding !== null ? collection.nftsHolding.length : '--'}
                   </td>
                   <td>
                     <div className="tooltip !w-[60px]">
@@ -413,9 +413,9 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                   </td>
                   <td className="overflow-hidden overflow-ellipsis">
                     <div>
-                      <TETooltip title={collection?.floor}>
-                        {collection?.floor !== undefined && collection?.floor !== null
-                          ? `${Number(collection.floor)?.toFixed(2)} ${crypto?.symbol}`
+                      <TETooltip title={collection?.floorPrice}>
+                        {collection?.floorPrice !== undefined && collection?.floorPrice !== null
+                          ? `${formatUSei(collection.floorPrice).toFixed(2)} ${crypto?.symbol}`
                           : '--'}
                       </TETooltip>
                     </div>
@@ -437,8 +437,8 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                   </td>
                   <td className="w-[100px] overflow-hidden overflow-ellipsis">
                     <div>
-                      {collection?.floor && collection?.floor !== null
-                        ? `${Number(collection.floor * collection.userHoldingAmount)?.toFixed(2)} ${crypto?.symbol}`
+                      {info?.floorPrice && info?.floorPrice !== null
+                        ? `${Number(info.floorPrice)?.toFixed(2)} ${crypto?.symbol}`
                         : '--'}
                     </div>
                   </td>
@@ -497,8 +497,8 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                     </div>{' '}
                   </td>
                 </tr>
-                {collection?.userHoldingNfts &&
-                  collection?.userHoldingNfts?.map((nft: any) => (
+                {collection?.nftsHolding &&
+                  collection?.nftsHolding?.map((nft: any) => (
                     <tr className={`${activeElement === index ? 'table-row' : 'hidden'} cursor-pointer`} key={nft.key}>
                       <td className="!p-0">
                         <div>
@@ -507,7 +507,7 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                               {nft?.status?.status}
                             </div>
                             <div className="w-[40px] !px-0">
-                              <Image alt={'IMG'} height={40} src={nft?.imageLink} width={40} />
+                              <Image alt={'IMG'} height={40} src={nft?.image} width={40} />
                             </div>
                             <div className="w-[90px] !px-0 text-center">{nft?.name}</div>
                           </div>
@@ -517,32 +517,32 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                       <td></td>
                       <td className="overflow-hidden overflow-ellipsis">
                         <div>
-                          {nft?.floor !== undefined && nft?.floor !== null
-                            ? `${Number(nft.floor)?.toFixed(2)} ${crypto?.symbol}`
+                          {nft?.floorPrice !== undefined && nft?.floorPrice !== null
+                            ? `${formatUSei(nft.floorPrice).toFixed(2)} ${crypto?.symbol}`
                             : '--'}
                         </div>
                       </td>
                       <td>{nft?.rarity?.rank && nft?.rarity?.rank !== null ? nft?.rarity?.rank : '--'}</td>
                       <td>
                         <div>
-                          <TETooltip title={Number(nft?.buyPrice?.amount / SEI)?.toFixed(2)}>
-                            {nft?.buyPrice?.amount
-                              ? `${Number(nft?.buyPrice?.amount / SEI)?.toFixed(2)} ${crypto?.symbol}`
-                              : '--'}
+                          <TETooltip title={formatUSei(nft?.buyPrice)?.toFixed(2)}>
+                            {nft?.buyPrice ? `${formatUSei(nft?.buyPrice).toFixed(2)} ${crypto?.symbol}` : '--'}
                           </TETooltip>
                         </div>
                       </td>
                       <td>
                         <div>
-                          {nft?.estFee && nft?.estFee !== null
-                            ? `${Number(nft?.estFee.amount / SEI)?.toFixed(2)} ${crypto?.symbol}`
+                          {nft?.royaltyPercentage && nft?.royaltyPercentage !== null
+                            ? `${(formatUSei(nft?.floorPrice) * nft.royaltyPercentage * 0.01).toFixed(2)} ${
+                                crypto?.symbol
+                              }`
                             : '--'}
                         </div>
                       </td>
                       <td className="w-[100px] overflow-hidden overflow-ellipsis">
                         <div>
-                          {nft?.floor && nft?.floor !== null
-                            ? `${Number(nft.floor)?.toFixed(2)} ${crypto?.symbol}`
+                          {nft?.floorPrice && nft?.floorPrice !== null
+                            ? `${formatUSei(nft.floorPrice).toFixed(2)} ${crypto?.symbol}`
                             : '--'}
                         </div>
                       </td>
@@ -551,7 +551,7 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                           <div>
                             <Typography>
                               {nft?.unrealizedGains && nft?.unrealizedGains !== null
-                                ? `${Number(nft?.unrealizedGains.amount / SEI).toFixed(2)} ${crypto?.symbol}`
+                                ? `${formatUSei(nft.unrealizedGains).toFixed(2)} ${crypto?.symbol}`
                                 : '--'}
                             </Typography>
                           </div>
@@ -567,9 +567,9 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                         </TETooltip>
                       </td>
                       <td>
-                        {collection && collection?.holdingTime !== null
-                          ? collection?.holdingTime
-                            ? `${collection?.holdingTime} d`
+                        {nft && nft?.ts !== null
+                          ? nft?.ts
+                            ? `${((Date.now() - new Date(nft?.ts).getTime()) / (24 * 60 * 60 * 1000)).toFixed(2)} d`
                             : '--'
                           : '--'}
                       </td>

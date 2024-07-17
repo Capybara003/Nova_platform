@@ -5,10 +5,9 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
 
-model User {
+model Account {
   id            Int      @id @default(autoincrement())
   email         String   @unique
   userName      String?
@@ -27,6 +26,6 @@ model Wallet {
   walletAddress String
   walletName    String?
 
-  owner   User? @relation(fields: [ownerId], references: [id])
+  owner   Account? @relation(fields: [ownerId], references: [id])
   ownerId Int?
 }
