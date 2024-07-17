@@ -11,6 +11,7 @@ import Line from 'design-systems/Atoms/Line'
 import Typography from 'design-systems/Atoms/Typography'
 import { useHolding } from 'hooks/apis/useHolding'
 import { useDataSelector } from 'lib/redux/store'
+import { formatUSei } from 'utils/formatUnit'
 
 export const convertToSEI = (value?: number, SEI?: number): number | undefined =>
   value !== undefined && SEI !== undefined ? value / SEI : undefined
@@ -24,21 +25,24 @@ const HoldingDataGroup: React.FC = () => {
     amount: 0,
     buyPrice: 0,
     estFee: 0,
+    estValue: 0,
     unrealizedGains: 0,
   }
 
   Holding?.map((collection: any) => {
     const info =
-      collection?.userHoldingNfts &&
-      collection?.userHoldingNfts?.reduce((acc: any, nft: any) => {
-        acc.buyPrice = (acc.buyPrice || 0) + nft?.buyPrice?.amount / SEI || 0
-        acc.estFee = (acc.estFee || 0) + nft?.estFee?.amount / SEI || 0
-        acc.unrealizedGains = (acc.unrealizedGains || 0) + nft?.unrealizedGains?.amount / SEI || 0
+      collection?.nftsHolding &&
+      collection?.nftsHolding?.reduce((acc: any, nft: any) => {
+        acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
+        acc.estFee = (acc.estFee || 0) + formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01 || 0
+        acc.unrealizedGains = (acc.unrealizedGains || 0) + formatUSei(nft?.unrealizedGains) || 0
+        acc.estValue = (acc.estValue || 0) + formatUSei(nft?.floorPrice) || 0
         return acc
       }, {})
-    holdingData.amount += Number(collection?.userHoldingAmount) || 0
+    holdingData.amount += Number(collection?.nftsHolding?.length) || 0
     holdingData.buyPrice += Number(info?.buyPrice) || 0
     holdingData.estFee += Number(info?.estFee) || 0
+    holdingData.estValue += Number(info?.estValue) || 0
     holdingData.unrealizedGains += Number(info?.unrealizedGains) || 0
   }, {})
   const BuyPrice = convertToSEI(Holding?.buyPrice, SEI)
@@ -83,15 +87,13 @@ const HoldingDataGroup: React.FC = () => {
             <HoldingDetailsSection
               crypto={crypto}
               title="Est. Value"
-              tooltipTitle={`${holdingData.estFee} ${crypto.symbol}`}
-              value={EstValue}
+              tooltipTitle={`${holdingData.estValue} ${crypto.symbol}`}
+              value={holdingData.estValue}
             />
             <div className="flex justify-between">
               <Typography size="body">Unrealized Gains:</Typography>
               <Typography
-                className={`text-right ${
-                  holdingDetail?.holdingDetails?.percentage < 0 ? ' text-warning-300' : 'text-green'
-                } `}
+                className={`text-right ${holdingData?.unrealizedGains < 0 ? ' text-warning-300' : 'text-green'} `}
                 size="body"
               >
                 <TETooltip title={`${holdingData.unrealizedGains} ${crypto.symbol}`}>
@@ -105,12 +107,14 @@ const HoldingDataGroup: React.FC = () => {
                     )}
                   </Typography>
                 </TETooltip>
-                <Typography className="text-[11px]">
-                  <TETooltip title={`${Percentage}%`}>
-                    {holdingDetail?.holdingDetails ? (
+                <Typography className="text-md">
+                  <TETooltip title={`${(holdingData.unrealizedGains / holdingData.buyPrice) * 100}%`}>
+                    {holdingData?.unrealizedGains ? (
                       <>
                         {' '}
-                        {holdingDetail?.holdingDetails?.percentage === null ? '0.00%' : `${Percentage?.toFixed(2)}%`}
+                        {holdingData?.unrealizedGains === null
+                          ? '0.00%'
+                          : `${((holdingData.unrealizedGains / holdingData.buyPrice) * 100).toFixed(2)}%`}
                       </>
                     ) : (
                       '--'

@@ -66,8 +66,8 @@ const HoldingPageTemplate: React.FC = () => {
   }, [LocalWallet])
 
   const totalItems = useMemo(
-    () => (activeTab === 0 ? Holding?.length : activeTab === 1 ? incomeData?.sellHistory?.length : StakingData1.length),
-    [activeTab, Holding?.length, incomeData?.sellHistory?.length]
+    () => (activeTab === 0 ? Holding?.length : activeTab === 1 ? incomeData?.length : StakingData1.length),
+    [activeTab, Holding?.length, incomeData?.length]
   )
   const handlePageChange = ({ selected }: { selected: number }) => setCurrentPage(selected)
 
@@ -85,7 +85,7 @@ const HoldingPageTemplate: React.FC = () => {
   }
 
   const openModal = () => setIsModalOpen(true)
-  const DataLength = Holding?.length || Income?.collection?.length
+  const DataLength = Holding?.length || Income?.length
 
   return (
     <>
@@ -247,7 +247,7 @@ const HoldingPageTemplate: React.FC = () => {
                       activeTab === 0
                         ? holdingData
                         : activeTab === 1
-                        ? incomeData.sellHistory
+                        ? incomeData
                         : activeTab === 2
                         ? StakingData
                         : activeTab === 3
@@ -306,7 +306,7 @@ const HoldingPageTemplate: React.FC = () => {
                     <>
                       <HoldingIndexTable
                         crypto={crypto}
-                        data={incomeData?.sellHistory?.slice(startIndex, endIndex)}
+                        data={incomeData?.slice(startIndex, endIndex)}
                         footerData={incomeData}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
@@ -386,7 +386,7 @@ const HoldingPageTemplate: React.FC = () => {
                   )}
                 </div>
                 {((Holding?.length > 9 && activeTab === 0) ||
-                  (incomeData?.sellHistory?.length > 9 && activeTab === 1) ||
+                  (incomeData?.length > 9 && activeTab === 1) ||
                   (StakingData1.length > 9 && activeTab === 3) ||
                   (StakingData.length > 9 && activeTab === 2)) && (
                   <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
@@ -395,11 +395,7 @@ const HoldingPageTemplate: React.FC = () => {
             </div>
           </div>
 
-          {activeTab === 3 && (
-            <>
-              <AnalyticsBottomSection />
-            </>
-          )}
+          {activeTab === 3 && <>{/* <AnalyticsBottomSection /> */}</>}
         </div>
       </Web3Modal>
 

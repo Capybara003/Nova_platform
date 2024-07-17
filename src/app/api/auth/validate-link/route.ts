@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Invalid Link', user: '', success: false }, { status: 400 })
     }
 
-    const user = await prisma.user.findFirst({
+    const user = await prisma.account.findFirst({
       where: {
         id: Number(id),
         isDeleted: false,

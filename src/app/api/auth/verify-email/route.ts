@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   try {
     const { email, otp } = await request.json()
 
-    const user = await prisma.user.findFirst({
+    const user = await prisma.account.findFirst({
       where: {
         email,
         isDeleted: false,
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: 'Invalid opt.' }, { status: 200 })
     }
 
-    await prisma.user.update({
+    await prisma.account.update({
       where: {
         id: user.id,
       },
