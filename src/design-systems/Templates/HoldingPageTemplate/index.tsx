@@ -395,7 +395,11 @@ const HoldingPageTemplate: React.FC = () => {
             </div>
           </div>
 
-          {activeTab === 3 && <>{/* <AnalyticsBottomSection /> */}</>}
+          {activeTab === 3 && (
+            <>
+              <AnalyticsBottomSection />
+            </>
+          )}
         </div>
       </Web3Modal>
 

@@ -24,6 +24,7 @@ export const API_ENDPOINTS = {
     GET_HOLDING_NFTS: 'nfts/user/get_holding_nfts',
     GET_INCOME_NFTS: 'nfts/user/get_income_nfts',
     GET_USER_HOLDING_NFTS_TOP: 'nfts/user/get_holding_nfts_top',
+    GET_NFTS_TRADE_INFO: 'nfts/user/get_nfts_trade_info',
     GET_HOLDING:
       'collections/all-nft/addr1qyf6cdhh0gn246dt92ac97sgrct9dteaqn85hutzemak4j9s2fhw5xj4gzh5feq0fursxsrman00lvy9cl9un6n84msswxthgn',
     POST_ASSETS_DETAILS: 'assets/asset-details',
@@ -35,8 +36,6 @@ export const API_ENDPOINTS = {
       'assets/tax-capital?address=addr1qxgscmhpp7qnnc0qv6rs2fk34tgath7nzhjq90x9ens233cxtaluc9l6as5lfvm7njvs05fqr0lkedye7lszfepzehusmucnm6',
     GET_TAXIABLE_GAIN:
       'assets/getTaxableGain?address=addr1qxgscmhpp7qnnc0qv6rs2fk34tgath7nzhjq90x9ens233cxtaluc9l6as5lfvm7njvs05fqr0lkedye7lszfepzehusmucnm6',
-    GET_HOLDING_COLLECTIONS: 'user/nfts/get_holding_collections',
-    GET_USER_NFT_HOLDING_TIME: 'user/nfts/get_user_nft_holding_time',
   },
 } as const
 

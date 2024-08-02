@@ -18,66 +18,167 @@ import { BookMarkEmpty, InfoIcons } from 'design-systems/Atoms/Icons'
 import NavTabsMolecule from 'design-systems/Molecules/NavTabs/NavTabsMolecule'
 import Table from 'design-systems/Atoms/Table'
 import { useHolding } from 'hooks/apis/useHolding'
+import { formatUSei } from 'utils/formatUnit'
 
 const AnalyticsBottomSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState<number>(0)
+  const [activeTabOfAssetAllocation, setActiveTabOfAssetAllocation] = useState<number>(0)
+  const [activeTabOfTransaction, setActiveTabOfTransaction] = useState<number>(0)
+  const [activeTabOfVolume, setActiveTabOfVolume] = useState<number>(0)
+  const [activeTabOfTotalVolume, setActiveTabOfTotalVolume] = useState<number>(0)
   const [collectionData, setCollectionData] = useState<any>([])
-  const [topGainerData, setTopGainerData] = useState<any>([])
+  const [topGainerData, setTopGainerData] = useState<any>({
+    topGainers: [],
+    topLosser: [],
+  })
+  const [nftTradeData, setNftTradeData] = useState<any>({
+    ageOfNftAssets:
+      {
+        level1: [],
+        level2: [],
+        level3: [],
+        level4: [],
+        level5: [],
+        level6: [],
+      } || null,
+    transaction: {
+      day: {},
+      week: {},
+      month: {},
+    },
+    volume: {
+      buyVolume: {
+        day: {},
+        week: {},
+        month: {},
+      },
+      sellVolume: {
+        day: {},
+        week: {},
+        month: {},
+      },
+    },
+  })
 
-  const { isLoadingCollections, Collections, isLoadingHoldingTime, HoldingTime, isLoadingTopGainer, TopGainer } =
-    useHolding()
+  const { isLoadingHolding, Holding, isLoadingTopGainer, TopGainer, isLoadingNftTradeInfo, NftTradeInfo } = useHolding()
 
-  useMemo(() => Collections && setCollectionData(Collections), [Collections, isLoadingCollections])
+  useMemo(() => Holding && setCollectionData(Holding), [Holding, isLoadingHolding])
   useMemo(() => TopGainer && setTopGainerData(TopGainer), [TopGainer, isLoadingTopGainer])
+
+  useMemo(() => NftTradeInfo && setNftTradeData(NftTradeInfo), [NftTradeInfo, isLoadingNftTradeInfo])
 
   const collectionChartData = useMemo(() => {
     return (
-      Collections &&
-      Collections.length > 0 &&
-      Collections.reduce((acc: any, item: any) => {
-        acc['total'] = Number(acc['total'] || 0 + item.volume || 0).toFixed(3)
-        if (item.volume < 5_000) {
-          acc[0] = (acc[0] || 0) + 1
-        } else if (item.volume < 25_000) {
-          acc[1] = (acc[1] || 0) + 1
-        } else if (item.volume < 100_000) {
-          acc[2] = (acc[2] || 0) + 1
-        } else if (item.volume < 250_000) {
-          acc[3] = (acc[3] || 0) + 1
-        } else if (item.volume < 1_000_000) {
-          acc[4] = (acc[4] || 0) + 1
-        } else {
-          acc[5] = (acc[5] || 0) + 1
+      Holding &&
+      Holding.length > 0 &&
+      Holding.reduce((acc: any, item: any) => {
+        const info =
+          item?.nftsHolding &&
+          item?.nftsHolding?.reduce((acc: any, nft: any) => {
+            acc = (acc || 0) + formatUSei(nft?.floorPrice) || 0
+            return acc
+          }, 0)
+
+        acc['total'] = (acc['total'] || 0) + (info || 0)
+
+        if (acc['collections'] === undefined) {
+          acc['collections'] = {}
         }
+        acc['collections'][item.name] = (acc['collections'][item.name] || 0) + info
+
         return acc
       }, {})
     )
-  }, [Collections, isLoadingCollections])
+  }, [Holding, isLoadingHolding])
 
   const timeChartData = useMemo(() => {
     return (
-      HoldingTime &&
-      HoldingTime.length > 0 &&
-      HoldingTime.reduce((acc: any, item: any) => {
-        const time = (new Date().getTime() - new Date(item.ts).getTime()) / 1000
-        acc['total'] = Number((acc['total'] || 0) + (time / 3600 / 24 || 0))
-        if (time < 7 * 24 * 60 * 60) {
-          acc[0] = (acc[0] || 0) + 1
-        } else if (time < 4 * 7 * 24 * 60 * 60) {
-          acc[1] = (acc[1] || 0) + 1
-        } else if (time < 3 * 30 * 24 * 60 * 60) {
-          acc[2] = (acc[2] || 0) + 1
-        } else if (time < 6 * 30 * 24 * 60 * 60) {
-          acc[3] = (acc[3] || 0) + 1
-        } else if (time < 12 * 30 * 24 * 60 * 60) {
-          acc[4] = (acc[4] || 0) + 1
-        } else {
-          acc[5] = (acc[5] || 0) + 1
-        }
-        return acc
-      }, {})
+      NftTradeInfo &&
+      NftTradeInfo.ageOfNftAssets &&
+      Object.values(NftTradeInfo.ageOfNftAssets)
+        .flat()
+        .reduce((acc: any, item: any) => {
+          const time = (new Date().getTime() - new Date(item.ts).getTime()) / 1000
+          acc['total'] = Number((acc['total'] || 0) + (time / 3600 / 24 || 0))
+          acc['count'] = Number((acc['count'] || 0) + 1)
+          return acc
+        }, {})
     )
-  }, [HoldingTime, isLoadingHoldingTime])
+  }, [Holding, isLoadingHolding])
+
+  const transactionChartData = useMemo(() => {
+    return (
+      NftTradeInfo &&
+      NftTradeInfo.transaction && {
+        0: Object.keys(NftTradeInfo.transaction.day).map(day => {
+          const transaction = NftTradeInfo.transaction.day[day]
+          return {
+            day,
+            totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
+            transactionAmount: transaction?.transactionAmount ? transaction.transactionAmount : 0,
+          }
+        }),
+        1: Object.keys(NftTradeInfo.transaction.week).map(week => {
+          const transaction = NftTradeInfo.transaction.week[week]
+          return {
+            day: week,
+            totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
+            transactionAmount: transaction?.transactionAmount ? transaction.transactionAmount : 0,
+          }
+        }),
+        2: Object.keys(NftTradeInfo.transaction.month).map(month => {
+          const transaction = NftTradeInfo.transaction.month[month]
+          return {
+            day: month,
+            totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
+            transactionAmount: transaction?.transactionAmount ? transaction.transactionAmount : 0,
+          }
+        }),
+      }
+    )
+  }, [NftTradeInfo, isLoadingNftTradeInfo])
+
+  const volumeChartData = useMemo(() => {
+    return (
+      NftTradeInfo &&
+      NftTradeInfo.volume && {
+        buyVolume: {
+          0: Object.keys(NftTradeInfo.volume.buyVolume.day).reduce((acc: any, day) => {
+            const volume = NftTradeInfo.volume.buyVolume.day[day]
+            acc[day] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+            return acc
+          }, {}),
+          1: Object.keys(NftTradeInfo.volume.buyVolume.week).reduce((acc: any, week) => {
+            const volume = NftTradeInfo.volume.buyVolume.week[week]
+            acc[week] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+            return acc
+          }, {}),
+          2: Object.keys(NftTradeInfo.volume.buyVolume.month).reduce((acc: any, month) => {
+            const volume = NftTradeInfo.volume.buyVolume.month[month]
+            acc[month] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+            return acc
+          }, {}),
+        },
+        sellVolume: {
+          0: Object.keys(NftTradeInfo.volume.sellVolume.day).reduce((acc: any, day) => {
+            const volume = NftTradeInfo.volume.sellVolume.day[day]
+            acc[day] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+            return acc
+          }, {}),
+          1: Object.keys(NftTradeInfo.volume.sellVolume.week).reduce((acc: any, week) => {
+            const volume = NftTradeInfo.volume.sellVolume.week[week]
+            acc[week] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+            return acc
+          }, {}),
+          2: Object.keys(NftTradeInfo.volume.sellVolume.month).reduce((acc: any, month) => {
+            const volume = NftTradeInfo.volume.sellVolume.month[month]
+            acc[month] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+            return acc
+          }, {}),
+        },
+      }
+    )
+  }, [NftTradeInfo, isLoadingNftTradeInfo])
 
   const realTimeNftTableData = useMemo(() => {
     return portfolioProfitTableData.map(item => ({
@@ -146,11 +247,11 @@ const AnalyticsBottomSection: React.FC = () => {
 
         <div className="mt-4 w-fit">
           <NavTabsMolecule
-            activeTab={activeTab}
+            activeTab={activeTabOfAssetAllocation}
             className="whitespace-nowrap"
             tabs={['Collection', 'Type', 'Category', 'Market Cap']}
             onTabChange={tab => {
-              setActiveTab(tab)
+              setActiveTabOfAssetAllocation(tab)
             }}
           />
         </div>
@@ -162,21 +263,14 @@ const AnalyticsBottomSection: React.FC = () => {
                 <>
                   <p>Total</p>
                   <p className="text-xl text-white font-medium">
-                    {(collectionChartData && `${collectionChartData['total']}`) || 0} SEI
+                    {(collectionChartData && `${collectionChartData['total'].toFixed(3)}`) || 0} SEI
                   </p>
                 </>
               }
               colors={['#5A3FFF', '#2592D9', '#1ED6FF', '#F466FE', '#C517D1', '#6B0090']}
               height={550}
-              labels={['0-5K ', '5K-25k', '25K-100K', '100K-250K', '250K-1M', '1M+']}
-              series={[
-                collectionChartData[0] || 0,
-                collectionChartData[1] || 0,
-                collectionChartData[2] || 0,
-                collectionChartData[3] || 0,
-                collectionChartData[4] || 0,
-                collectionChartData[5] || 0,
-              ]}
+              labels={Object.keys(collectionChartData['collections'])}
+              series={Object.values(collectionChartData['collections'])}
               width={550}
             />
           </div>
@@ -209,45 +303,57 @@ const AnalyticsBottomSection: React.FC = () => {
               </thead>
 
               <tbody className="mt-5 overflow-y-scroll md:!h-[500px] [&>*>td:first-child]:border-s-0 [&>*>td:last-child]:border-e-0">
-                {!isLoadingCollections &&
+                {!isLoadingHolding &&
                   collectionData &&
-                  collectionData?.map((collection: any) => (
-                    <tr key={collection.seiAddress}>
-                      <td className="text-white text-left font-medium">
-                        <div className="flex items-center justify-start gap-2">
-                          <div className="h-5 w-5 rounded bg-red"></div>
-                          {collection?.pfp && collection?.pfp !== null ? (
-                            <Image alt={'IMG'} height={48} src={collection?.pfp} width={48} />
-                          ) : (
-                            <Image alt={'IMG'} height={48} src={IMG.webump} width={48} />
-                          )}
-                          <Typography>
-                            {collection?.name && collection?.name !== null ? collection?.name || '--' : '--'}
-                          </Typography>
-                        </div>
-                      </td>
+                  collectionData?.map((collection: any) => {
+                    const floorPrice =
+                      collection?.nftsHolding &&
+                      collection?.nftsHolding?.reduce((acc: any, nft: any) => {
+                        acc = (acc || 0) + formatUSei(nft?.floorPrice) || 0
+                        return acc
+                      }, 0)
+                    return (
+                      <tr key={collection.contract}>
+                        <td className="text-white text-left font-medium">
+                          <div className="flex items-center justify-start gap-2">
+                            <div className="h-5 w-5 rounded bg-red"></div>
+                            {collection?.pfp && collection?.pfp !== null ? (
+                              <Image alt={'IMG'} height={48} src={collection?.pfp} width={48} />
+                            ) : (
+                              <Image alt={'IMG'} height={48} src={IMG.webump} width={48} />
+                            )}
+                            <Typography>
+                              {collection?.name && collection?.name !== null ? collection?.name || '--' : '--'}
+                            </Typography>
+                          </div>
+                        </td>
 
-                      <td className="text-white text-left font-medium">
-                        <div className="flex items-center justify-start gap-2">
-                          {collection?.holdingNftAmount && collection?.holdingNftAmount !== null
-                            ? collection?.holdingNftAmount || '--'
-                            : '--'}
-                        </div>
-                      </td>
+                        <td className="text-white text-left font-medium">
+                          <div className="flex items-center justify-start gap-2">
+                            {collection?.nftsHolding && collection?.nftsHolding !== null
+                              ? collection?.nftsHolding.length || '--'
+                              : '--'}
+                          </div>
+                        </td>
 
-                      <td className="text-white text-left font-medium">
-                        <div className="flex items-center justify-start gap-2">96.7%</div>
-                      </td>
+                        <td className="text-white text-left font-medium">
+                          <div className="flex items-center justify-start gap-2">
+                            {floorPrice && collectionChartData['total'] && collectionChartData['total'] != 0
+                              ? ((floorPrice / collectionChartData['total']) * 100).toFixed(2) + '%'
+                              : '--'}
+                          </div>
+                        </td>
 
-                      <td className="text-white text-left font-medium">
-                        <div className="flex items-center justify-start gap-2">
-                          {collection?.holdingNftAmount && collection?.holdingNftAmount !== null
-                            ? `${Number(collection?.holdingNftAmount * collection?.floor)?.toFixed(2)} SEI` || '--'
-                            : '--'}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        <td className="text-white text-left font-medium">
+                          <div className="flex items-center justify-start gap-2">
+                            {collection?.nftsHolding && collection.nftsHolding !== null
+                              ? `${Number(floorPrice)?.toFixed(2)} SEI` || '--'
+                              : '--'}
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })}
               </tbody>
 
               <tfoot className="[&>*>*]:py-5">
@@ -289,7 +395,7 @@ const AnalyticsBottomSection: React.FC = () => {
 
             <tbody className="mt-5">
               {!isLoadingTopGainer &&
-                topGainerData.slice(0, 6).map((item: any, key: any) => {
+                topGainerData.topGainers.slice(0, 6).map((item: any, key: any) => {
                   return (
                     <tr key={item.key}>
                       <td className="text-white text-left font-medium">
@@ -297,8 +403,8 @@ const AnalyticsBottomSection: React.FC = () => {
                           <div className="flex items-center gap-1">
                             <BookMarkEmpty /> {key + 1}
                           </div>
-                          {item.imageLink ? (
-                            <Image alt="Image" height={48} src={item.imageLink} width={48} />
+                          {item.image ? (
+                            <Image alt="Image" height={48} src={item.image} width={48} />
                           ) : (
                             <Image alt="Image" height={48} src={IMG.webump} width={48} />
                           )}
@@ -308,7 +414,7 @@ const AnalyticsBottomSection: React.FC = () => {
 
                       <td className="text-white text-left font-medium">
                         <div className="flex items-center justify-center gap-2">
-                          {item?.price ? `${item.price} SEI` : '--'}
+                          {item?.price ? `${formatUSei(item.price)} SEI` : '--'}
                         </div>
                       </td>
 
@@ -355,45 +461,42 @@ const AnalyticsBottomSection: React.FC = () => {
 
             <tbody className="mt-5">
               {!isLoadingTopGainer &&
-                topGainerData
-                  .reverse()
-                  .slice(0, 6)
-                  .map((item: any, key: any) => {
-                    return (
-                      <tr key={item.key}>
-                        <td className="text-white text-left font-medium">
-                          <div className="flex items-center justify-center gap-2">
-                            <div className="flex items-center gap-1">
-                              <BookMarkEmpty />
-                              {key + 1}
-                            </div>
-                            {item.imageLink ? (
-                              <Image alt="Image" height={48} src={item.imageLink} width={48} />
-                            ) : (
-                              <Image alt="Image" height={48} src={IMG.webump} width={48} />
-                            )}
-                            {item?.name ? <Typography>{item.name}</Typography> : <Typography>WeBump</Typography>}
+                topGainerData.topLosser.slice(0, 6).map((item: any, key: any) => {
+                  return (
+                    <tr key={item.key}>
+                      <td className="text-white text-left font-medium">
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="flex items-center gap-1">
+                            <BookMarkEmpty />
+                            {key + 1}
                           </div>
-                        </td>
+                          {item.image ? (
+                            <Image alt="Image" height={48} src={item.image} width={48} />
+                          ) : (
+                            <Image alt="Image" height={48} src={IMG.webump} width={48} />
+                          )}
+                          {item?.name ? <Typography>{item.name}</Typography> : <Typography>WeBump</Typography>}
+                        </div>
+                      </td>
 
-                        <td className="text-white text-left font-medium">
-                          <div className="flex items-center justify-center gap-2">
-                            {item?.price ? `${item.price} SEI` : '--'}
-                          </div>
-                        </td>
+                      <td className="text-white text-left font-medium">
+                        <div className="flex items-center justify-center gap-2">
+                          {item?.price ? `${formatUSei(item.price)} SEI` : '--'}
+                        </div>
+                      </td>
 
-                        <td className="text-white text-left font-medium">
-                          <div className="flex items-center justify-center gap-2">
-                            {item?.floor ? `${item.floor} SEI` : '--'}
-                          </div>
-                        </td>
+                      <td className="text-white text-left font-medium">
+                        <div className="flex items-center justify-center gap-2">
+                          {item?.floor ? `${item.floor} SEI` : '--'}
+                        </div>
+                      </td>
 
-                        <td className="text-white text-left font-medium">
-                          <div className="flex items-center justify-center gap-2">165.87.7SEI</div>
-                        </td>
-                      </tr>
-                    )
-                  })}
+                      <td className="text-white text-left font-medium">
+                        <div className="flex items-center justify-center gap-2">165.87.7SEI</div>
+                      </td>
+                    </tr>
+                  )
+                })}
             </tbody>
             <tfoot className="transparent-footer-bg">
               <tr>
@@ -424,17 +527,17 @@ const AnalyticsBottomSection: React.FC = () => {
                 <>
                   <p>Avg. Age</p>
                   <p className="text-2xl text-white font-medium">
-                    {(timeChartData && `${(timeChartData['total'] / HoldingTime.length).toFixed(3)}`) || 0} Days
+                    {(timeChartData && `${(timeChartData['total'] / timeChartData['count']).toFixed(3)}`) || 0} Days
                   </p>
                 </>
               }
               chartData={[
-                timeChartData[0] || 0,
-                timeChartData[1] || 0,
-                timeChartData[2] || 0,
-                timeChartData[3] || 0,
-                timeChartData[4] || 0,
-                timeChartData[5] || 0,
+                nftTradeData.ageOfNftAssets.level1.length || 0,
+                nftTradeData.ageOfNftAssets.level2.length || 0,
+                nftTradeData.ageOfNftAssets.level3.length || 0,
+                nftTradeData.ageOfNftAssets.level4.length || 0,
+                nftTradeData.ageOfNftAssets.level5.length || 0,
+                nftTradeData.ageOfNftAssets.level6.length || 0,
               ]}
               chartLabel={['< 1W ', '1W-4W', '1M-3M', '3M-6M', '6M-12M', '1Y+']}
               columnHeadingFirst="Amount"
@@ -492,7 +595,7 @@ const AnalyticsBottomSection: React.FC = () => {
               ]}
               totalHeading="Total Average"
               totalValue={
-                (timeChartData && `${(timeChartData['total'] / HoldingTime.length).toFixed(3)} Days`) || '0 Days'
+                (timeChartData && `${(timeChartData['total'] / timeChartData['count']).toFixed(3)} Days`) || '0 Days'
               }
             />
           </div>
@@ -524,10 +627,10 @@ const AnalyticsBottomSection: React.FC = () => {
 
               <div className="h-fit !w-full xsm:!w-auto">
                 <NavTabsMolecule
-                  activeTab={0}
+                  activeTab={activeTabOfTransaction}
                   tabs={['D', 'W', 'M']}
-                  onTabChange={() => {
-                    return
+                  onTabChange={tab => {
+                    setActiveTabOfTransaction(tab)
                   }}
                 />
               </div>
@@ -535,12 +638,12 @@ const AnalyticsBottomSection: React.FC = () => {
 
             <div className="flex-1">
               <CustomBarChart
-                data={GraphData2}
+                data={transactionChartData[activeTabOfTransaction]}
                 height={300}
-                name="name"
+                name="day"
                 width="100%"
-                xdata1="pv"
-                xdata2="uv"
+                xdata1="transactionAmount"
+                xdata2="totalVolume"
                 xdata3="amt"
               />
             </div>
@@ -589,10 +692,10 @@ const AnalyticsBottomSection: React.FC = () => {
               </div>
               <div className="h-fit !w-full xsm:!w-auto">
                 <NavTabsMolecule
-                  activeTab={0}
+                  activeTab={activeTabOfVolume}
                   tabs={['D', 'W', 'M']}
-                  onTabChange={() => {
-                    return
+                  onTabChange={tab => {
+                    setActiveTabOfVolume(tab)
                   }}
                 />
               </div>
@@ -603,51 +706,64 @@ const AnalyticsBottomSection: React.FC = () => {
                 height={200}
                 series={[
                   {
-                    name: 'Series A',
-                    data: [44, 55, 41, 64, 22, 43, 21, 43, 54, 76, 98, 83],
+                    name: 'Buy Volume',
+                    data: Object.values(volumeChartData['buyVolume'][activeTabOfVolume]),
                   },
                   {
-                    name: 'Series B',
-                    data: [0, -23, -20, -8, -13, -27, -33, -89, -98, -87, -56, -33],
+                    name: 'Sell Volume',
+                    data: Object.values(volumeChartData['sellVolume'][activeTabOfVolume]),
                   },
                 ]}
                 width={800}
-                xAxisCategory={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']}
+                xAxisCategory={Object.keys(volumeChartData['buyVolume'][activeTabOfVolume])}
               />
             </div>
           </div>
+
           <div className="!rounded-md bg-[#1d1b25] p-4">
             <div className="flex flex-col justify-between gap-3">
-              <div className="flex flex-col">
-                <div className="flex flex-row flex-wrap items-center gap-2">
-                  <Typography className="text-left font-medium text-[#DBDBDB] drop-shadow" size="subtitle">
-                    Total Volume
-                  </Typography>
-                  <div>
-                    <InfoIcons />
+              <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                <div className="flex flex-col">
+                  <div className="flex flex-row flex-wrap items-center gap-2">
+                    <Typography className="text-left font-medium text-[#DBDBDB] drop-shadow" size="subtitle">
+                      Total Volume
+                    </Typography>
+                    <div>
+                      <InfoIcons />
+                    </div>
                   </div>
-                </div>
-                <div className="mt-2 flex w-full flex-row items-center gap-2">
-                  <Typography className="text-left font-medium" size="lg">
-                    5.463 SEI
+                  <div className="mt-2 flex w-full flex-row items-center gap-2">
+                    <Typography className="text-left font-medium" size="lg">
+                      5.463 SEI
+                    </Typography>
+                    <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
+                      +225,53%
+                    </Typography>
+                  </div>
+                  <Typography className="text-left font-light text-black7f" size="small">
+                    01.02.2022
                   </Typography>
-                  <Typography className="text-left font-Inter font-medium text-[#00C68A]" size="sm">
-                    +225,53%
-                  </Typography>
                 </div>
-                <Typography className="text-left font-light text-black7f" size="small">
-                  01.02.2022
-                </Typography>
+
+                <div className="h-fit !w-full xsm:!w-auto">
+                  <NavTabsMolecule
+                    activeTab={activeTabOfTotalVolume}
+                    tabs={['D', 'W', 'M']}
+                    onTabChange={tab => {
+                      setActiveTabOfTotalVolume(tab)
+                    }}
+                  />
+                </div>
               </div>
 
               <div className="h-[200px]">
                 <CustomBarChart
-                  data={GraphData2}
+                  data={transactionChartData[activeTabOfTotalVolume]}
                   height={200}
-                  name="name"
+                  name="day"
                   width="100%"
-                  xdata1="pv"
-                  xdata2="uv"
+                  xdata1="totalVolume"
+                  xdata2="transactionAmount"
                   xdata3="amt"
                 />
               </div>
@@ -817,10 +933,10 @@ const AnalyticsBottomSection: React.FC = () => {
               </div>
               <div className="h-fit !w-full xsm:!w-auto">
                 <NavTabsMolecule
-                  activeTab={0}
+                  activeTab={activeTab}
                   tabs={['D', 'W', 'M']}
-                  onTabChange={() => {
-                    return
+                  onTabChange={tab => {
+                    setActiveTab(tab)
                   }}
                 />
               </div>
@@ -957,10 +1073,10 @@ const AnalyticsBottomSection: React.FC = () => {
               </div>
               <div className="h-fit !w-full xsm:!w-auto">
                 <NavTabsMolecule
-                  activeTab={0}
+                  activeTab={activeTab}
                   tabs={['D', 'W', 'M']}
-                  onTabChange={() => {
-                    return
+                  onTabChange={tab => {
+                    setActiveTab(tab)
                   }}
                 />
               </div>

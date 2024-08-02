@@ -39,8 +39,30 @@ const NegativeChart: React.FC<NegativeChartProps> = ({ height, width, series, xA
             show: false,
           },
           tooltip: {
-            custom: function () {
-              return ''
+            shared: false,
+            x: {
+              formatter: function (val) {
+                return val.toString()
+              },
+            },
+            y: {
+              formatter: function (val) {
+                return val.toString()
+              },
+            },
+            theme: 'dark',
+            style: {
+              fontSize: '18px',
+              fontFamily: 'Lexend',
+            },
+            items: {
+              display: 'flex',
+            },
+            fixed: {
+              enabled: false,
+              position: 'topRight',
+              offsetX: 0,
+              offsetY: 0,
             },
           },
 
