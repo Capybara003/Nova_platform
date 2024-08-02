@@ -25,10 +25,11 @@ import HoldingModal from 'design-systems/Molecules/ModalMolecules/HoldingModal'
 import NavTabsMolecule from 'design-systems/Molecules/NavTabs/NavTabsMolecule'
 import { TableSkeletan } from 'design-systems/Molecules/Skeletan/TableSkeletan'
 import TwoLineGraph from 'design-systems/Molecules/TwoLineGraph'
-import { StakingData, StakingData1, GraphTwoLineData } from 'design-systems/data/data'
+import { GraphTwoLineData } from 'design-systems/data/data'
 import { useHolding } from 'hooks/apis/useHolding'
 import { useDataSelector } from 'lib/redux/store'
 import useWindowWidth from 'hooks/useWindowWidth'
+import { formatUSei } from 'utils/formatUnit'
 
 const HoldingPageTemplate: React.FC = () => {
   const [activeTab, setActiveTab] = useState<number>(0)
@@ -46,9 +47,10 @@ const HoldingPageTemplate: React.FC = () => {
     HoldingGraph,
     isLoadingHoldingGraph,
   } = useHolding()
-  const [holdingData, setHoldingData] = useState<any>({})
+  const [holdingData, setHoldingData] = useState<any>([])
   const [soldDetail, setSoldDetails] = useState<any>({})
-  const [incomeData, setIncomeData] = useState<any>({})
+  const [incomeData, setIncomeData] = useState<any>([])
+  const [totalData, setTotalData] = useState<any>([])
   const [HoldingGraphData, setHoldingGraphData] = useState<any>([])
   const [currentPage, setCurrentPage] = useState<number>(0)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
@@ -66,8 +68,8 @@ const HoldingPageTemplate: React.FC = () => {
   }, [LocalWallet])
 
   const totalItems = useMemo(
-    () => (activeTab === 0 ? Holding?.length : activeTab === 1 ? incomeData?.length : StakingData1.length),
-    [activeTab, Holding?.length, incomeData?.length]
+    () => (activeTab === 0 ? Holding?.length : activeTab === 1 ? Income?.length : totalData.length),
+    [activeTab, Holding?.length, Income?.length]
   )
   const handlePageChange = ({ selected }: { selected: number }) => setCurrentPage(selected)
 
@@ -76,16 +78,43 @@ const HoldingPageTemplate: React.FC = () => {
   const pageCount = Math.ceil(totalItems / itemsPerPage)
   useMemo(() => Holding && setHoldingData(Holding), [Holding, isLoadingHolding])
   useMemo(() => Income && setIncomeData(Income), [Income, isLoadingIncome])
+  useMemo(
+    () => Income && Holding && setTotalData([...Holding, ...Income]),
+    [Holding, isLoadingHolding, Income, isLoadingIncome]
+  )
   useMemo(() => soldDetails && setSoldDetails(soldDetails), [soldDetails, isLoadingSoldDetails])
   useMemo(() => refetchHolding(), [refetchHolding])
   useMemo(() => HoldingGraph && setHoldingGraphData(HoldingGraph), [HoldingGraphData, isLoadingHoldingGraph])
+
+  const incomeTotalValue = useMemo(() => {
+    return (
+      Income &&
+      Income.length > 0 &&
+      Income.reduce((acc: any, item: any) => {
+        acc = (acc || 0) + (formatUSei(item?.floorPrice) * item?.incomeNfts?.length || 0)
+        return acc
+      }, 0)
+    )
+  }, [Income])
+
+  const holdingTotalValue = useMemo(() => {
+    return (
+      Holding &&
+      Holding.length > 0 &&
+      Holding.reduce((acc: any, item: any) => {
+        acc = (acc || 0) + (formatUSei(item?.floorPrice) * item?.nftsHolding?.length || 0)
+        return acc
+      }, 0)
+    )
+  }, [Holding])
+
   const handleTabChange = (tab: number) => {
     setActiveTab(tab)
     // setCurrentPage(0)
   }
 
   const openModal = () => setIsModalOpen(true)
-  const DataLength = Holding?.length || Income?.length
+  const DataLength = holdingData?.length || incomeData?.length
 
   return (
     <>
@@ -249,9 +278,9 @@ const HoldingPageTemplate: React.FC = () => {
                         : activeTab === 1
                         ? incomeData
                         : activeTab === 2
-                        ? StakingData
+                        ? totalData
                         : activeTab === 3
-                        ? StakingData1
+                        ? holdingData
                         : ''
                     }
                     filename="data"
@@ -275,8 +304,9 @@ const HoldingPageTemplate: React.FC = () => {
                     <>
                       <HoldingTable
                         crypto={crypto}
-                        data={Holding?.slice(startIndex, endIndex)}
-                        footerData={Holding}
+                        data={holdingData?.slice(startIndex, endIndex)}
+                        totalValue={holdingTotalValue}
+                        footerData={holdingData}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                           { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
@@ -307,6 +337,7 @@ const HoldingPageTemplate: React.FC = () => {
                       <HoldingIndexTable
                         crypto={crypto}
                         data={incomeData?.slice(startIndex, endIndex)}
+                        totalValue={incomeTotalValue}
                         footerData={incomeData}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
@@ -328,7 +359,9 @@ const HoldingPageTemplate: React.FC = () => {
                   )}
                   {activeTab === 2 && (
                     <HoldingTotalTable
-                      data={StakingData.slice(startIndex, endIndex)}
+                      crypto={crypto}
+                      data={totalData.slice(startIndex, endIndex)}
+                      totalValue={holdingTotalValue + incomeTotalValue}
                       headData={[
                         { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                         { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
@@ -361,6 +394,7 @@ const HoldingPageTemplate: React.FC = () => {
                     <HoldingAnalyticsTable
                       crypto={crypto}
                       data={Holding?.slice(startIndex, endIndex)}
+                      totalValue={holdingTotalValue}
                       headData={[
                         { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                         { name: 'Amount', key: 'Amount', isInfo: false, isSort: true, width: '70px' },
@@ -385,10 +419,10 @@ const HoldingPageTemplate: React.FC = () => {
                     />
                   )}
                 </div>
-                {((Holding?.length > 9 && activeTab === 0) ||
+                {((holdingData?.length > 9 && activeTab === 0) ||
                   (incomeData?.length > 9 && activeTab === 1) ||
-                  (StakingData1.length > 9 && activeTab === 3) ||
-                  (StakingData.length > 9 && activeTab === 2)) && (
+                  (totalData.length > 9 && activeTab === 2) ||
+                  (holdingData.length > 9 && activeTab === 3)) && (
                   <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
                 )}
               </div>

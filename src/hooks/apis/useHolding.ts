@@ -84,7 +84,7 @@ export const useHolding = () => {
     [API_ENDPOINTS.PUBLIC.GET_INCOME_NFTS],
     () => HoldingServices.getIncome({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
     {
-      select: res => res.collections,
+      select: res => res,
       refetchOnWindowFocus: false,
     }
   )

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useMemo, useState } from 'react'
+import React from 'react'
 import { TETooltip } from 'tw-elements-react'
 
 import { TableSkeletan } from '../Skeletan/TableSkeletan'
@@ -17,16 +17,21 @@ export const convertToSEI = (value?: number, SEI?: number): number | undefined =
   value !== undefined && SEI !== undefined ? value / SEI : undefined
 
 const HoldingDataGroup: React.FC = () => {
-  const { Holding, isLoadingHolding } = useHolding()
-  const [holdingDetail, setHoldingDetails] = useState<any>([])
+  const { Holding, isLoadingHolding, Income, isLoadingIncome } = useHolding()
   const { crypto } = useDataSelector('toggle')
-  const SEI = crypto.value
   const holdingData = {
     amount: 0,
     buyPrice: 0,
     estFee: 0,
     estValue: 0,
     unrealizedGains: 0,
+  }
+  const incomeData = {
+    amount: 0,
+    buyPrice: 0,
+    paidFee: 0,
+    sellPrice: 0,
+    realizedGains: 0,
   }
 
   Holding?.map((collection: any) => {
@@ -45,19 +50,24 @@ const HoldingDataGroup: React.FC = () => {
     holdingData.estValue += Number(info?.estValue) || 0
     holdingData.unrealizedGains += Number(info?.unrealizedGains) || 0
   }, {})
-  const BuyPrice = convertToSEI(Holding?.buyPrice, SEI)
-  const EstFees = convertToSEI(Holding?.estFees, SEI)
-  const EstValue = convertToSEI(Holding?.estValue, SEI)
-  const UnrealizedGains = convertToSEI(Holding?.unrealizedGains, SEI)
-  const Percentage = convertToSEI(Holding?.percentage, SEI)
-  const soldDetails = holdingDetail?.soldDetails
-  const SolidBuyPrice = convertToSEI(soldDetails?.buyPrice, SEI)
-  const SolidEstFees = convertToSEI(soldDetails?.estFees, SEI)
-  const SellPrice = convertToSEI(soldDetails?.sellPrice, SEI)
-  const SolidRealizedGains = convertToSEI(soldDetails?.realizedGains, SEI)
-  const SolidPercentage = convertToSEI(soldDetails?.percentage, SEI)
 
-  useMemo(() => Holding && setHoldingDetails(Holding), [Holding, isLoadingHolding])
+  Income?.map((collection: any) => {
+    const info =
+      collection?.incomeNfts &&
+      collection?.incomeNfts?.reduce((acc: any, nft: any) => {
+        acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
+        acc.paidFee = (acc.paidFee || 0) + formatUSei(nft?.paidFee) || 0
+        acc.realizedGains = (acc.realizedGains || 0) + formatUSei(nft?.realizedGains) || 0
+        acc.sellPrice = (acc.sellPrice || 0) + formatUSei(nft?.sellPrice) || 0
+        return acc
+      }, {})
+
+    incomeData.amount += Number(collection?.incomeNfts?.length) || 0
+    incomeData.buyPrice += Number(info?.buyPrice) || 0
+    incomeData.paidFee += Number(info?.paidFee) || 0
+    incomeData.sellPrice += Number(info?.sellPrice) || 0
+    incomeData.realizedGains += Number(info?.realizedGains) || 0
+  }, {})
 
   return (
     <div className="flex h-full w-full flex-col content-between rounded-[12px] bg-blackCardBg p-2 text-[#DBDBDB] md:!rounded-md md:!p-[22px] lg:col-span-2 ">
@@ -131,60 +141,63 @@ const HoldingDataGroup: React.FC = () => {
         <TableSkeletan limit={5} />
       )}
       <Line />
-      {!isLoadingHolding ? (
+      {!isLoadingIncome ? (
         <div className="flex flex-col gap-4">
           <div className="flex justify-between font-Lexend font-medium">
             <Typography className="!font-medium" size="lg">
               Sold Assets:
             </Typography>
             <Typography className="!font-medium" size="lg">
-              {holdingDetail?.soldDetails ? <>{holdingDetail?.soldDetails?.soldAsset}</> : '--'}
+              {incomeData?.amount ? incomeData.amount : '--'}
             </Typography>
           </div>
           <div className="flex flex-col gap-3 font-Inter font-normal">
             <HoldingDetailsSection
               crypto={crypto}
               title="Buy Price"
-              tooltipTitle={`${SolidBuyPrice} ${crypto.symbol}`}
-              value={SolidBuyPrice}
+              tooltipTitle={`${incomeData.buyPrice} ${crypto.symbol}`}
+              value={incomeData.buyPrice}
             />
             <HoldingDetailsSection
               crypto={crypto}
               title="Paid Fees"
-              tooltipTitle={`${SolidEstFees} ${crypto.symbol}`}
-              value={SolidEstFees}
+              tooltipTitle={`${incomeData.paidFee} ${crypto.symbol}`}
+              value={incomeData.paidFee}
             />
             <HoldingDetailsSection
               crypto={crypto}
               title="Sold Price"
-              tooltipTitle={`${SellPrice} ${crypto.symbol}`}
-              value={SellPrice}
+              tooltipTitle={`${incomeData.sellPrice} ${crypto.symbol}`}
+              value={incomeData.sellPrice}
             />
 
             <div className="flex justify-between">
               <Typography size="body">Realized Gains:</Typography>
               <Typography
-                className={`text-right ${
-                  holdingDetail?.soldDetails?.percentage < 0 ? ' text-warning-300' : 'text-green'
-                } `}
+                className={`text-right ${incomeData?.realizedGains < 0 ? ' text-warning-300' : 'text-green'} `}
                 size="body"
               >
-                <TETooltip title={`${SolidRealizedGains} ${crypto.symbol}`}>
+                <TETooltip title={`${incomeData.realizedGains} ${crypto.symbol}`}>
                   <Typography>
-                    {holdingDetail?.soldDetails ? (
+                    {incomeData?.realizedGains ? (
                       <>
-                        {SolidRealizedGains?.toFixed(3)} {crypto.symbol}
+                        {incomeData.realizedGains?.toFixed(3)} {crypto.symbol}
                       </>
                     ) : (
                       '--'
                     )}{' '}
                   </Typography>
                 </TETooltip>
-                <Typography className="text-[11px]">
-                  <TETooltip title={`${SolidPercentage}%`}>
-                    {holdingDetail?.soldDetails ? (
+                <Typography className="text-md">
+                  <TETooltip title={`${(incomeData.realizedGains / incomeData.buyPrice) * 100}%`}>
+                    {incomeData?.realizedGains ? (
                       <>
-                        {holdingDetail?.soldDetails?.percentage === null ? '0.00%' : `${SolidPercentage?.toFixed(2)}%`}
+                        {' '}
+                        {incomeData?.realizedGains === null
+                          ? '0.00%'
+                          : incomeData?.buyPrice === 0
+                          ? '100.00%'
+                          : `${((incomeData.realizedGains / incomeData.buyPrice) * 100).toFixed(2)}%`}
                       </>
                     ) : (
                       '--'
@@ -199,60 +212,74 @@ const HoldingDataGroup: React.FC = () => {
         <TableSkeletan limit={5} />
       )}
       <Line />
-      {!isLoadingHolding ? (
+      {!isLoadingIncome && !isLoadingHolding ? (
         <div className="flex flex-col gap-4 text-left">
           <div className="flex justify-between font-Lexend font-medium">
             <Typography className="!font-medium" size="lg">
               Total Assets:
             </Typography>
             <Typography className="!font-medium" size="lg">
-              {holdingDetail?.holdingDetails ? <>{holdingDetail?.holdingDetails?.holdingAsset}</> : '--'}
+              {holdingData?.amount && incomeData?.amount ? holdingData.amount + incomeData.amount : '--'}
             </Typography>
           </div>
           <div className="flex flex-col gap-3 font-Inter font-normal">
             <HoldingDetailsSection
               crypto={crypto}
               title="Buy Price"
-              tooltipTitle={`${BuyPrice} ${crypto.symbol}`}
-              value={BuyPrice}
+              tooltipTitle={`${holdingData.buyPrice + incomeData.buyPrice} ${crypto.symbol}`}
+              value={holdingData.buyPrice + incomeData.buyPrice}
             />
             <HoldingDetailsSection
               crypto={crypto}
               title="Paid Fees + Est. Fees"
-              tooltipTitle={`${EstFees} ${crypto.symbol}`}
-              value={EstFees}
+              tooltipTitle={`${holdingData.estFee + incomeData.paidFee} ${crypto.symbol}`}
+              value={holdingData.estFee + incomeData.paidFee}
             />
             <HoldingDetailsSection
               crypto={crypto}
-              title="Income + Est. Value:"
-              tooltipTitle={`${EstValue} ${crypto.symbol}`}
-              value={EstValue}
+              title="Income + Est. Value"
+              tooltipTitle={`${holdingData.estValue + incomeData.sellPrice} ${crypto.symbol}`}
+              value={holdingData.estValue + incomeData.sellPrice}
             />
             <div className="flex justify-between">
               <Typography size="body">Total Profit:</Typography>
               <Typography
                 className={`text-right ${
-                  holdingDetail?.holdingDetails?.percentage < 0 ? ' text-warning-300' : 'text-green'
+                  holdingData.unrealizedGains + incomeData.realizedGains < 0 ? ' text-warning-300' : 'text-green'
                 } `}
                 size="body"
               >
-                <TETooltip title={`${UnrealizedGains} ${crypto.symbol}`}>
+                <TETooltip title={`${holdingData.unrealizedGains + incomeData.realizedGains} ${crypto.symbol}`}>
                   <Typography>
-                    {holdingDetail?.holdingDetails ? (
+                    {holdingData?.unrealizedGains && incomeData?.realizedGains ? (
                       <>
-                        {UnrealizedGains?.toFixed(2)} {crypto.symbol}
+                        {(holdingData.unrealizedGains + incomeData.realizedGains).toFixed(2)} {crypto.symbol}
                       </>
                     ) : (
                       '--'
                     )}
                   </Typography>
                 </TETooltip>
-                <Typography className="text-[11px]">
-                  <TETooltip title={`${Percentage}%`}>
-                    {holdingDetail?.holdingDetails ? (
+                <Typography className="text-md">
+                  <TETooltip
+                    title={`${
+                      ((holdingData.unrealizedGains + incomeData.realizedGains) /
+                        (holdingData.buyPrice + incomeData.buyPrice)) *
+                      100
+                    }%`}
+                  >
+                    {holdingData.unrealizedGains && incomeData?.realizedGains ? (
                       <>
                         {' '}
-                        {holdingDetail?.holdingDetails?.percentage === null ? '0.00%' : `${Percentage?.toFixed(3)}%`}
+                        {holdingData?.unrealizedGains === null || incomeData?.realizedGains === null
+                          ? '0.00%'
+                          : holdingData.buyPrice + incomeData.buyPrice === 0
+                          ? '100.00%'
+                          : `${(
+                              ((holdingData.unrealizedGains + incomeData.realizedGains) /
+                                (holdingData.buyPrice + incomeData.buyPrice)) *
+                              100
+                            ).toFixed(2)}%`}
                       </>
                     ) : (
                       '--'
