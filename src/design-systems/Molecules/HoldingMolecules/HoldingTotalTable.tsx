@@ -3,8 +3,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // DataTable.tsx
 import Image from 'next/image'
-import React, { useState } from 'react' // Import the props interface
-import { TECollapse } from 'tw-elements-react'
+import React, { useMemo, useState } from 'react' // Import the props interface
+import { TECollapse, TETooltip } from 'tw-elements-react'
 import { FiInfo } from 'react-icons/fi'
 import { RxCaretSort } from 'react-icons/rx'
 
@@ -14,9 +14,40 @@ import BookMarkButton from '../Table/BookMarkButton'
 import { InfoIcons, LinkIcon, RightArrowIcons } from 'design-systems/Atoms/Icons'
 import Typography from 'design-systems/Atoms/Typography'
 import { Checkbox } from 'design-systems/Atoms/CheckBox'
+import { formatUSei } from 'utils/formatUnit'
+import { IMG } from 'assets/images'
+import Link from 'next/link'
 
-const HoldingTotalTable: React.FC<TableProps> = ({ data, headData }) => {
+interface HoldingTotalTableProps extends TableProps {
+  totalValue: number
+}
+
+const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, headData, totalValue }) => {
   const [activeElement, setActiveElement] = useState<string>('')
+  const [checkboxes, setCheckboxes] = useState<any>([])
+
+  const handleCheckboxChange = (id: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const updatedCheckboxes: any = [...checkboxes]
+
+    const index = updatedCheckboxes.indexOf(id)
+
+    if (index !== -1) {
+      updatedCheckboxes.splice(index, 1)
+    } else {
+      updatedCheckboxes.push(id)
+    }
+
+    setCheckboxes(updatedCheckboxes)
+  }
+
+  const handleSelectAllChange = (checked: boolean) => {
+    if (checked) {
+      const allIds = data.map((item: any) => item.id)
+      setCheckboxes(allIds)
+    } else {
+      setCheckboxes([])
+    }
+  }
 
   const handleClick = (value: string) => {
     if (value === activeElement) {
@@ -25,9 +56,10 @@ const HoldingTotalTable: React.FC<TableProps> = ({ data, headData }) => {
       setActiveElement(value)
     }
   }
+
   return (
     <>
-      <table className="rounded-corners w-full rounded-sm    font-Lexend" id="holding-table">
+      <table className="rounded-corners w-full rounded-sm font-Lexend" id="holding-table">
         <thead>
           <tr>
             {headData?.map((item: any, key: number) => {
@@ -56,88 +88,361 @@ const HoldingTotalTable: React.FC<TableProps> = ({ data, headData }) => {
                   <Typography className={`line-clamp-2 overflow-hidden text-ellipsis`} size="md">
                     All
                   </Typography>
-                  <Checkbox checked={true} />
+                  <Checkbox
+                    checked={checkboxes?.length === data?.length}
+                    name="All"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSelectAllChange(e.target.checked)}
+                  />
                 </div>
               </div>
             </th>
           </tr>
         </thead>
         <tbody>
-          {data?.map((item: any, index: any) => (
-            <>
-              <tr className="cursor-pointer">
-                <td className="min-w-[230px]">
-                  <div className="flex items-center justify-center gap-2">
-                    <BookMarkButton isActive={false} />
-                    <div className={`${activeElement === index && 'rotate-90'}`} onClick={() => handleClick(index)}>
-                      <RightArrowIcons />
+          {data?.map((collection: any, index: any) => {
+            const info =
+              (collection?.incomeNfts &&
+                collection?.incomeNfts?.reduce((acc: any, nft: any) => {
+                  // acc.rank = (acc.rank || 0) + (nft?.rarity?.rank || 0) / collection.userHoldingAmount
+                  acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
+                  acc.sellPrice = (acc.sellPrice || 0) + formatUSei(nft?.sellPrice) || 0
+                  acc.fee = (acc.fee || 0) + formatUSei(nft?.paidFee) || 0
+                  acc.gains = (acc.gains || 0) + formatUSei(nft?.realizedGains) || 0
+                  acc.holdingTime = (acc.holdingTime || 0) + Number(nft?.holdingTime) / (24 * 60 * 60) || 0
+                  return acc
+                }, {})) ||
+              (collection?.nftsHolding &&
+                collection?.nftsHolding?.reduce((acc: any, nft: any) => {
+                  // acc.rank = (acc.rank || 0) + nft?.rarity?.rank || 0
+                  acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
+                  acc.fee = (acc.fee || 0) + formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01 || 0
+                  acc.gains = (acc.gains || 0) + formatUSei(nft?.unrealizedGains) || 0
+                  acc.holdingTime =
+                    (acc.holdingTime || 0) + (Date.now() - new Date(nft?.ts).getTime()) / (24 * 60 * 60 * 1000) || 0
+                  acc.floorPrice = (acc.floorPrice || 0) + formatUSei(nft?.floorPrice) || 0
+                  return acc
+                }, {}))
+            info.holdingTime = info.holdingTime / collection?.nftsHolding?.length || collection?.incomeNfts?.length || 0
+            info.weight = ((formatUSei(collection?.floorPrice) || 0) * 100) / (totalValue || 0)
+            info.floorPrice = formatUSei(collection?.floorPrice) * collection?.nftsHolding?.length || 0
+            return (
+              <React.Fragment key={index}>
+                <tr className="cursor-pointer">
+                  <td className="min-w-[230px]">
+                    <div className="flex items-center justify-center gap-2">
+                      <BookMarkButton isActive={false} />
+                      <div className={`${activeElement === index && 'rotate-90'}`} onClick={() => handleClick(index)}>
+                        <RightArrowIcons />
+                      </div>
+                      <div className="flex items-center justify-center gap-[3px]">
+                        {collection?.pfp && collection?.pfp !== null ? (
+                          <Image
+                            alt={'IMG'}
+                            className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
+                            height={40}
+                            src={collection?.pfp}
+                            width={40}
+                          />
+                        ) : (
+                          <Image
+                            alt={'IMG'}
+                            className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
+                            height={48}
+                            src={IMG.webump}
+                            width={48}
+                          />
+                        )}
+                        <Typography className="w-max">{collection?.name ? collection.name : '--'}</Typography>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-center gap-[3px]">
-                      <Image alt={'IMG'} height={40} src={item.img} width={40} />
-                      {item?.name}
+                  </td>
+                  <td className="!w-[20px] !overflow-hidden !overflow-ellipsis">
+                    {(collection?.nftsHolding && collection.nftsHolding !== null) ||
+                    (collection?.incomeNfts && collection.incomeNfts !== null)
+                      ? collection?.nftsHolding?.length || collection?.incomeNfts?.length
+                      : '--'}
+                  </td>
+                  <td className="w-[40px] overflow-hidden overflow-ellipsis">
+                    <TETooltip title={`${((collection.floorPrice * 100) / (totalValue || 0)).toFixed(2)}%`}>
+                      {collection?.floorPrice !== undefined && totalValue && totalValue !== 0
+                        ? `${((collection.floorPrice * 100) / totalValue).toFixed(2)}%`
+                        : '--'}
+                    </TETooltip>
+                  </td>
+                  <td className="w-[100px] overflow-hidden overflow-ellipsis">
+                    <TETooltip title={`${collection?.floorPrice} SEI`}>
+                      <Typography className="w-max">
+                        {collection?.floorPrice
+                          ? `${(formatUSei(collection.floorPrice) || 0).toFixed(2)} ${crypto?.symbol}`
+                          : '--'}
+                      </Typography>
+                    </TETooltip>
+                  </td>
+                  <td>{collection.rarity}</td>
+                  <td className="w-[100px] overflow-hidden overflow-ellipsis">
+                    <TETooltip title={`${info?.buyPrice} ${crypto?.symbol}`}>
+                      <Typography className="w-max">
+                        {info?.buyPrice ? `${info.buyPrice.toFixed(2)} ${crypto?.symbol}` : '--'}
+                      </Typography>
+                    </TETooltip>
+                  </td>
+                  <td>
+                    {info?.fee && info?.fee !== null ? `${Number(info.fee)?.toFixed(2)} ${crypto?.symbol}` : '--'}
+                  </td>
+                  <td>
+                    {(info?.floorPrice && info?.floorPrice !== null) || (info?.sellPrice && info?.sellPrice !== null)
+                      ? `${Number(info.floorPrice || info.sellPrice)?.toFixed(2)} ${crypto?.symbol}`
+                      : '--'}
+                  </td>
+                  <td>
+                    {info?.gains && info?.gains !== null ? `${Number(info.gains).toFixed(2)} ${crypto?.symbol}` : '--'}
+                  </td>
+                  <td>{collection.tokenReard}</td>
+                  <td>{info && info?.holdingTime !== null ? `${info.holdingTime.toFixed(2)} d` : '--'}</td>
+                  <td>
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="rounded-[8px] bg-black225_05 p-1">
+                        <LinkIcon />
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td className="!w-[20px] !overflow-hidden !overflow-ellipsis">{item?.amount}</td>
-                <td className="w-[40px] overflow-hidden overflow-ellipsis">{item?.weight}</td>
-                <td className="w-[100px] overflow-hidden overflow-ellipsis">{item?.floor}</td>
-                <td>{item.rarity}</td>
-                <td className="w-[100px] overflow-hidden overflow-ellipsis">{item.token}</td>
-                <td>{item.tokenPrice}</td>
-                <td>{item.buyPrice}</td>
-                <td>{item.floorValue}</td>
-                <td>{item.tokenReard}</td>
-                <td>{item.ROI}</td>
-                <td>
-                  <div className="flex flex-col items-center justify-center">
-                    <div className="rounded-[8px] bg-black225_05 p-1">
-                      <LinkIcon />
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div className="flex !w-full justify-end">
-                    <Checkbox />
-                  </div>{' '}
-                </td>
-              </tr>
-              <tr>
-                <TECollapse
-                  className=" Collapse !mt-0 !rounded-b-none text-left !shadow-none"
-                  show={activeElement === index}
-                >
-                  {item.innerData &&
-                    item.innerData?.map((res: any, index: number) => (
-                      <>
-                        <tbody>
-                          <tr className="flex w-full items-center" key={index}>
-                            <td className="w-[100px] !pl-0 text-center text-[14px] text-black7f">AirDrop</td>
-                            <td className="w-[40px] !px-0">
-                              <Image alt={'IMG'} src={res?.airdrop?.StakeIMG} />
-                            </td>
-                            <td className="w-[90px] !px-0 text-center">{res?.airdrop?.StakeName}</td>
-                          </tr>
-                          <tr className="flex w-full items-center" key={index}>
-                            <td className="w-[100px] !pl-0 text-center text-[14px] text-black7f">Mint</td>
-                            <td className="w-[40px] !px-0">
-                              <Image alt={'IMG'} src={res?.mint?.StakeIMG} />
-                            </td>
-                            <td className="w-[90px] !px-0 text-center">{res?.mint?.StakeName}</td>
-                          </tr>
-                          <tr className="flex w-full items-center" key={index}>
-                            <td className="w-[100px] !pl-0 text-center text-[14px] text-black7f">Bought</td>
-                            <td className="w-[40px] !px-0">
-                              <Image alt={'IMG'} src={res?.bought?.StakeIMG} />
-                            </td>
-                            <td className="w-[90px] !px-0 text-center">{res?.bought?.StakeName}</td>
-                          </tr>
-                        </tbody>
-                      </>
-                    ))}
-                </TECollapse>
-              </tr>
-            </>
-          ))}
+                  </td>
+                  <td>
+                    <div className="flex !w-full justify-end">
+                      <Checkbox />
+                    </div>{' '}
+                  </td>
+                </tr>
+                {collection?.nftsHolding &&
+                  collection?.nftsHolding?.map((nft: any) => (
+                    <tr className={`${activeElement === index ? 'table-row' : 'hidden'} cursor-pointer`} key={nft.key}>
+                      <td className="!p-0">
+                        <div>
+                          <div className="flex w-full items-center">
+                            <div className="w-[100px] !pl-0 text-center text-[14px] text-black7f">
+                              {nft?.status?.status}
+                            </div>
+                            <div className="w-[40px] !px-0">
+                              <Image alt={'IMG'} height={40} src={nft?.image} width={40} />
+                            </div>
+                            <div className="w-[90px] !px-0 text-center">{nft?.name}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td></td>
+                      <td></td>
+                      <td className="overflow-hidden overflow-ellipsis">
+                        <div>
+                          {nft?.floorPrice !== undefined && nft?.floorPrice !== null
+                            ? `${formatUSei(nft.floorPrice).toFixed(2)} ${crypto?.symbol}`
+                            : '--'}
+                        </div>
+                      </td>
+                      <td>{nft?.rarity?.rank && nft?.rarity?.rank !== null ? nft?.rarity?.rank : '--'}</td>
+                      <td>
+                        <div>
+                          <TETooltip title={formatUSei(nft?.buyPrice)?.toFixed(2)}>
+                            {nft?.buyPrice ? `${formatUSei(nft?.buyPrice).toFixed(2)} ${crypto?.symbol}` : '--'}
+                          </TETooltip>
+                        </div>
+                      </td>
+                      <td>
+                        <div>
+                          {nft?.royaltyPercentage && nft?.royaltyPercentage !== null
+                            ? `${(formatUSei(nft?.floorPrice) * nft.royaltyPercentage * 0.01).toFixed(2)} ${
+                                crypto?.symbol
+                              }`
+                            : '--'}
+                        </div>
+                      </td>
+                      <td className="w-[100px] overflow-hidden overflow-ellipsis">
+                        <div>
+                          {nft?.floorPrice && nft?.floorPrice !== null
+                            ? `${formatUSei(nft.floorPrice).toFixed(2)} ${crypto?.symbol}`
+                            : '--'}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="flex flex-col gap-[4px]">
+                          <div>
+                            <Typography>
+                              {nft?.unrealizedGains && nft?.unrealizedGains !== null
+                                ? `${formatUSei(nft.unrealizedGains).toFixed(2)} ${crypto?.symbol}`
+                                : '--'}
+                            </Typography>
+                          </div>
+                        </div>
+                      </td>
+                      <td></td>
+                      {/* <td className={percentageChange < 0 ? 'text-warning-300' : 'text-green'}>
+                        <TETooltip title={formattedPercentageChange}>
+                          <Typography>
+                            {collection?.sinceTrade && collection?.sinceTrade !== null
+                              ? `${formattedPercentageChange}`
+                              : '--'}
+                          </Typography>
+                        </TETooltip>
+                      </td> */}
+                      <td>
+                        {nft && nft?.ts && nft.ts !== null
+                          ? `${((Date.now() - new Date(nft?.ts).getTime()) / (24 * 60 * 60 * 1000)).toFixed(2)} d`
+                          : '--'}
+                      </td>
+                      <td>
+                        {collection?.link && collection?.link !== null ? (
+                          <Link
+                            className="flex flex-col items-center justify-center"
+                            href={collection && collection?.link}
+                            target={`${
+                              collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
+                            }`}
+                          >
+                            <div className="rounded-[8px] bg-black225_05 p-1">
+                              <LinkIcon />
+                            </div>
+                          </Link>
+                        ) : (
+                          '--'
+                        )}
+                      </td>
+                      <td>
+                        <div
+                          className="flex !w-full justify-end"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            handleCheckboxChange(collection?.seiAddress, e)
+                          }
+                        >
+                          <Checkbox checked={checkboxes.includes(collection?.seiAddress)} />
+                        </div>{' '}
+                      </td>
+                      {/* </TECollapse> */}
+                    </tr>
+                  ))}
+                {collection?.incomeNfts &&
+                  collection?.incomeNfts?.map((nft: any) => (
+                    <tr
+                      className={`${activeElement === index ? 'table-row' : 'hidden'} cursor-pointer`}
+                      key={nft.tokenId}
+                    >
+                      {/* avatar, name */}
+                      <td className="!p-0">
+                        <div className="flex w-full items-center">
+                          <div className="w-[100px] !pl-0 text-center text-[14px] text-black7f">
+                            {nft?.status?.status}
+                          </div>
+                          <div className="w-[40px] !px-0">
+                            <Image alt={'IMG'} height={40} src={nft?.image} width={40} />
+                          </div>
+                          <div className="w-[90px] !px-0 text-center">{nft?.name}</div>
+                        </div>
+                      </td>
+                      {/* Amount, Weight */}
+                      <td></td>
+                      <td>
+                        <Typography>
+                          {info?.weight !== undefined &&
+                          totalValue !== 0 &&
+                          collection?.incomeNfts &&
+                          collection.incomeNfts.length > 0
+                            ? `${(info.weight / collection.incomeNfts.length).toFixed(2)}%`
+                            : '--'}
+                        </Typography>
+                      </td>
+                      {/* Floor */}
+                      <td className="overflow-hidden overflow-ellipsis">
+                        <div>
+                          {collection?.floorPrice !== undefined && collection?.floorPrice !== null
+                            ? `${formatUSei(collection.floorPrice)?.toFixed(2)} ${crypto?.symbol}`
+                            : '--'}
+                        </div>
+                      </td>
+                      {/* Rarity */}
+                      <td>{nft?.rarity?.rank && nft?.rarity?.rank !== null ? nft?.rarity?.rank.toFixed(2) : '--'}</td>
+                      {/* Buy Price */}
+                      <td>
+                        <div>
+                          <TETooltip title={formatUSei(nft?.buyPrice)}>
+                            {nft?.buyPrice ? `${formatUSei(nft.buyPrice)?.toFixed(2)} ${crypto?.symbol}` : '--'}
+                          </TETooltip>
+                        </div>
+                      </td>
+                      {/* Paid Fees */}
+                      <td>
+                        {nft?.paidFee && nft?.paidFee !== null
+                          ? `${formatUSei(nft.paidFee)?.toFixed(2)} ${crypto?.symbol}`
+                          : '--'}
+                      </td>
+                      {/* Income */}
+                      <td className="w-[100px] overflow-hidden overflow-ellipsis">
+                        <div>
+                          {nft?.sellPrice && nft?.sellPrice !== null
+                            ? `${formatUSei(nft.sellPrice)?.toFixed(2)} ${crypto?.symbol}`
+                            : '--'}
+                        </div>
+                      </td>
+                      {/* Unrealized Gains */}
+                      <td>
+                        <div className="flex flex-col gap-[4px]">
+                          <div>
+                            <Typography>
+                              {nft?.realizedGains && nft?.realizedGains !== null
+                                ? `${formatUSei(nft.realizedGains).toFixed(2)} ${crypto?.symbol}`
+                                : '--'}
+                            </Typography>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{/* Since Trade */}</td>
+                      {/* <td className={percentageChange < 0 ? 'text-warning-300' : 'text-green'}>
+                          <TETooltip title={formattedPercentageChange}>
+                            <Typography>
+                              {item?.sinceTrade && item?.sinceTrade !== null
+                                ? `${formattedPercentageChange}`
+                                : '--'}
+                            </Typography>
+                          </TETooltip>
+                        </td> */}
+                      {/* Holding Time */}
+                      <td>
+                        {nft && nft?.holdingTime && nft.holdingTime !== null
+                          ? `${(Number(nft.holdingTime) / (24 * 60 * 60)).toFixed(2)} d`
+                          : '--'}
+                      </td>
+                      <td>
+                        <Link
+                          className="flex flex-col items-center justify-center"
+                          href={collection.link ? collection.link : ''}
+                        >
+                          <div className="rounded-[8px] bg-black225_05 p-1">
+                            <LinkIcon />
+                          </div>
+                        </Link>
+                        {/* {collection?.link && collection?.link !== null ? (
+                            <Link
+                              className="flex flex-col items-center justify-center"
+                              href={collection && collection?.link}
+                              target={`${collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''}`}
+                            >
+                              <div className="rounded-[8px] bg-black225_05 p-1">
+                                <LinkIcon />
+                              </div>
+                            </Link>
+                          ) : (
+                            '--'
+                          )} */}
+                      </td>
+                      <td>
+                        <div
+                          className="flex !w-full justify-end"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCheckboxChange(collection.id, e)}
+                        >
+                          <Checkbox checked={checkboxes.includes(collection.id)} />
+                        </div>{' '}
+                      </td>
+                    </tr>
+                  ))}
+              </React.Fragment>
+            )
+          })}
         </tbody>
         <tfoot>
           <tr>
