@@ -72,7 +72,7 @@ export const useHolding = () => {
     isFetching: isFetchingHolding,
   } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_HOLDING_NFTS],
-    () => HoldingServices.getHolding({ wallet_address: 'sei18d56etelkz5w0hu82l8lzl6jnucd8pz8dwh44f' }),
+    () => HoldingServices.getHolding({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
     {
       select: res => res.collections,
       refetchOnWindowFocus: false,
@@ -82,7 +82,7 @@ export const useHolding = () => {
 
   const { isLoading: isLoadingIncome, data: Income } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_INCOME_NFTS],
-    () => HoldingServices.getIncome({ wallet_address: 'sei18d56etelkz5w0hu82l8lzl6jnucd8pz8dwh44f' }),
+    () => HoldingServices.getIncome({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
     {
       select: res => res.collections,
       refetchOnWindowFocus: false,
@@ -91,9 +91,18 @@ export const useHolding = () => {
 
   const { isLoading: isLoadingTopGainer, data: TopGainer } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_NFTS_TOP],
-    () => HoldingServices.getTopGainers({ wallet_address: 'sei18d56etelkz5w0hu82l8lzl6jnucd8pz8dwh44f' }),
+    () => HoldingServices.getTopGainers({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
     {
-      select: res => res.top_gainers,
+      select: res => res,
+      refetchOnWindowFocus: false,
+    }
+  )
+
+  const { isLoading: isLoadingNftTradeInfo, data: NftTradeInfo } = useQuery(
+    [API_ENDPOINTS.PUBLIC.GET_NFTS_TRADE_INFO],
+    () => HoldingServices.getNftTradeInfo({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
+    {
+      select: res => res,
       refetchOnWindowFocus: false,
     }
   )
@@ -132,24 +141,6 @@ export const useHolding = () => {
     }
   )
 
-  const { isLoading: isLoadingCollections, data: Collections } = useQuery(
-    [API_ENDPOINTS.PUBLIC.GET_HOLDING_COLLECTIONS],
-    () => HoldingServices.getCollections({ user_address: 'sei1krvjk3r790dcsqkr96ymd44v04w9zz5dlr66z7' }),
-    {
-      select: res => res.collections,
-      refetchOnWindowFocus: false,
-    }
-  )
-
-  const { isLoading: isLoadingHoldingTime, data: HoldingTime } = useQuery(
-    [API_ENDPOINTS.PUBLIC.GET_USER_NFT_HOLDING_TIME],
-    () => HoldingServices.getHoldingTime({ user_address: 'sei1krvjk3r790dcsqkr96ymd44v04w9zz5dlr66z7' }),
-    {
-      select: res => res.nftHoldingTime,
-      refetchOnWindowFocus: false,
-    }
-  )
-
   return {
     isLoadingAssetDetails: postAssetDetailsMutation.isLoading,
     isLoadingHolding,
@@ -168,11 +159,9 @@ export const useHolding = () => {
     soldDetails,
     HoldingGraph,
     isLoadingHoldingGraph,
-    isLoadingCollections,
-    Collections,
     isLoadingTopGainer,
     TopGainer,
-    isLoadingHoldingTime,
-    HoldingTime,
+    isLoadingNftTradeInfo,
+    NftTradeInfo,
   }
 }

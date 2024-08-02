@@ -114,6 +114,8 @@ const HoldingDataGroup: React.FC = () => {
                         {' '}
                         {holdingData?.unrealizedGains === null
                           ? '0.00%'
+                          : holdingData?.buyPrice === 0
+                          ? '100.00%'
                           : `${((holdingData.unrealizedGains / holdingData.buyPrice) * 100).toFixed(2)}%`}
                       </>
                     ) : (

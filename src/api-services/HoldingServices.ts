@@ -26,6 +26,12 @@ class HoldingServices {
     )
   }
 
+  getNftTradeInfo = async (data: { wallet_address: string }) => {
+    return CoreAPIService.get<any>(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_NFTS_TRADE_INFO}/${data.wallet_address}`
+    )
+  }
+
   postAssetDetails = async (AssetsDetails: AssetsDetailsBlock) => {
     return CoreAPIService.post<any>(
       `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.POST_ASSETS_DETAILS}`,
@@ -34,18 +40,6 @@ class HoldingServices {
   }
   getPortFolio = async () => {
     return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_PORTFOLIO}`)
-  }
-  getCollections = async (data: object) => {
-    return CoreAPIService.post<any>(
-      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_COLLECTIONS}`,
-      data
-    )
-  }
-  getHoldingTime = async (data: object) => {
-    return CoreAPIService.post<any>(
-      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_USER_NFT_HOLDING_TIME}`,
-      data
-    )
   }
 
   getWalletList = async (userId: string) => {

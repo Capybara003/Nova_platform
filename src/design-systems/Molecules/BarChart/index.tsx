@@ -3,7 +3,7 @@ import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxi
 
 import { BarChartProps } from './interface'
 
-const CustomBarChart: React.FC<BarChartProps> = ({ data, height, name, width, xdata1, xdata2, xdata3 }) => {
+const CustomBarChart: React.FC<BarChartProps> = ({ data, height, name, width, xdata1 }) => {
   return (
     <ResponsiveContainer height={height} width={width}>
       <BarChart barCategoryGap={2} barGap={5} data={data}>
@@ -16,9 +16,9 @@ const CustomBarChart: React.FC<BarChartProps> = ({ data, height, name, width, xd
           labelStyle={{ color: 'white', textAlign: 'left' }}
         />
         <Bar dataKey={xdata1} fill="#00C68A" radius={[10, 10, 0, 0]} />
-        <Bar dataKey={xdata2} fill="#00C68A" radius={[10, 10, 0, 0]} />
+        {/* <Bar dataKey={xdata2} fill="#00C68A" radius={[10, 10, 0, 0]} />
         <Bar dataKey={xdata3} fill="#00C68A" radius={[10, 10, 0, 0]} />
-        <Bar dataKey={xdata2} fill="#00C68A" radius={[10, 10, 0, 0]} />
+        <Bar dataKey={xdata2} fill="#00C68A" radius={[10, 10, 0, 0]} /> */}
       </BarChart>
     </ResponsiveContainer>
   )

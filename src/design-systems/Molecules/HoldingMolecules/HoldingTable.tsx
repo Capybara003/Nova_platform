@@ -4,7 +4,7 @@
 // DataTable.tsx
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react' // Import the props interface
+import React, { useMemo, useState } from 'react' // Import the props interface
 import { TECollapse, TETooltip } from 'tw-elements-react'
 import { FiInfo } from 'react-icons/fi'
 import { RxCaretSort } from 'react-icons/rx'
@@ -84,6 +84,25 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
     }
   }
 
+  const totalValue = useMemo(() => {
+    return (
+      data &&
+      data.length > 0 &&
+      data.reduce((acc: any, item: any) => {
+        const info =
+          item?.nftsHolding &&
+          item?.nftsHolding?.reduce((acc: any, nft: any) => {
+            acc = (acc || 0) + formatUSei(nft?.floorPrice) || 0
+            return acc
+          }, 0)
+
+        acc = (acc || 0) + (info || 0)
+
+        return acc
+      }, 0)
+    )
+  }, [data])
+
   return (
     <table className="rounded-corners w-full rounded-sm font-Lexend">
       {' '}
@@ -138,11 +157,14 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                 acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
                 acc.estFee = (acc.estFee || 0) + formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01 || 0
                 acc.unrealizedGains = (acc.unrealizedGains || 0) + formatUSei(nft?.unrealizedGains) || 0
-                acc.holdingTime = (acc.holdingTime || 0) + nft?.holdingTime || 0
+                acc.holdingTime =
+                  (acc.holdingTime || 0) +
+                    ((Date.now() - new Date(nft?.ts).getTime()) / (24 * 60 * 60 * 1000)).toFixed(2) || 0
                 acc.floorPrice = (acc.floorPrice || 0) + formatUSei(nft?.floorPrice) || 0
                 return acc
               }, {})
             // info.rank = info.rank / collection?.userHoldingNfts?.length || 0
+            info.holdingTime = info.holdingTime / collection?.nftsHolding?.length || 0
 
             const SinceTrade = collection?.sinceTrade / SEI
 
@@ -404,9 +426,9 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                   </td>
                   <td>
                     <div className="tooltip !w-[60px]">
-                      <TETooltip title={collection?.weight}>
-                        {collection?.weight !== undefined && collection?.weight !== null
-                          ? `${collection?.weight?.toFixed(2)}%`
+                      <TETooltip title={`${((info.floorPrice * 100) / totalValue).toFixed(2)}%`}>
+                        {info?.floorPrice !== undefined && totalValue !== 0
+                          ? `${((info.floorPrice * 100) / totalValue).toFixed(2)}%`
                           : '--'}
                       </TETooltip>
                     </div>
@@ -463,11 +485,7 @@ const HoldingTable: React.FC<TableProps> = ({ data, headData, loading, footerDat
                     </TETooltip>
                   </td>
                   <td>
-                    {collection && collection?.holdingTime !== null
-                      ? collection?.holdingTime
-                        ? `${collection?.holdingTime} d`
-                        : '--'
-                      : '--'}
+                    {info && info?.holdingTime !== null ? (info?.holdingTime ? `${info?.holdingTime} d` : '--') : '--'}
                   </td>
                   <td>
                     {collection?.link && collection?.link !== null ? (
