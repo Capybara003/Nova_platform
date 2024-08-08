@@ -16,7 +16,8 @@ import { LinkIcon, RightArrowIcons } from 'design-systems/Atoms/Icons'
 import Typography from 'design-systems/Atoms/Typography'
 import { Checkbox } from 'design-systems/Atoms/CheckBox'
 import { IMG } from 'assets/images'
-import { formatUSei } from 'utils/formatUnit'
+import { formatUnits, formatUSei } from 'utils/formatUnit'
+import { useDataSelector } from 'lib/redux/store'
 
 interface HoldingAnalyticsTableProps extends TableProps {
   totalValue: number
@@ -31,6 +32,8 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
 }) => {
   const [activeElement, setActiveElement] = useState<string>('')
   const [checkboxes, setCheckboxes] = useState<any>([])
+
+  const { tabName } = useDataSelector('toggle')
 
   const SEI = crypto?.value || 0
   const baseValue = 100
@@ -109,6 +112,7 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
         </thead>
         <tbody>
           {!loading &&
+            tabName === 1 &&
             data?.map((collection: any, index: any) => {
               const info =
                 collection?.nftsHolding &&
@@ -337,6 +341,237 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                             }
                           >
                             <Checkbox checked={checkboxes.includes(collection?.seiAddress)} />
+                          </div>{' '}
+                        </td>
+                      </tr>
+                    ))}
+                </React.Fragment>
+              )
+            })}
+          {!loading &&
+            tabName === 2 &&
+            data?.map((token: any, index: any) => {
+              // const info =
+              //   token?.nftsHolding &&
+              //   token?.nftsHolding?.reduce((acc: any, nft: any) => {
+              //     // acc.rank = (acc.rank || 0) + nft?.rarity?.rank || 0
+              //     acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
+              //     acc.estFee = (acc.estFee || 0) + formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01 || 0
+              //     acc.unrealizedGains = (acc.unrealizedGains || 0) + formatUSei(nft?.unrealizedGains) || 0
+              //     acc.holdingTime =
+              //       (acc.holdingTime || 0) + (Date.now() - new Date(nft?.ts).getTime()) / (24 * 60 * 60 * 1000) || 0
+              //     acc.floorPrice = (acc.floorPrice || 0) + formatUSei(nft?.floorPrice) || 0
+              //     return acc
+              //   }, {})
+              // info.rank = info.rank / token?.userHoldingNfts?.length || 0
+              // info.holdingTime = info.holdingTime / token?.nftsHolding?.length || 0
+
+              const SinceTrade = token?.sinceTrade / SEI
+
+              const percentageChange = (SinceTrade - baseValue) / baseValue
+              const formattedPercentageChange = `${
+                (percentageChange >= 0 ? '+' : '') +
+                percentageChange
+                  .toFixed(2)
+                  .replace('.', ',')
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+              }%`
+              return (
+                <React.Fragment key={index}>
+                  <tr className="cursor-pointer">
+                    <td className="min-w-[230px]">
+                      <div className="flex items-center justify-center gap-2">
+                        <BookMarkButton isActive={false} />
+                        <div className={`${activeElement === index && 'rotate-90'}`} onClick={() => handleClick(index)}>
+                          <RightArrowIcons />
+                        </div>
+                        <div className="flex items-center justify-center gap-[3px]">
+                          {token?.logoUrl && token?.logoUrl !== null ? (
+                            <Image
+                              alt={'IMG'}
+                              className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
+                              height={40}
+                              src={token.logoUrl}
+                              width={40}
+                            />
+                          ) : (
+                            <Image
+                              alt={'IMG'}
+                              className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
+                              height={48}
+                              src={IMG.webump}
+                              width={48}
+                            />
+                          )}
+                          <Typography className="w-max">
+                            {token?.name && token?.name !== null ? token.name || '--' : '--'}
+                          </Typography>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="!w-[20px] !overflow-hidden !overflow-ellipsis">
+                      {token?.amount && token?.amount !== null
+                        ? `${formatUnits(token.amount, token.decimals).toFixed(2)}`
+                        : '--'}
+                    </td>
+                    <td className="w-[40px] overflow-hidden overflow-ellipsis">
+                      {token?.floorPrice !== undefined && totalValue !== 0
+                        ? `${((token.floorPrice * 100) / totalValue).toFixed(2)}%`
+                        : '--'}
+                    </td>
+                    <td className="w-[100px] overflow-hidden overflow-ellipsis">
+                      {token?.floorPrice !== undefined && token?.floorPrice !== null
+                        ? `${formatUSei(token.floorPrice)?.toFixed(2)} ${crypto?.symbol}`
+                        : '--'}
+                    </td>
+                    <td>{token?.rank && token?.rank !== null ? token?.rank : '--'}</td>
+                    {/* <td className="w-[100px] overflow-hidden overflow-ellipsis">{item.token}</td> */}
+                    <td>{token?.buyPrice ? `${Number(token.buyPrice)?.toFixed(2)} ${crypto?.symbol}` : '--'}</td>
+                    <td>
+                      {token?.estFee && token?.estFee !== null
+                        ? `${Number(token.estFee)?.toFixed(2)} ${crypto?.symbol}`
+                        : '--'}
+                    </td>
+                    <td>
+                      {token?.floorPrice && token?.floorPrice !== null
+                        ? `${Number(token.floorPrice)?.toFixed(2)} ${crypto?.symbol}`
+                        : '--'}
+                    </td>
+                    <td>
+                      {token?.unrealizedGains && token?.unrealizedGains !== null
+                        ? `${Number(token.unrealizedGains).toFixed(2)} ${crypto?.symbol}`
+                        : '--'}
+                    </td>
+                    <td className={` ${percentageChange < 0 ? 'text-warning-300' : 'text-green'}`}>
+                      {token?.sinceTrade && token?.sinceTrade !== null ? `${formattedPercentageChange}` : '--'}
+                    </td>
+                    <td className="">
+                      {token?.holdingTime && token?.holdingTime !== null ? `${token.holdingTime.toFixed(2)} d` : '--'}
+                    </td>
+                    <td>
+                      {token?.link && token?.link !== null ? (
+                        <Link
+                          className="flex flex-col items-center justify-center"
+                          href={token && token?.link}
+                          target={`${token ? (token?.link !== '' && token?.link !== null ? '_blank' : '') : ''}`}
+                        >
+                          <div className="rounded-[8px] bg-black225_05 p-1">
+                            <LinkIcon />
+                          </div>
+                        </Link>
+                      ) : (
+                        '--'
+                      )}
+                    </td>
+                    <td>
+                      <div
+                        className="flex !w-full justify-end"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          handleCheckboxChange(token?.seiAddress, e)
+                        }
+                      >
+                        <Checkbox checked={checkboxes.includes(token?.seiAddress)} />
+                      </div>{' '}
+                    </td>
+                  </tr>
+                  {token?.nftsHolding &&
+                    token?.nftsHolding?.map((nft: any) => (
+                      <tr
+                        className={`${activeElement === index ? 'table-row' : 'hidden'} cursor-pointer`}
+                        key={nft.key}
+                      >
+                        <td className="!p-0">
+                          <div>
+                            <div className="flex w-full items-center">
+                              <div className="w-[100px] !pl-0 text-center text-[14px] text-black7f">
+                                {nft?.status?.status}
+                              </div>
+                              <div className="w-[40px] !px-0">
+                                <Image alt={'IMG'} height={40} src={nft?.image} width={40} />
+                              </div>
+                              <div className="w-[90px] !px-0 text-center">{nft?.name}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td className="overflow-hidden overflow-ellipsis">
+                          <div>
+                            {nft?.floorPrice !== undefined && nft?.floorPrice !== null
+                              ? `${formatUSei(nft.floorPrice)?.toFixed(2)} ${crypto?.symbol}`
+                              : '--'}
+                          </div>
+                        </td>
+                        <td>{nft?.rarity?.rank && nft?.rarity?.rank !== null ? nft?.rarity?.rank : '--'}</td>
+                        <td>
+                          <div>
+                            {nft?.buyPrice && nft?.buyPrice !== null
+                              ? `${formatUSei(nft.buyPrice)?.toFixed(2)} ${crypto?.symbol}`
+                              : '--'}
+                          </div>
+                        </td>
+                        <td>
+                          <div>
+                            {nft?.royaltyPercentage && nft?.royaltyPercentage !== null
+                              ? `${(formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01).toFixed(2)} ${
+                                  crypto?.symbol
+                                }`
+                              : '--'}
+                          </div>
+                        </td>
+                        <td className="w-[100px] overflow-hidden overflow-ellipsis">
+                          <div>
+                            {nft?.floorPrice && nft?.floorPrice !== null
+                              ? `${formatUSei(nft.floorPrice)?.toFixed(2)} ${crypto?.symbol}`
+                              : '--'}
+                          </div>
+                        </td>
+                        <td>
+                          <div className="flex flex-col gap-[4px]">
+                            <div>
+                              <Typography>
+                                {nft?.unrealizedGains && nft?.unrealizedGains !== null
+                                  ? `${formatUSei(nft.unrealizedGains).toFixed(2)} ${crypto?.symbol}`
+                                  : '--'}
+                              </Typography>
+                            </div>
+                          </div>
+                        </td>
+                        <td className={percentageChange < 0 ? 'text-warning-300' : 'text-green'}>
+                          <Typography>
+                            {token?.sinceTrade && token?.sinceTrade !== null ? `${formattedPercentageChange}` : '--'}
+                          </Typography>
+                        </td>
+                        <td>
+                          {nft && nft?.ts !== null
+                            ? nft?.ts
+                              ? `${((Date.now() - new Date(nft?.ts).getTime()) / (24 * 60 * 60 * 1000)).toFixed(2)} d`
+                              : '--'
+                            : '--'}
+                        </td>
+                        <td>
+                          {token?.link && token?.link !== null ? (
+                            <Link
+                              className="flex flex-col items-center justify-center"
+                              href={token && token?.link}
+                              target={`${token ? (token?.link !== '' && token?.link !== null ? '_blank' : '') : ''}`}
+                            >
+                              <div className="rounded-[8px] bg-black225_05 p-1">
+                                <LinkIcon />
+                              </div>
+                            </Link>
+                          ) : (
+                            '--'
+                          )}
+                        </td>
+                        <td>
+                          <div
+                            className="flex !w-full justify-end"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                              handleCheckboxChange(token?.seiAddress, e)
+                            }
+                          >
+                            <Checkbox checked={checkboxes.includes(token?.seiAddress)} />
                           </div>{' '}
                         </td>
                       </tr>

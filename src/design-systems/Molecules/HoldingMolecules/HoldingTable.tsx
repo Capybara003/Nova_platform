@@ -19,7 +19,7 @@ import Typography from 'design-systems/Atoms/Typography'
 import { useDataSelector } from 'lib/redux/store'
 import { IMG } from 'assets/images'
 import { NoData } from 'design-systems/Atoms/NoData'
-import { formatUSei } from 'utils/formatUnit'
+import { formatUnits, formatUSei } from 'utils/formatUnit'
 
 interface HoldingTableProps extends TableProps {
   totalValue: number
@@ -87,6 +87,7 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
       setCheckboxes([])
     }
   }
+  console.log(data)
 
   return (
     <table className="rounded-corners w-full rounded-sm font-Lexend">
@@ -134,6 +135,7 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
       </thead>
       <tbody>
         {!loading &&
+          tabName === 1 &&
           data?.map((collection: any, index: any) => {
             const info =
               collection?.nftsHolding &&
@@ -148,7 +150,7 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                 return acc
               }, {})
             // info.rank = info.rank / collection?.userHoldingNfts?.length || 0
-            info.holdingTime = info.holdingTime / collection?.nftsHolding?.length || 0
+            info.holdingTime = info?.holdingTime / collection?.nftsHolding?.length || 0
 
             const SinceTrade = collection?.sinceTrade / SEI
 
@@ -161,196 +163,6 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                 .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
             }%`
 
-            if (tabName === 2) {
-              if (!collection?.asset?.includes(crypto?.label)) return <></>
-              return (
-                <React.Fragment key={index}>
-                  <tr className="cursor-pointer">
-                    <td className="min-w-[230px]">
-                      <>
-                        <div className="flex items-center justify-center gap-2">
-                          <div onClick={() => handleBookMark(collection?.seiAddress)}>
-                            {bookmarkedItems.includes(collection?.seiAddress) ? (
-                              <div>
-                                <BookMarkFill />
-                              </div>
-                            ) : (
-                              <div>
-                                <BookMarkEmpty />
-                              </div>
-                            )}
-                          </div>
-
-                          <div
-                            className={`${activeElement === index ? 'rotate-90' : ''}`}
-                            onClick={() => handleClick(index)}
-                          >
-                            <RightArrowIcons />
-                          </div>
-
-                          <Link
-                            className="flex items-center gap-3 text-ellipsis"
-                            href={{
-                              pathname: '/single-collection-trades',
-                              query: {
-                                asset_name: collection?.name && collection?.name !== null ? collection?.name : '',
-                                // item?.assetNameAscii,
-                                policy: collection?.policy && collection?.policy !== null ? collection?.policy : '',
-                                current_value: collection?.id && collection?.id !== null ? collection?.id : '',
-                              }, // Add your custom props as query parameters
-                            }}
-                          >
-                            <Image
-                              alt={'IMG'}
-                              className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
-                              height={48}
-                              src={collection?.pfp}
-                              width={48}
-                            />
-                            SEI {collection.type ? `(${collection.type})`.toUpperCase() : ''}
-                          </Link>
-                        </div>
-                      </>
-                    </td>
-                    <td className="">
-                      <TETooltip title={collection?.free}>
-                        {collection?.free ? `${parseInt(collection?.free).toFixed(2)}%` : '--'}
-                      </TETooltip>
-                    </td>
-                    <td className="">
-                      <TETooltip title={collection?.size}>
-                        {collection?.size ? parseInt(collection?.size).toFixed(2) : '--'}
-                      </TETooltip>
-                    </td>
-                    <td className=" overflow-hidden overflow-ellipsis">
-                      <div>{collection?.floor ? `${Number(collection.floor)?.toFixed(2)} $` : '--'}</div>
-                    </td>
-                    <td className="">{info?.rank && info?.rank !== null ? info?.rank?.toFixed(2) : '--'}</td>
-                    <td className="">
-                      <div>{collection?.price ? `${Number(collection.price)?.toFixed(2)} $` : '--'}</div>
-                    </td>
-                    <td className="">
-                      <div>
-                        {info?.fee && info?.fee !== null ? `${Number(info.fee)?.toFixed(2)} ${crypto?.symbol}` : '--'}
-                      </div>
-                    </td>
-                    <td className=" overflow-hidden overflow-ellipsis">
-                      <div>
-                        {collection?.floor && collection?.floor !== null
-                          ? `${Number(collection.floor * collection.userHoldingAmount)?.toFixed(2)} ${crypto?.symbol}`
-                          : '--'}
-                      </div>
-                    </td>
-                    <td className="">
-                      <div className="flex flex-col gap-[4px]">
-                        <div>
-                          <Typography>
-                            {info?.unrealizedGains && info?.unrealizedGains !== null
-                              ? `${Number(info.unrealizedGains).toFixed(2)} ${crypto?.symbol}`
-                              : '--'}
-                          </Typography>
-                          <Typography className={percentageChange < 0 ? 'text-warning-300' : 'text-green'}>
-                            {collection?.sinceTrade && collection?.sinceTrade !== null
-                              ? `${formattedPercentageChange}`
-                              : '--'}
-                          </Typography>
-                        </div>
-                      </div>
-                    </td>
-                    <td className={` ${percentageChange < 0 ? 'text-warning-300' : 'text-green'}`}>
-                      {collection?.sinceTrade && collection?.sinceTrade !== null
-                        ? `${formattedPercentageChange}`
-                        : '--'}
-                    </td>
-                    <td className="">
-                      {collection && collection?.holdingTime !== null
-                        ? collection?.holdingTime
-                          ? `${collection?.holdingTime} d`
-                          : '--'
-                        : '--'}
-                    </td>
-                    <td className="">
-                      {collection?.link && collection?.link !== null ? (
-                        <Link
-                          className="flex flex-col items-center justify-center"
-                          href={collection && collection?.link}
-                          target={`${
-                            collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
-                          }`}
-                        >
-                          <div className="rounded-[8px] bg-black225_05 p-1">
-                            <LinkIcon />
-                          </div>
-                        </Link>
-                      ) : (
-                        '--'
-                      )}
-                    </td>
-                    <td className="">
-                      <div className="flex !w-full justify-end">
-                        <Checkbox />
-                      </div>{' '}
-                    </td>
-                  </tr>
-                  {index === 1 && (
-                    <tr>
-                      <td className="!border-0 !border-b-0 !p-0" colSpan={headData.length + 1}>
-                        <TECollapse
-                          className="Collapse !mt-0 !w-full !rounded-b-none text-left !shadow-none"
-                          show={activeElement === index}
-                        >
-                          <div className="px-2 py-1">
-                            <table className="w-full">
-                              <tbody>
-                                {footerData.transData &&
-                                  footerData.transData.map((item: any, key: number) => {
-                                    return (
-                                      <tr key={item?.id}>
-                                        <td className="w-[12%]">{item.details.title}</td>
-                                        <td className="">{item.amount.amount}</td>
-                                        <td className="">{item.weight.toFixed(3)}</td>
-                                        <td className="">--</td>
-                                        <td className="">--</td>
-                                        <td className="">{item?.advancedTradeFill?.fillPrice}</td>
-                                        <td className="">{item?.network?.transactionFee?.amount}</td>
-                                        <td className=""></td>
-                                        <td className="">{item?.gain?.toFixed(3)}</td>
-                                        <td className=""></td>
-                                        <td className=""></td>
-                                        <td className="">
-                                          {item && item?.network?.transactionUrl && (
-                                            <Link
-                                              className="flex flex-col items-center justify-center"
-                                              href={(item && item?.network?.transactionUrl) || ''}
-                                              target={`${
-                                                item
-                                                  ? item?.network?.transactionUrl !== '' &&
-                                                    item?.network?.transactionUrl !== null
-                                                    ? '_blank'
-                                                    : ''
-                                                  : ''
-                                              }`}
-                                            >
-                                              <div className="rounded-[8px] bg-black225_05 p-1">
-                                                <LinkIcon />
-                                              </div>
-                                            </Link>
-                                          )}
-                                        </td>
-                                        <td className=""></td>
-                                      </tr>
-                                    )
-                                  })}
-                              </tbody>
-                            </table>
-                          </div>
-                        </TECollapse>
-                      </td>
-                    </tr>
-                  )}
-                </React.Fragment>
-              )
-            }
             return (
               <React.Fragment key={index}>
                 <tr className="cursor-pointer">
@@ -387,7 +199,7 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                             alt={'IMG'}
                             className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
                             height={40}
-                            src={collection?.pfp}
+                            src={collection.pfp}
                             width={40}
                           />
                         ) : (
@@ -601,6 +413,235 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                       {/* </TECollapse> */}
                     </tr>
                   ))}
+              </React.Fragment>
+            )
+          })}
+        {!loading &&
+          tabName === 2 &&
+          data?.map((token: any, index: any) => {
+            // const info =
+            //   token &&
+            //   token?.reduce((acc: any, nft: any) => {
+            //     // acc.rank = (acc.rank || 0) + nft?.rarity?.rank || 0
+            //     acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
+            //     acc.estFee = (acc.estFee || 0) + formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01 || 0
+            //     acc.unrealizedGains = (acc.unrealizedGains || 0) + formatUSei(nft?.unrealizedGains) || 0
+            //     acc.holdingTime =
+            //       (acc.holdingTime || 0) + (Date.now() - new Date(nft?.ts).getTime()) / (24 * 60 * 60 * 1000) || 0
+            //     acc.floorPrice = (acc.floorPrice || 0) + formatUSei(nft?.floorPrice) || 0
+            //     return acc
+            //   }, {})
+            const info: any = {}
+            // info.rank = info.rank / collection?.userHoldingNfts?.length || 0
+            // info.holdingTime = info?.holdingTime / collection?.nftsHolding?.length || 0
+
+            const SinceTrade = token?.sinceTrade / SEI
+
+            const percentageChange = (SinceTrade - baseValue) / baseValue
+            const formattedPercentageChange = `${
+              (percentageChange >= 0 ? '+' : '') +
+              percentageChange
+                .toFixed(2)
+                .replace('.', ',')
+                .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+            }%`
+
+            return (
+              <React.Fragment key={index}>
+                <tr className="cursor-pointer">
+                  <td className="min-w-[230px]">
+                    <>
+                      <div className="flex items-center justify-center gap-2">
+                        <div onClick={() => handleBookMark(token?.seiAddress)}>
+                          {bookmarkedItems.includes(token?.seiAddress) ? (
+                            <div>
+                              <BookMarkFill />
+                            </div>
+                          ) : (
+                            <div>
+                              <BookMarkEmpty />
+                            </div>
+                          )}
+                        </div>
+
+                        <div
+                          className={`${activeElement === index ? 'rotate-90' : ''}`}
+                          onClick={() => handleClick(index)}
+                        >
+                          <RightArrowIcons />
+                        </div>
+
+                        <Link
+                          className="flex items-center gap-3 text-ellipsis"
+                          href={{
+                            pathname: '/single-collection-trades',
+                            query: {
+                              asset_name: token?.name && token?.name !== null ? token?.name : '',
+                              // item?.assetNameAscii,
+                              policy: token?.policy && token?.policy !== null ? token?.policy : '',
+                              current_value: token?.id && token?.id !== null ? token?.id : '',
+                            }, // Add your custom props as query parameters
+                          }}
+                        >
+                          {token?.logoUrl && token?.logoUrl !== null ? (
+                            <Image
+                              alt={'IMG'}
+                              className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
+                              height={48}
+                              src={token.logoUrl}
+                              width={48}
+                            />
+                          ) : (
+                            <Image
+                              alt={'IMG'}
+                              className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
+                              height={48}
+                              src={IMG.webump}
+                              width={48}
+                            />
+                          )}
+                          <Typography className="w-max">
+                            {token?.name && token?.name !== null ? token.name || '--' : '--'}
+                          </Typography>
+                          {/* SEI {token.type ? `(${token.type})`.toUpperCase() : ''} */}
+                        </Link>
+                      </div>
+                    </>
+                  </td>
+                  <td className="">
+                    <TETooltip title={token?.amount}>
+                      {token?.amount ? `${formatUnits(token.amount, token.decimals).toFixed(2)}` : '--'}
+                    </TETooltip>
+                  </td>
+                  <td className="">
+                    <TETooltip title={token?.size}>{token?.size ? parseInt(token?.size).toFixed(2) : '--'}</TETooltip>
+                  </td>
+                  <td className=" overflow-hidden overflow-ellipsis">
+                    <div>
+                      {token?.amount && token?.worthUsei
+                        ? `${(formatUnits(token?.worthUsei, 6) / formatUnits(token.amount, token.decimals))?.toFixed(
+                            6
+                          )} SEI`
+                        : '--'}
+                    </div>
+                  </td>
+                  <td className="">{info?.rank && info?.rank !== null ? info?.rank?.toFixed(2) : '--'}</td>
+                  <td className="">
+                    <div>{token?.price ? `${Number(token.price)?.toFixed(2)} $` : '--'}</div>
+                  </td>
+                  <td className="">
+                    <div>
+                      {info?.fee && info?.fee !== null ? `${Number(info.fee)?.toFixed(2)} ${crypto?.symbol}` : '--'}
+                    </div>
+                  </td>
+                  <td className=" overflow-hidden overflow-ellipsis">
+                    <div>
+                      {token?.floor && token?.floor !== null
+                        ? `${Number(token.floor * token.userHoldingAmount)?.toFixed(2)} ${crypto?.symbol}`
+                        : '--'}
+                    </div>
+                  </td>
+                  <td className="">
+                    <div className="flex flex-col gap-[4px]">
+                      <div>
+                        <Typography>
+                          {info?.unrealizedGains && info?.unrealizedGains !== null
+                            ? `${Number(info.unrealizedGains).toFixed(2)} ${crypto?.symbol}`
+                            : '--'}
+                        </Typography>
+                        <Typography className={percentageChange < 0 ? 'text-warning-300' : 'text-green'}>
+                          {token?.sinceTrade && token?.sinceTrade !== null ? `${formattedPercentageChange}` : '--'}
+                        </Typography>
+                      </div>
+                    </div>
+                  </td>
+                  <td className={` ${percentageChange < 0 ? 'text-warning-300' : 'text-green'}`}>
+                    {token?.sinceTrade && token?.sinceTrade !== null ? `${formattedPercentageChange}` : '--'}
+                  </td>
+                  <td className="">
+                    {token && token?.holdingTime !== null
+                      ? token?.holdingTime
+                        ? `${token?.holdingTime} d`
+                        : '--'
+                      : '--'}
+                  </td>
+                  <td className="">
+                    {token?.link && token?.link !== null ? (
+                      <Link
+                        className="flex flex-col items-center justify-center"
+                        href={token && token?.link}
+                        target={`${token ? (token?.link !== '' && token?.link !== null ? '_blank' : '') : ''}`}
+                      >
+                        <div className="rounded-[8px] bg-black225_05 p-1">
+                          <LinkIcon />
+                        </div>
+                      </Link>
+                    ) : (
+                      '--'
+                    )}
+                  </td>
+                  <td className="">
+                    <div className="flex !w-full justify-end">
+                      <Checkbox />
+                    </div>{' '}
+                  </td>
+                </tr>
+                {index === 1 && (
+                  <tr>
+                    <td className="!border-0 !border-b-0 !p-0" colSpan={headData.length + 1}>
+                      <TECollapse
+                        className="Collapse !mt-0 !w-full !rounded-b-none text-left !shadow-none"
+                        show={activeElement === index}
+                      >
+                        <div className="px-2 py-1">
+                          <table className="w-full">
+                            <tbody>
+                              {footerData.transData &&
+                                footerData.transData.map((item: any, key: number) => {
+                                  return (
+                                    <tr key={item?.id}>
+                                      <td className="w-[12%]">{item.details.title}</td>
+                                      <td className="">{item.amount.amount}</td>
+                                      <td className="">{item.weight.toFixed(3)}</td>
+                                      <td className="">--</td>
+                                      <td className="">--</td>
+                                      <td className="">{item?.advancedTradeFill?.fillPrice}</td>
+                                      <td className="">{item?.network?.transactionFee?.amount}</td>
+                                      <td className=""></td>
+                                      <td className="">{item?.gain?.toFixed(3)}</td>
+                                      <td className=""></td>
+                                      <td className=""></td>
+                                      <td className="">
+                                        {item && item?.network?.transactionUrl && (
+                                          <Link
+                                            className="flex flex-col items-center justify-center"
+                                            href={(item && item?.network?.transactionUrl) || ''}
+                                            target={`${
+                                              item
+                                                ? item?.network?.transactionUrl !== '' &&
+                                                  item?.network?.transactionUrl !== null
+                                                  ? '_blank'
+                                                  : ''
+                                                : ''
+                                            }`}
+                                          >
+                                            <div className="rounded-[8px] bg-black225_05 p-1">
+                                              <LinkIcon />
+                                            </div>
+                                          </Link>
+                                        )}
+                                      </td>
+                                      <td className=""></td>
+                                    </tr>
+                                  )
+                                })}
+                            </tbody>
+                          </table>
+                        </div>
+                      </TECollapse>
+                    </td>
+                  </tr>
+                )}
               </React.Fragment>
             )
           })}

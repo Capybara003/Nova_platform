@@ -60,18 +60,25 @@ const AnalyticsBottomSection: React.FC = () => {
     },
   })
 
-  const { isLoadingHolding, Holding, isLoadingTopGainer, TopGainer, isLoadingNftTradeInfo, NftTradeInfo } = useHolding()
+  const {
+    isLoadingHoldingNfts,
+    HoldingNfts,
+    isLoadingNftsTopGainer,
+    NftsTopGainer,
+    isLoadingNftTradeInfo,
+    NftTradeInfo,
+  } = useHolding()
 
-  useMemo(() => Holding && setCollectionData(Holding), [Holding, isLoadingHolding])
-  useMemo(() => TopGainer && setTopGainerData(TopGainer), [TopGainer, isLoadingTopGainer])
+  useMemo(() => HoldingNfts && setCollectionData(HoldingNfts), [HoldingNfts, isLoadingHoldingNfts])
+  useMemo(() => NftsTopGainer && setTopGainerData(NftsTopGainer), [NftsTopGainer, isLoadingNftsTopGainer])
 
   useMemo(() => NftTradeInfo && setNftTradeData(NftTradeInfo), [NftTradeInfo, isLoadingNftTradeInfo])
 
   const collectionChartData = useMemo(() => {
     return (
-      Holding &&
-      Holding.length > 0 &&
-      Holding.reduce((acc: any, item: any) => {
+      HoldingNfts &&
+      HoldingNfts.length > 0 &&
+      HoldingNfts.reduce((acc: any, item: any) => {
         const info =
           item?.nftsHolding &&
           item?.nftsHolding?.reduce((acc: any, nft: any) => {
@@ -89,7 +96,7 @@ const AnalyticsBottomSection: React.FC = () => {
         return acc
       }, {})
     )
-  }, [Holding, isLoadingHolding])
+  }, [HoldingNfts, isLoadingHoldingNfts])
 
   const timeChartData = useMemo(() => {
     return (
@@ -104,20 +111,22 @@ const AnalyticsBottomSection: React.FC = () => {
           return acc
         }, {})
     )
-  }, [Holding, isLoadingHolding])
+  }, [HoldingNfts, isLoadingHoldingNfts])
 
   const transactionChartData = useMemo(() => {
     return (
       NftTradeInfo &&
       NftTradeInfo.transaction && {
-        0: Object.keys(NftTradeInfo.transaction.day).map(day => {
-          const transaction = NftTradeInfo.transaction.day[day]
-          return {
-            day,
-            totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
-            transactionAmount: transaction?.transactionAmount ? transaction.transactionAmount : 0,
-          }
-        }),
+        0: Object.keys(NftTradeInfo.transaction.day)
+          .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
+          .map(day => {
+            const transaction = NftTradeInfo.transaction.day[day]
+            return {
+              day,
+              totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
+              transactionAmount: transaction?.transactionAmount ? transaction.transactionAmount : 0,
+            }
+          }),
         1: Object.keys(NftTradeInfo.transaction.week).map(week => {
           const transaction = NftTradeInfo.transaction.week[week]
           return {
@@ -143,38 +152,50 @@ const AnalyticsBottomSection: React.FC = () => {
       NftTradeInfo &&
       NftTradeInfo.volume && {
         buyVolume: {
-          0: Object.keys(NftTradeInfo.volume.buyVolume.day).reduce((acc: any, day) => {
-            const volume = NftTradeInfo.volume.buyVolume.day[day]
-            acc[day] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-            return acc
-          }, {}),
-          1: Object.keys(NftTradeInfo.volume.buyVolume.week).reduce((acc: any, week) => {
-            const volume = NftTradeInfo.volume.buyVolume.week[week]
-            acc[week] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-            return acc
-          }, {}),
-          2: Object.keys(NftTradeInfo.volume.buyVolume.month).reduce((acc: any, month) => {
-            const volume = NftTradeInfo.volume.buyVolume.month[month]
-            acc[month] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-            return acc
-          }, {}),
+          0: Object.keys(NftTradeInfo.volume.buyVolume.day)
+            .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
+            .reduce((acc: any, day) => {
+              const volume = NftTradeInfo.volume.buyVolume.day[day]
+              acc[day] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+              return acc
+            }, {}),
+          1: Object.keys(NftTradeInfo.volume.buyVolume.week)
+            .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
+            .reduce((acc: any, week) => {
+              const volume = NftTradeInfo.volume.buyVolume.week[week]
+              acc[week] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+              return acc
+            }, {}),
+          2: Object.keys(NftTradeInfo.volume.buyVolume.month)
+            .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
+            .reduce((acc: any, month) => {
+              const volume = NftTradeInfo.volume.buyVolume.month[month]
+              acc[month] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+              return acc
+            }, {}),
         },
         sellVolume: {
-          0: Object.keys(NftTradeInfo.volume.sellVolume.day).reduce((acc: any, day) => {
-            const volume = NftTradeInfo.volume.sellVolume.day[day]
-            acc[day] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-            return acc
-          }, {}),
-          1: Object.keys(NftTradeInfo.volume.sellVolume.week).reduce((acc: any, week) => {
-            const volume = NftTradeInfo.volume.sellVolume.week[week]
-            acc[week] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-            return acc
-          }, {}),
-          2: Object.keys(NftTradeInfo.volume.sellVolume.month).reduce((acc: any, month) => {
-            const volume = NftTradeInfo.volume.sellVolume.month[month]
-            acc[month] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-            return acc
-          }, {}),
+          0: Object.keys(NftTradeInfo.volume.sellVolume.day)
+            .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
+            .reduce((acc: any, day) => {
+              const volume = NftTradeInfo.volume.sellVolume.day[day]
+              acc[day] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+              return acc
+            }, {}),
+          1: Object.keys(NftTradeInfo.volume.sellVolume.week)
+            .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
+            .reduce((acc: any, week) => {
+              const volume = NftTradeInfo.volume.sellVolume.week[week]
+              acc[week] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+              return acc
+            }, {}),
+          2: Object.keys(NftTradeInfo.volume.sellVolume.month)
+            .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
+            .reduce((acc: any, month) => {
+              const volume = NftTradeInfo.volume.sellVolume.month[month]
+              acc[month] = volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+              return acc
+            }, {}),
         },
       }
     )
@@ -303,7 +324,7 @@ const AnalyticsBottomSection: React.FC = () => {
               </thead>
 
               <tbody className="mt-5 overflow-y-scroll md:!h-[500px] [&>*>td:first-child]:border-s-0 [&>*>td:last-child]:border-e-0">
-                {!isLoadingHolding &&
+                {!isLoadingHoldingNfts &&
                   collectionData &&
                   collectionData?.map((collection: any) => {
                     const floorPrice =
@@ -394,7 +415,7 @@ const AnalyticsBottomSection: React.FC = () => {
             </thead>
 
             <tbody className="mt-5">
-              {!isLoadingTopGainer &&
+              {!isLoadingNftsTopGainer &&
                 topGainerData.topGainers.slice(0, 6).map((item: any, key: any) => {
                   return (
                     <tr key={item.key}>
@@ -460,7 +481,7 @@ const AnalyticsBottomSection: React.FC = () => {
             </thead>
 
             <tbody className="mt-5">
-              {!isLoadingTopGainer &&
+              {!isLoadingNftsTopGainer &&
                 topGainerData.topLosser.slice(0, 6).map((item: any, key: any) => {
                   return (
                     <tr key={item.key}>
@@ -527,7 +548,7 @@ const AnalyticsBottomSection: React.FC = () => {
                 <>
                   <p>Avg. Age</p>
                   <p className="text-2xl text-white font-medium">
-                    {(timeChartData && `${(timeChartData['total'] / timeChartData['count']).toFixed(3)}`) || 0} Days
+                    {(timeChartData && `${(timeChartData['total'] / timeChartData['count']).toFixed(2)}`) || 0} Days
                   </p>
                 </>
               }
@@ -595,7 +616,7 @@ const AnalyticsBottomSection: React.FC = () => {
               ]}
               totalHeading="Total Average"
               totalValue={
-                (timeChartData && `${(timeChartData['total'] / timeChartData['count']).toFixed(3)} Days`) || '0 Days'
+                (timeChartData && `${(timeChartData['total'] / timeChartData['count']).toFixed(2)} Days`) || '0 Days'
               }
             />
           </div>

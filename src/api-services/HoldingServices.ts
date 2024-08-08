@@ -6,7 +6,7 @@ import CoreNextAPIService from './CoreNextAPIService'
 import { AssetsDetailsBlock } from 'design-systems/Templates/HoldingPageTemplate/interface'
 import { API_ENDPOINTS } from 'utils/api-integration'
 class HoldingServices {
-  getHolding = async (data: { wallet_address: string }) => {
+  getHoldingNfts = async (data: { wallet_address: string }) => {
     // return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING}`)
     // return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_ASSETS}`)
     return CoreAPIService.get<any>(
@@ -14,21 +14,27 @@ class HoldingServices {
     )
   }
 
-  getIncome = async (data: { wallet_address: string }) => {
+  getIncomeNfts = async (data: { wallet_address: string }) => {
     return CoreAPIService.get<any>(
       `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_INCOME_NFTS}/${data.wallet_address}`
     )
   }
 
-  getTopGainers = async (data: { wallet_address: string }) => {
+  getNftsTopGainers = async (data: { wallet_address: string }) => {
     return CoreAPIService.get<any>(
       `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_NFTS_TOP}/${data.wallet_address}`
     )
   }
 
-  getNftTradeInfo = async (data: { wallet_address: string }) => {
+  getNftsTradeInfo = async (data: { wallet_address: string }) => {
     return CoreAPIService.get<any>(
       `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_NFTS_TRADE_INFO}/${data.wallet_address}`
+    )
+  }
+
+  getHoldingTokens = async (data: { wallet_address: string }) => {
+    return CoreAPIService.get<any>(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_TOKENS}/${data.wallet_address}`
     )
   }
 

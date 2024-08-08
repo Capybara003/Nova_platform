@@ -65,14 +65,16 @@ export const useHolding = () => {
         : 'allToken',
   })
 
+  // ===================== NFT Data =====================
+
   const {
-    isLoading: isLoadingHolding,
-    data: Holding,
-    refetch: refetchHolding,
-    isFetching: isFetchingHolding,
+    isLoading: isLoadingHoldingNfts,
+    data: HoldingNfts,
+    refetch: refetchHoldingNfts,
+    isFetching: isFetchingHoldingNfts,
   } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_HOLDING_NFTS],
-    () => HoldingServices.getHolding({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
+    () => HoldingServices.getHoldingNfts({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
     {
       select: res => res.collections,
       refetchOnWindowFocus: false,
@@ -80,18 +82,18 @@ export const useHolding = () => {
     }
   )
 
-  const { isLoading: isLoadingIncome, data: Income } = useQuery(
+  const { isLoading: isLoadingIncomeNfts, data: IncomeNfts } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_INCOME_NFTS],
-    () => HoldingServices.getIncome({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
+    () => HoldingServices.getIncomeNfts({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
     {
       select: res => res,
       refetchOnWindowFocus: false,
     }
   )
 
-  const { isLoading: isLoadingTopGainer, data: TopGainer } = useQuery(
+  const { isLoading: isLoadingNftsTopGainer, data: NftsTopGainer } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_NFTS_TOP],
-    () => HoldingServices.getTopGainers({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
+    () => HoldingServices.getNftsTopGainers({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
     {
       select: res => res,
       refetchOnWindowFocus: false,
@@ -100,7 +102,23 @@ export const useHolding = () => {
 
   const { isLoading: isLoadingNftTradeInfo, data: NftTradeInfo } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_NFTS_TRADE_INFO],
-    () => HoldingServices.getNftTradeInfo({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
+    () => HoldingServices.getNftsTradeInfo({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
+    {
+      select: res => res,
+      refetchOnWindowFocus: false,
+    }
+  )
+
+  // ===================== Token Data =====================
+
+  const {
+    isLoading: isLoadingHoldingTokens,
+    data: HoldingTokens,
+    refetch: refetchHoldingTokens,
+    isFetching: isFetchingHoldingTokens,
+  } = useQuery(
+    [API_ENDPOINTS.PUBLIC.GET_HOLDING_TOKENS],
+    () => HoldingServices.getHoldingTokens({ wallet_address: 'sei1d649tnttdphknafag5xwz69fd55v9rllrnrt4h' }),
     {
       select: res => res,
       refetchOnWindowFocus: false,
@@ -143,25 +161,29 @@ export const useHolding = () => {
 
   return {
     isLoadingAssetDetails: postAssetDetailsMutation.isLoading,
-    isLoadingHolding,
-    Holding,
+    isLoadingHoldingNfts,
+    HoldingNfts,
     postAssetDetails,
-    isLoadingIncome,
-    Income,
-    refetchHolding,
+    isLoadingIncomeNfts,
+    IncomeNfts,
+    refetchHoldingNfts,
     refetchWallet,
     walletConnect,
     isLoadingWallet,
-    isFetchingHolding,
+    isFetchingHoldingNfts,
     isLoadingHoldingDetails,
     holdingDetails,
     isLoadingSoldDetails,
     soldDetails,
     HoldingGraph,
     isLoadingHoldingGraph,
-    isLoadingTopGainer,
-    TopGainer,
+    isLoadingNftsTopGainer,
+    NftsTopGainer,
     isLoadingNftTradeInfo,
     NftTradeInfo,
+    isLoadingHoldingTokens,
+    HoldingTokens,
+    refetchHoldingTokens,
+    isFetchingHoldingTokens,
   }
 }

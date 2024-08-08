@@ -25,6 +25,7 @@ export const API_ENDPOINTS = {
     GET_INCOME_NFTS: 'nfts/user/get_income_nfts',
     GET_USER_HOLDING_NFTS_TOP: 'nfts/user/get_holding_nfts_top',
     GET_NFTS_TRADE_INFO: 'nfts/user/get_nfts_trade_info',
+    GET_HOLDING_TOKENS: 'token/user/get_holding_tokens',
     GET_HOLDING:
       'collections/all-nft/addr1qyf6cdhh0gn246dt92ac97sgrct9dteaqn85hutzemak4j9s2fhw5xj4gzh5feq0fursxsrman00lvy9cl9un6n84msswxthgn',
     POST_ASSETS_DETAILS: 'assets/asset-details',
