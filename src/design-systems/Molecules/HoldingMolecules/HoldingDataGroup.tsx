@@ -17,16 +17,16 @@ export const convertToSEI = (value?: number, SEI?: number): number | undefined =
   value !== undefined && SEI !== undefined ? value / SEI : undefined
 
 const HoldingDataGroup: React.FC = () => {
-  const { Holding, isLoadingHolding, Income, isLoadingIncome } = useHolding()
+  const { HoldingNfts, isLoadingHoldingNfts, IncomeNfts, isLoadingIncomeNfts } = useHolding()
   const { crypto } = useDataSelector('toggle')
-  const holdingData = {
+  const holdingNftsData = {
     amount: 0,
     buyPrice: 0,
     estFee: 0,
     estValue: 0,
     unrealizedGains: 0,
   }
-  const incomeData = {
+  const incomeNftsData = {
     amount: 0,
     buyPrice: 0,
     paidFee: 0,
@@ -34,7 +34,7 @@ const HoldingDataGroup: React.FC = () => {
     realizedGains: 0,
   }
 
-  Holding?.map((collection: any) => {
+  HoldingNfts?.map((collection: any) => {
     const info =
       collection?.nftsHolding &&
       collection?.nftsHolding?.reduce((acc: any, nft: any) => {
@@ -44,14 +44,14 @@ const HoldingDataGroup: React.FC = () => {
         acc.estValue = (acc.estValue || 0) + formatUSei(nft?.floorPrice) || 0
         return acc
       }, {})
-    holdingData.amount += Number(collection?.nftsHolding?.length) || 0
-    holdingData.buyPrice += Number(info?.buyPrice) || 0
-    holdingData.estFee += Number(info?.estFee) || 0
-    holdingData.estValue += Number(info?.estValue) || 0
-    holdingData.unrealizedGains += Number(info?.unrealizedGains) || 0
+    holdingNftsData.amount += Number(collection?.nftsHolding?.length) || 0
+    holdingNftsData.buyPrice += Number(info?.buyPrice) || 0
+    holdingNftsData.estFee += Number(info?.estFee) || 0
+    holdingNftsData.estValue += Number(info?.estValue) || 0
+    holdingNftsData.unrealizedGains += Number(info?.unrealizedGains) || 0
   }, {})
 
-  Income?.map((collection: any) => {
+  IncomeNfts?.map((collection: any) => {
     const info =
       collection?.incomeNfts &&
       collection?.incomeNfts?.reduce((acc: any, nft: any) => {
@@ -62,55 +62,55 @@ const HoldingDataGroup: React.FC = () => {
         return acc
       }, {})
 
-    incomeData.amount += Number(collection?.incomeNfts?.length) || 0
-    incomeData.buyPrice += Number(info?.buyPrice) || 0
-    incomeData.paidFee += Number(info?.paidFee) || 0
-    incomeData.sellPrice += Number(info?.sellPrice) || 0
-    incomeData.realizedGains += Number(info?.realizedGains) || 0
+    incomeNftsData.amount += Number(collection?.incomeNfts?.length) || 0
+    incomeNftsData.buyPrice += Number(info?.buyPrice) || 0
+    incomeNftsData.paidFee += Number(info?.paidFee) || 0
+    incomeNftsData.sellPrice += Number(info?.sellPrice) || 0
+    incomeNftsData.realizedGains += Number(info?.realizedGains) || 0
   }, {})
 
   return (
     <div className="flex h-full w-full flex-col content-between rounded-[12px] bg-blackCardBg p-2 text-[#DBDBDB] md:!rounded-md md:!p-[22px] lg:col-span-2 ">
-      {!isLoadingHolding ? (
+      {!isLoadingHoldingNfts ? (
         <div className="flex flex-col gap-4">
           <div className="flex justify-between font-Lexend !font-medium">
             <Typography className="!font-medium" size="lg">
               Holding Assets:
             </Typography>
             <Typography className="!font-medium" size="lg">
-              {holdingData?.amount ? holdingData.amount : '--'}
+              {holdingNftsData?.amount ? holdingNftsData.amount : '--'}
             </Typography>
           </div>
           <div className="flex flex-col gap-3 font-Inter font-normal">
             <HoldingDetailsSection
               crypto={crypto}
               title="Buy Price"
-              tooltipTitle={`${holdingData.buyPrice} ${crypto.symbol}`}
-              value={holdingData.buyPrice}
+              tooltipTitle={`${holdingNftsData.buyPrice} ${crypto.symbol}`}
+              value={holdingNftsData.buyPrice}
             />
             <HoldingDetailsSection
               crypto={crypto}
               title="Est. Fees"
-              tooltipTitle={`${holdingData.estFee} ${crypto.symbol}`}
-              value={holdingData.estFee}
+              tooltipTitle={`${holdingNftsData.estFee} ${crypto.symbol}`}
+              value={holdingNftsData.estFee}
             />
             <HoldingDetailsSection
               crypto={crypto}
               title="Est. Value"
-              tooltipTitle={`${holdingData.estValue} ${crypto.symbol}`}
-              value={holdingData.estValue}
+              tooltipTitle={`${holdingNftsData.estValue} ${crypto.symbol}`}
+              value={holdingNftsData.estValue}
             />
             <div className="flex justify-between">
               <Typography size="body">Unrealized Gains:</Typography>
               <Typography
-                className={`text-right ${holdingData?.unrealizedGains < 0 ? ' text-warning-300' : 'text-green'} `}
+                className={`text-right ${holdingNftsData?.unrealizedGains < 0 ? ' text-warning-300' : 'text-green'} `}
                 size="body"
               >
-                <TETooltip title={`${holdingData.unrealizedGains} ${crypto.symbol}`}>
+                <TETooltip title={`${holdingNftsData.unrealizedGains} ${crypto.symbol}`}>
                   <Typography>
-                    {holdingData.unrealizedGains ? (
+                    {holdingNftsData.unrealizedGains ? (
                       <>
-                        {holdingData.unrealizedGains?.toFixed(3)} {crypto.symbol}
+                        {holdingNftsData.unrealizedGains?.toFixed(3)} {crypto.symbol}
                       </>
                     ) : (
                       '--'
@@ -118,15 +118,15 @@ const HoldingDataGroup: React.FC = () => {
                   </Typography>
                 </TETooltip>
                 <Typography className="text-md">
-                  <TETooltip title={`${(holdingData.unrealizedGains / holdingData.buyPrice) * 100}%`}>
-                    {holdingData?.unrealizedGains ? (
+                  <TETooltip title={`${(holdingNftsData.unrealizedGains / holdingNftsData.buyPrice) * 100}%`}>
+                    {holdingNftsData?.unrealizedGains ? (
                       <>
                         {' '}
-                        {holdingData?.unrealizedGains === null
+                        {holdingNftsData?.unrealizedGains === null
                           ? '0.00%'
-                          : holdingData?.buyPrice === 0
+                          : holdingNftsData?.buyPrice === 0
                           ? '100.00%'
-                          : `${((holdingData.unrealizedGains / holdingData.buyPrice) * 100).toFixed(2)}%`}
+                          : `${((holdingNftsData.unrealizedGains / holdingNftsData.buyPrice) * 100).toFixed(2)}%`}
                       </>
                     ) : (
                       '--'
@@ -141,47 +141,47 @@ const HoldingDataGroup: React.FC = () => {
         <TableSkeletan limit={5} />
       )}
       <Line />
-      {!isLoadingIncome ? (
+      {!isLoadingIncomeNfts ? (
         <div className="flex flex-col gap-4">
           <div className="flex justify-between font-Lexend font-medium">
             <Typography className="!font-medium" size="lg">
               Sold Assets:
             </Typography>
             <Typography className="!font-medium" size="lg">
-              {incomeData?.amount ? incomeData.amount : '--'}
+              {incomeNftsData?.amount ? incomeNftsData.amount : '--'}
             </Typography>
           </div>
           <div className="flex flex-col gap-3 font-Inter font-normal">
             <HoldingDetailsSection
               crypto={crypto}
               title="Buy Price"
-              tooltipTitle={`${incomeData.buyPrice} ${crypto.symbol}`}
-              value={incomeData.buyPrice}
+              tooltipTitle={`${incomeNftsData.buyPrice} ${crypto.symbol}`}
+              value={incomeNftsData.buyPrice}
             />
             <HoldingDetailsSection
               crypto={crypto}
               title="Paid Fees"
-              tooltipTitle={`${incomeData.paidFee} ${crypto.symbol}`}
-              value={incomeData.paidFee}
+              tooltipTitle={`${incomeNftsData.paidFee} ${crypto.symbol}`}
+              value={incomeNftsData.paidFee}
             />
             <HoldingDetailsSection
               crypto={crypto}
               title="Sold Price"
-              tooltipTitle={`${incomeData.sellPrice} ${crypto.symbol}`}
-              value={incomeData.sellPrice}
+              tooltipTitle={`${incomeNftsData.sellPrice} ${crypto.symbol}`}
+              value={incomeNftsData.sellPrice}
             />
 
             <div className="flex justify-between">
               <Typography size="body">Realized Gains:</Typography>
               <Typography
-                className={`text-right ${incomeData?.realizedGains < 0 ? ' text-warning-300' : 'text-green'} `}
+                className={`text-right ${incomeNftsData?.realizedGains < 0 ? ' text-warning-300' : 'text-green'} `}
                 size="body"
               >
-                <TETooltip title={`${incomeData.realizedGains} ${crypto.symbol}`}>
+                <TETooltip title={`${incomeNftsData.realizedGains} ${crypto.symbol}`}>
                   <Typography>
-                    {incomeData?.realizedGains ? (
+                    {incomeNftsData?.realizedGains ? (
                       <>
-                        {incomeData.realizedGains?.toFixed(3)} {crypto.symbol}
+                        {incomeNftsData.realizedGains?.toFixed(3)} {crypto.symbol}
                       </>
                     ) : (
                       '--'
@@ -189,15 +189,15 @@ const HoldingDataGroup: React.FC = () => {
                   </Typography>
                 </TETooltip>
                 <Typography className="text-md">
-                  <TETooltip title={`${(incomeData.realizedGains / incomeData.buyPrice) * 100}%`}>
-                    {incomeData?.realizedGains ? (
+                  <TETooltip title={`${(incomeNftsData.realizedGains / incomeNftsData.buyPrice) * 100}%`}>
+                    {incomeNftsData?.realizedGains ? (
                       <>
                         {' '}
-                        {incomeData?.realizedGains === null
+                        {incomeNftsData?.realizedGains === null
                           ? '0.00%'
-                          : incomeData?.buyPrice === 0
+                          : incomeNftsData?.buyPrice === 0
                           ? '100.00%'
-                          : `${((incomeData.realizedGains / incomeData.buyPrice) * 100).toFixed(2)}%`}
+                          : `${((incomeNftsData.realizedGains / incomeNftsData.buyPrice) * 100).toFixed(2)}%`}
                       </>
                     ) : (
                       '--'
@@ -212,48 +212,52 @@ const HoldingDataGroup: React.FC = () => {
         <TableSkeletan limit={5} />
       )}
       <Line />
-      {!isLoadingIncome && !isLoadingHolding ? (
+      {!isLoadingIncomeNfts && !isLoadingHoldingNfts ? (
         <div className="flex flex-col gap-4 text-left">
           <div className="flex justify-between font-Lexend font-medium">
             <Typography className="!font-medium" size="lg">
               Total Assets:
             </Typography>
             <Typography className="!font-medium" size="lg">
-              {holdingData?.amount && incomeData?.amount ? holdingData.amount + incomeData.amount : '--'}
+              {holdingNftsData?.amount && incomeNftsData?.amount
+                ? holdingNftsData.amount + incomeNftsData.amount
+                : '--'}
             </Typography>
           </div>
           <div className="flex flex-col gap-3 font-Inter font-normal">
             <HoldingDetailsSection
               crypto={crypto}
               title="Buy Price"
-              tooltipTitle={`${holdingData.buyPrice + incomeData.buyPrice} ${crypto.symbol}`}
-              value={holdingData.buyPrice + incomeData.buyPrice}
+              tooltipTitle={`${holdingNftsData.buyPrice + incomeNftsData.buyPrice} ${crypto.symbol}`}
+              value={holdingNftsData.buyPrice + incomeNftsData.buyPrice}
             />
             <HoldingDetailsSection
               crypto={crypto}
               title="Paid Fees + Est. Fees"
-              tooltipTitle={`${holdingData.estFee + incomeData.paidFee} ${crypto.symbol}`}
-              value={holdingData.estFee + incomeData.paidFee}
+              tooltipTitle={`${holdingNftsData.estFee + incomeNftsData.paidFee} ${crypto.symbol}`}
+              value={holdingNftsData.estFee + incomeNftsData.paidFee}
             />
             <HoldingDetailsSection
               crypto={crypto}
               title="Income + Est. Value"
-              tooltipTitle={`${holdingData.estValue + incomeData.sellPrice} ${crypto.symbol}`}
-              value={holdingData.estValue + incomeData.sellPrice}
+              tooltipTitle={`${holdingNftsData.estValue + incomeNftsData.sellPrice} ${crypto.symbol}`}
+              value={holdingNftsData.estValue + incomeNftsData.sellPrice}
             />
             <div className="flex justify-between">
               <Typography size="body">Total Profit:</Typography>
               <Typography
                 className={`text-right ${
-                  holdingData.unrealizedGains + incomeData.realizedGains < 0 ? ' text-warning-300' : 'text-green'
+                  holdingNftsData.unrealizedGains + incomeNftsData.realizedGains < 0
+                    ? ' text-warning-300'
+                    : 'text-green'
                 } `}
                 size="body"
               >
-                <TETooltip title={`${holdingData.unrealizedGains + incomeData.realizedGains} ${crypto.symbol}`}>
+                <TETooltip title={`${holdingNftsData.unrealizedGains + incomeNftsData.realizedGains} ${crypto.symbol}`}>
                   <Typography>
-                    {holdingData?.unrealizedGains && incomeData?.realizedGains ? (
+                    {holdingNftsData?.unrealizedGains && incomeNftsData?.realizedGains ? (
                       <>
-                        {(holdingData.unrealizedGains + incomeData.realizedGains).toFixed(2)} {crypto.symbol}
+                        {(holdingNftsData.unrealizedGains + incomeNftsData.realizedGains).toFixed(2)} {crypto.symbol}
                       </>
                     ) : (
                       '--'
@@ -263,21 +267,21 @@ const HoldingDataGroup: React.FC = () => {
                 <Typography className="text-md">
                   <TETooltip
                     title={`${
-                      ((holdingData.unrealizedGains + incomeData.realizedGains) /
-                        (holdingData.buyPrice + incomeData.buyPrice)) *
+                      ((holdingNftsData.unrealizedGains + incomeNftsData.realizedGains) /
+                        (holdingNftsData.buyPrice + incomeNftsData.buyPrice)) *
                       100
                     }%`}
                   >
-                    {holdingData.unrealizedGains && incomeData?.realizedGains ? (
+                    {holdingNftsData.unrealizedGains && incomeNftsData?.realizedGains ? (
                       <>
                         {' '}
-                        {holdingData?.unrealizedGains === null || incomeData?.realizedGains === null
+                        {holdingNftsData?.unrealizedGains === null || incomeNftsData?.realizedGains === null
                           ? '0.00%'
-                          : holdingData.buyPrice + incomeData.buyPrice === 0
+                          : holdingNftsData.buyPrice + incomeNftsData.buyPrice === 0
                           ? '100.00%'
                           : `${(
-                              ((holdingData.unrealizedGains + incomeData.realizedGains) /
-                                (holdingData.buyPrice + incomeData.buyPrice)) *
+                              ((holdingNftsData.unrealizedGains + incomeNftsData.realizedGains) /
+                                (holdingNftsData.buyPrice + incomeNftsData.buyPrice)) *
                               100
                             ).toFixed(2)}%`}
                       </>

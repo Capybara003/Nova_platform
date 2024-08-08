@@ -31,11 +31,11 @@ const MarketAnaliticsTemplate: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isCheckboxChecked, setIsCheckboxChecked] = useState<boolean>(false)
   const [isCheckboxChecked2, setIsCheckboxChecked2] = useState<boolean>(false)
-  const { isLoadingHolding, Holding } = useHolding()
+  const { isLoadingHoldingNfts, HoldingNfts } = useHolding()
   const pathname = usePathname()
   const [currentPage, setCurrentPage] = useState<number>(0)
   const itemsPerPage = 10 // Set the number of items per page
-  const totalItems = Holding?.length
+  const totalItems = HoldingNfts?.length
   const handlePageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected)
   }
@@ -97,9 +97,9 @@ const MarketAnaliticsTemplate: React.FC = () => {
           </div>
           <div className="mt-[22px] h-full w-full">
             {activeTab === 0 && (
-              <div className={`${Holding?.data?.length > 0 ? 'max-h-[500px]' : 'max-h-auto'} overflow-y-auto`}>
+              <div className={`${HoldingNfts?.data?.length > 0 ? 'max-h-[500px]' : 'max-h-auto'} overflow-y-auto`}>
                 <MarketTable
-                  data={Holding?.data?.slice(startIndex, endIndex)}
+                  data={HoldingNfts?.data?.slice(startIndex, endIndex)}
                   headData={[
                     { name: 'Name', key: 'Name', isInfo: false, isSort: true },
                     { name: 'Price', key: 'Price', isInfo: false, isSort: true },
@@ -114,7 +114,7 @@ const MarketAnaliticsTemplate: React.FC = () => {
             {activeTab === 2 && <OverviewMarketTree />}
             {activeTab === 3 && <MarketAnalytics />}
           </div>
-          {activeTab === 0 && Holding?.length > 9 && (
+          {activeTab === 0 && HoldingNfts?.length > 9 && (
             <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
           )}
           <div>{activeTab === 3 && <AssetAllocation />}</div>

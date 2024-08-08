@@ -7,6 +7,7 @@ import { TETooltip } from 'tw-elements-react'
 import { IoArrowBack } from 'react-icons/io5'
 
 import AnalyticsBottomSection from './AnalyticsBottomSection'
+import { HoldingPageData } from './interface'
 
 import Web3Modal from 'context/WagmiModalProvider'
 import Button from 'design-systems/Atoms/Button'
@@ -36,21 +37,24 @@ const HoldingPageTemplate: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [walletLoading, setWalletLoading] = useState<boolean>(false)
   const {
-    isLoadingHolding,
-    Holding,
-    isLoadingIncome,
-    Income,
-    refetchHolding,
-    isFetchingHolding,
+    isLoadingHoldingNfts,
+    HoldingNfts,
+    isLoadingIncomeNfts,
+    IncomeNfts,
+    refetchHoldingNfts,
+    isFetchingHoldingNfts,
     soldDetails,
     isLoadingSoldDetails,
     HoldingGraph,
     isLoadingHoldingGraph,
+    isLoadingHoldingTokens,
+    HoldingTokens,
+    refetchHoldingTokens,
   } = useHolding()
-  const [holdingData, setHoldingData] = useState<any>([])
+  const [holdingData, setHoldingData] = useState<HoldingPageData>({ nfts: [], tokens: [] })
+  const [incomeData, setIncomeData] = useState<HoldingPageData>({ nfts: [], tokens: [] })
+  const [totalData, setTotalData] = useState<HoldingPageData>({ nfts: [], tokens: [] })
   const [soldDetail, setSoldDetails] = useState<any>({})
-  const [incomeData, setIncomeData] = useState<any>([])
-  const [totalData, setTotalData] = useState<any>([])
   const [HoldingGraphData, setHoldingGraphData] = useState<any>([])
   const [currentPage, setCurrentPage] = useState<number>(0)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
@@ -59,7 +63,7 @@ const HoldingPageTemplate: React.FC = () => {
 
   const width = useWindowWidth()
 
-  const { crypto } = useDataSelector('toggle')
+  const { crypto, tabName } = useDataSelector('toggle')
 
   useEffect(() => {
     if (LocalWallet !== null) {
@@ -68,45 +72,47 @@ const HoldingPageTemplate: React.FC = () => {
   }, [LocalWallet])
 
   const totalItems = useMemo(
-    () => (activeTab === 0 ? Holding?.length : activeTab === 1 ? Income?.length : totalData.length),
-    [activeTab, Holding?.length, Income?.length]
+    () => (activeTab === 0 ? HoldingNfts?.length : activeTab === 1 ? IncomeNfts?.length : totalData.nfts.length),
+    [activeTab, HoldingNfts?.length, IncomeNfts?.length]
   )
   const handlePageChange = ({ selected }: { selected: number }) => setCurrentPage(selected)
 
   const startIndex = currentPage * itemsPerPage
   const endIndex = startIndex + itemsPerPage
   const pageCount = Math.ceil(totalItems / itemsPerPage)
-  useMemo(() => Holding && setHoldingData(Holding), [Holding, isLoadingHolding])
-  useMemo(() => Income && setIncomeData(Income), [Income, isLoadingIncome])
   useMemo(
-    () => Income && Holding && setTotalData([...Holding, ...Income]),
-    [Holding, isLoadingHolding, Income, isLoadingIncome]
+    () => HoldingNfts && HoldingTokens && setHoldingData({ tokens: HoldingTokens, nfts: HoldingNfts }),
+    [HoldingNfts, isLoadingHoldingNfts, HoldingTokens, isLoadingHoldingTokens]
+  )
+  useMemo(() => IncomeNfts && setIncomeData({ ...IncomeNfts, nfts: IncomeNfts }), [IncomeNfts, isLoadingIncomeNfts])
+  useMemo(
+    () => IncomeNfts && HoldingNfts && setTotalData({ ...totalData, nfts: [...HoldingNfts, ...IncomeNfts] }),
+    [HoldingNfts, isLoadingHoldingNfts, IncomeNfts, isLoadingIncomeNfts]
   )
   useMemo(() => soldDetails && setSoldDetails(soldDetails), [soldDetails, isLoadingSoldDetails])
-  useMemo(() => refetchHolding(), [refetchHolding])
   useMemo(() => HoldingGraph && setHoldingGraphData(HoldingGraph), [HoldingGraphData, isLoadingHoldingGraph])
 
   const incomeTotalValue = useMemo(() => {
     return (
-      Income &&
-      Income.length > 0 &&
-      Income.reduce((acc: any, item: any) => {
+      IncomeNfts &&
+      IncomeNfts.length > 0 &&
+      IncomeNfts.reduce((acc: any, item: any) => {
         acc = (acc || 0) + (formatUSei(item?.floorPrice) * item?.incomeNfts?.length || 0)
         return acc
       }, 0)
     )
-  }, [Income])
+  }, [IncomeNfts])
 
   const holdingTotalValue = useMemo(() => {
     return (
-      Holding &&
-      Holding.length > 0 &&
-      Holding.reduce((acc: any, item: any) => {
+      HoldingNfts &&
+      HoldingNfts.length > 0 &&
+      HoldingNfts.reduce((acc: any, item: any) => {
         acc = (acc || 0) + (formatUSei(item?.floorPrice) * item?.nftsHolding?.length || 0)
         return acc
       }, 0)
     )
-  }, [Holding])
+  }, [HoldingNfts])
 
   const handleTabChange = (tab: number) => {
     setActiveTab(tab)
@@ -114,7 +120,7 @@ const HoldingPageTemplate: React.FC = () => {
   }
 
   const openModal = () => setIsModalOpen(true)
-  const DataLength = holdingData?.length || incomeData?.length
+  const DataLength = holdingData.nfts?.length || incomeData.nfts?.length
 
   return (
     <>
@@ -274,14 +280,14 @@ const HoldingPageTemplate: React.FC = () => {
                   <ExportPopOver
                     data={
                       activeTab === 0
-                        ? holdingData
+                        ? holdingData.nfts
                         : activeTab === 1
-                        ? incomeData
+                        ? incomeData.nfts
                         : activeTab === 2
-                        ? totalData
+                        ? totalData.nfts
                         : activeTab === 3
-                        ? holdingData
-                        : ''
+                        ? holdingData.nfts
+                        : []
                     }
                     filename="data"
                     // headers={activeTab === 0 ? holdingData : activeTab === 1 ? incomeData : holdingHeaders}
@@ -298,47 +304,77 @@ const HoldingPageTemplate: React.FC = () => {
                   )}
                 </div>
               </div>
-              <div>
-                <div className={` ${DataLength > 0 ? 'max-h-[500px]' : 'max-h-auto'}  overflow-y-auto pe-[12px]`}>
-                  {activeTab === 0 && (
-                    <>
-                      <HoldingTable
-                        crypto={crypto}
-                        data={holdingData?.slice(startIndex, endIndex)}
-                        totalValue={holdingTotalValue}
-                        footerData={holdingData}
-                        headData={[
-                          { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
-                          { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
-                          { name: 'Weight', key: 'Weight', isInfo: false, isSort: false, width: '100px' },
-                          { name: 'Floor', key: 'Floor', isInfo: false, isSort: false, width: '100px' },
-                          { name: 'Rank', key: 'Rank', isInfo: false, isSort: false, width: '100px' },
-                          { name: 'Buy Price', key: 'BuyPrice', isInfo: false, isSort: false, width: '100px' },
-                          { name: 'Est. Fees', key: 'EstFees', isInfo: false, isSort: false, width: '100px' },
-                          { name: 'Floor Value', key: 'FloorValue', isInfo: false, isSort: true, width: '150px' },
-                          {
-                            name: 'Unrealized Gains',
-                            key: 'UnrealizedGains',
-                            isInfo: true,
-                            isSort: false,
-                            width: '200px',
-                          },
-                          { name: 'Since Trade', key: 'SinceTrade', isInfo: false, isSort: false, width: '100px' },
-                          { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '100px' },
-                          { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
-                        ]}
-                        loading={isLoadingHolding}
-                      />
-                    </>
-                  )}
+              {tabName === 0 && (
+                <div>
+                  <div className={` ${DataLength > 0 ? 'max-h-[500px]' : 'max-h-auto'}  overflow-y-auto pe-[12px]`}>
+                    {activeTab === 0 && (
+                      <>
+                        <HoldingTable
+                          crypto={crypto}
+                          data={holdingData.nfts?.slice(startIndex, endIndex)}
+                          totalValue={holdingTotalValue}
+                          footerData={holdingData.nfts}
+                          headData={[
+                            { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
+                            { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
+                            { name: 'Weight', key: 'Weight', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Floor', key: 'Floor', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Rank', key: 'Rank', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Buy Price', key: 'BuyPrice', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Est. Fees', key: 'EstFees', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Floor Value', key: 'FloorValue', isInfo: false, isSort: true, width: '150px' },
+                            {
+                              name: 'Unrealized Gains',
+                              key: 'UnrealizedGains',
+                              isInfo: true,
+                              isSort: false,
+                              width: '200px',
+                            },
+                            { name: 'Since Trade', key: 'SinceTrade', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
+                          ]}
+                          loading={isLoadingHoldingNfts}
+                        />
+                      </>
+                    )}
 
-                  {activeTab === 1 && (
-                    <>
-                      <HoldingIndexTable
+                    {activeTab === 1 && (
+                      <>
+                        <HoldingIndexTable
+                          crypto={crypto}
+                          data={incomeData.nfts?.slice(startIndex, endIndex)}
+                          totalValue={incomeTotalValue}
+                          footerData={incomeData.nfts}
+                          headData={[
+                            { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
+                            { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
+                            { name: 'Weight', key: 'Weight', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Floor', key: 'Floor', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Rarity', key: 'Rarity', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Buy Price', key: 'BuyPrice', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Paid Fees', key: 'PaidFees', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Income', key: 'Income', isInfo: false, isSort: true, width: '150px' },
+                            {
+                              name: 'Realized Gains',
+                              key: 'RealizedGains',
+                              isInfo: true,
+                              isSort: false,
+                              width: '200px',
+                            },
+                            { name: 'Since Trade', key: 'SinceTrade', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
+                          ]}
+                          loading={isLoadingIncomeNfts}
+                        />
+                      </>
+                    )}
+                    {activeTab === 2 && (
+                      <HoldingTotalTable
                         crypto={crypto}
-                        data={incomeData?.slice(startIndex, endIndex)}
-                        totalValue={incomeTotalValue}
-                        footerData={incomeData}
+                        data={totalData.nfts.slice(startIndex, endIndex)}
+                        totalValue={holdingTotalValue + incomeTotalValue}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                           { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
@@ -346,86 +382,336 @@ const HoldingPageTemplate: React.FC = () => {
                           { name: 'Floor', key: 'Floor', isInfo: false, isSort: false, width: '100px' },
                           { name: 'Rarity', key: 'Rarity', isInfo: false, isSort: false, width: '100px' },
                           { name: 'Buy Price', key: 'BuyPrice', isInfo: false, isSort: false, width: '100px' },
-                          { name: 'Paid Fees', key: 'PaidFees', isInfo: false, isSort: false, width: '100px' },
-                          { name: 'Income', key: 'Income', isInfo: false, isSort: true, width: '150px' },
-                          { name: 'Realized Gains', key: 'RealizedGains', isInfo: true, isSort: false, width: '200px' },
+                          {
+                            name: 'Est. Fees + Paid Fees',
+                            key: 'EstFeesPaidFees',
+                            isInfo: false,
+                            isSort: false,
+                            width: '200px',
+                          },
+                          {
+                            name: 'Floor Value + Income',
+                            key: 'FloorValueIncome',
+                            isInfo: false,
+                            isSort: false,
+                            width: '200px',
+                          },
+                          { name: 'Gains', key: 'Gains', isInfo: false, isSort: false, width: '100px' },
                           { name: 'Since Trade', key: 'SinceTrade', isInfo: false, isSort: false, width: '100px' },
-                          { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '100px' },
+                          { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '105px' },
                           { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
                         ]}
-                        loading={isLoadingIncome}
                       />
-                    </>
-                  )}
-                  {activeTab === 2 && (
-                    <HoldingTotalTable
-                      crypto={crypto}
-                      data={totalData.slice(startIndex, endIndex)}
-                      totalValue={holdingTotalValue + incomeTotalValue}
-                      headData={[
-                        { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
-                        { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
-                        { name: 'Weight', key: 'Weight', isInfo: false, isSort: false, width: '100px' },
-                        { name: 'Floor', key: 'Floor', isInfo: false, isSort: false, width: '100px' },
-                        { name: 'Rarity', key: 'Rarity', isInfo: false, isSort: false, width: '100px' },
-                        { name: 'Buy Price', key: 'BuyPrice', isInfo: false, isSort: false, width: '100px' },
-                        {
-                          name: 'Est. Fees + Paid Fees',
-                          key: 'EstFeesPaidFees',
-                          isInfo: false,
-                          isSort: false,
-                          width: '200px',
-                        },
-                        {
-                          name: 'Floor Value + Income',
-                          key: 'FloorValueIncome',
-                          isInfo: false,
-                          isSort: false,
-                          width: '200px',
-                        },
-                        { name: 'Gains', key: 'Gains', isInfo: false, isSort: false, width: '100px' },
-                        { name: 'Since Trade', key: 'SinceTrade', isInfo: false, isSort: false, width: '100px' },
-                        { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '105px' },
-                        { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
-                      ]}
-                    />
-                  )}
-                  {activeTab === 3 && (
-                    <HoldingAnalyticsTable
-                      crypto={crypto}
-                      data={Holding?.slice(startIndex, endIndex)}
-                      totalValue={holdingTotalValue}
-                      headData={[
-                        { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
-                        { name: 'Amount', key: 'Amount', isInfo: false, isSort: true, width: '70px' },
-                        { name: 'Weight', key: 'Weight', isInfo: false, isSort: true, width: '100px' },
-                        { name: 'Floor', key: 'Floor', isInfo: false, isSort: true, width: '100px' },
-                        { name: 'Rank', key: 'Rank', isInfo: true, isSort: true, width: '100px' },
-                        { name: 'Buy Price', key: 'BuyPrice', isInfo: true, isSort: true, width: '150px' },
-                        { name: 'Est. Fees', key: 'EstFees', isInfo: true, isSort: true, width: '200px' },
-                        { name: 'Floor Value', key: 'FloorValue', isInfo: true, isSort: true, width: '150px' },
-                        {
-                          name: 'Unrealized Gains',
-                          key: 'UnrealizedGains',
-                          isInfo: true,
-                          isSort: true,
-                          width: '200px',
-                        },
-                        { name: 'Since Trade', key: 'SinceTrade', isInfo: true, isSort: true, width: '200px' },
-                        { name: 'Holding Time', key: 'HoldingTime', isInfo: true, isSort: true, width: '200px' },
-                        { name: 'Link', key: 'Link', isInfo: false, isSort: true, width: '70px' },
-                      ]}
-                      loading={isLoadingIncome}
-                    />
+                    )}
+                    {activeTab === 3 && (
+                      <HoldingAnalyticsTable
+                        crypto={crypto}
+                        data={holdingData.nfts?.slice(startIndex, endIndex)}
+                        totalValue={holdingTotalValue}
+                        headData={[
+                          { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
+                          { name: 'Amount', key: 'Amount', isInfo: false, isSort: true, width: '70px' },
+                          { name: 'Weight', key: 'Weight', isInfo: false, isSort: true, width: '100px' },
+                          { name: 'Floor', key: 'Floor', isInfo: false, isSort: true, width: '100px' },
+                          { name: 'Rank', key: 'Rank', isInfo: true, isSort: true, width: '100px' },
+                          { name: 'Buy Price', key: 'BuyPrice', isInfo: true, isSort: true, width: '150px' },
+                          { name: 'Est. Fees', key: 'EstFees', isInfo: true, isSort: true, width: '200px' },
+                          { name: 'Floor Value', key: 'FloorValue', isInfo: true, isSort: true, width: '150px' },
+                          {
+                            name: 'Unrealized Gains',
+                            key: 'UnrealizedGains',
+                            isInfo: true,
+                            isSort: true,
+                            width: '200px',
+                          },
+                          { name: 'Since Trade', key: 'SinceTrade', isInfo: true, isSort: true, width: '200px' },
+                          { name: 'Holding Time', key: 'HoldingTime', isInfo: true, isSort: true, width: '200px' },
+                          { name: 'Link', key: 'Link', isInfo: false, isSort: true, width: '70px' },
+                        ]}
+                        loading={isLoadingHoldingNfts}
+                      />
+                    )}
+                  </div>
+                  {((holdingData.nfts?.length > 9 && activeTab === 0) ||
+                    (incomeData.nfts?.length > 9 && activeTab === 1) ||
+                    (totalData.nfts.length > 9 && activeTab === 2) ||
+                    (holdingData.nfts.length > 9 && activeTab === 3)) && (
+                    <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
                   )}
                 </div>
-                {((holdingData?.length > 9 && activeTab === 0) ||
-                  (incomeData?.length > 9 && activeTab === 1) ||
-                  (totalData.length > 9 && activeTab === 2) ||
-                  (holdingData.length > 9 && activeTab === 3)) && (
-                  <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
-                )}
-              </div>
+              )}
+              {tabName === 1 && (
+                <div>
+                  <div className={` ${DataLength > 0 ? 'max-h-[500px]' : 'max-h-auto'}  overflow-y-auto pe-[12px]`}>
+                    {activeTab === 0 && (
+                      <>
+                        <HoldingTable
+                          crypto={crypto}
+                          data={holdingData.nfts?.slice(startIndex, endIndex)}
+                          totalValue={holdingTotalValue}
+                          footerData={holdingData.nfts}
+                          headData={[
+                            { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
+                            { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
+                            { name: 'Weight', key: 'Weight', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Floor', key: 'Floor', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Rank', key: 'Rank', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Buy Price', key: 'BuyPrice', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Est. Fees', key: 'EstFees', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Floor Value', key: 'FloorValue', isInfo: false, isSort: true, width: '150px' },
+                            {
+                              name: 'Unrealized Gains',
+                              key: 'UnrealizedGains',
+                              isInfo: true,
+                              isSort: false,
+                              width: '200px',
+                            },
+                            { name: 'Since Trade', key: 'SinceTrade', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
+                          ]}
+                          loading={isLoadingHoldingNfts}
+                        />
+                      </>
+                    )}
+
+                    {activeTab === 1 && (
+                      <>
+                        <HoldingIndexTable
+                          crypto={crypto}
+                          data={incomeData.nfts?.slice(startIndex, endIndex)}
+                          totalValue={incomeTotalValue}
+                          footerData={incomeData.nfts}
+                          headData={[
+                            { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
+                            { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
+                            { name: 'Weight', key: 'Weight', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Floor', key: 'Floor', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Rarity', key: 'Rarity', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Buy Price', key: 'BuyPrice', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Paid Fees', key: 'PaidFees', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Income', key: 'Income', isInfo: false, isSort: true, width: '150px' },
+                            {
+                              name: 'Realized Gains',
+                              key: 'RealizedGains',
+                              isInfo: true,
+                              isSort: false,
+                              width: '200px',
+                            },
+                            { name: 'Since Trade', key: 'SinceTrade', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
+                          ]}
+                          loading={isLoadingIncomeNfts}
+                        />
+                      </>
+                    )}
+                    {activeTab === 2 && (
+                      <HoldingTotalTable
+                        crypto={crypto}
+                        data={totalData.nfts.slice(startIndex, endIndex)}
+                        totalValue={holdingTotalValue + incomeTotalValue}
+                        headData={[
+                          { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
+                          { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
+                          { name: 'Weight', key: 'Weight', isInfo: false, isSort: false, width: '100px' },
+                          { name: 'Floor', key: 'Floor', isInfo: false, isSort: false, width: '100px' },
+                          { name: 'Rarity', key: 'Rarity', isInfo: false, isSort: false, width: '100px' },
+                          { name: 'Buy Price', key: 'BuyPrice', isInfo: false, isSort: false, width: '100px' },
+                          {
+                            name: 'Est. Fees + Paid Fees',
+                            key: 'EstFeesPaidFees',
+                            isInfo: false,
+                            isSort: false,
+                            width: '200px',
+                          },
+                          {
+                            name: 'Floor Value + Income',
+                            key: 'FloorValueIncome',
+                            isInfo: false,
+                            isSort: false,
+                            width: '200px',
+                          },
+                          { name: 'Gains', key: 'Gains', isInfo: false, isSort: false, width: '100px' },
+                          { name: 'Since Trade', key: 'SinceTrade', isInfo: false, isSort: false, width: '100px' },
+                          { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '105px' },
+                          { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
+                        ]}
+                      />
+                    )}
+                    {activeTab === 3 && (
+                      <HoldingAnalyticsTable
+                        crypto={crypto}
+                        data={holdingData.nfts?.slice(startIndex, endIndex)}
+                        totalValue={holdingTotalValue}
+                        headData={[
+                          { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
+                          { name: 'Amount', key: 'Amount', isInfo: false, isSort: true, width: '70px' },
+                          { name: 'Weight', key: 'Weight', isInfo: false, isSort: true, width: '100px' },
+                          { name: 'Floor', key: 'Floor', isInfo: false, isSort: true, width: '100px' },
+                          { name: 'Rank', key: 'Rank', isInfo: true, isSort: true, width: '100px' },
+                          { name: 'Buy Price', key: 'BuyPrice', isInfo: true, isSort: true, width: '150px' },
+                          { name: 'Est. Fees', key: 'EstFees', isInfo: true, isSort: true, width: '200px' },
+                          { name: 'Floor Value', key: 'FloorValue', isInfo: true, isSort: true, width: '150px' },
+                          {
+                            name: 'Unrealized Gains',
+                            key: 'UnrealizedGains',
+                            isInfo: true,
+                            isSort: true,
+                            width: '200px',
+                          },
+                          { name: 'Since Trade', key: 'SinceTrade', isInfo: true, isSort: true, width: '200px' },
+                          { name: 'Holding Time', key: 'HoldingTime', isInfo: true, isSort: true, width: '200px' },
+                          { name: 'Link', key: 'Link', isInfo: false, isSort: true, width: '70px' },
+                        ]}
+                        loading={isLoadingHoldingNfts}
+                      />
+                    )}
+                  </div>
+                  {((holdingData.nfts?.length > 9 && activeTab === 0) ||
+                    (incomeData.nfts?.length > 9 && activeTab === 1) ||
+                    (totalData.nfts.length > 9 && activeTab === 2) ||
+                    (holdingData.nfts.length > 9 && activeTab === 3)) && (
+                    <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
+                  )}
+                </div>
+              )}
+              {tabName === 2 && (
+                <div>
+                  <div className={` ${DataLength > 0 ? 'max-h-[500px]' : 'max-h-auto'}  overflow-y-auto pe-[12px]`}>
+                    {activeTab === 0 && (
+                      <>
+                        <HoldingTable
+                          crypto={crypto}
+                          data={holdingData.tokens?.slice(startIndex, endIndex)}
+                          totalValue={holdingTotalValue}
+                          footerData={holdingData.tokens}
+                          headData={[
+                            { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
+                            { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
+                            { name: 'Weight', key: 'Weight', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Floor', key: 'Floor', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Rank', key: 'Rank', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Buy Price', key: 'BuyPrice', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Est. Fees', key: 'EstFees', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Floor Value', key: 'FloorValue', isInfo: false, isSort: true, width: '150px' },
+                            {
+                              name: 'Unrealized Gains',
+                              key: 'UnrealizedGains',
+                              isInfo: true,
+                              isSort: false,
+                              width: '200px',
+                            },
+                            { name: 'Since Trade', key: 'SinceTrade', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
+                          ]}
+                          loading={isLoadingHoldingTokens}
+                        />
+                      </>
+                    )}
+
+                    {activeTab === 1 && (
+                      <>
+                        <HoldingIndexTable
+                          crypto={crypto}
+                          data={incomeData.tokens?.slice(startIndex, endIndex)}
+                          totalValue={incomeTotalValue}
+                          footerData={incomeData.tokens}
+                          headData={[
+                            { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
+                            { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
+                            { name: 'Weight', key: 'Weight', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Floor', key: 'Floor', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Rarity', key: 'Rarity', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Buy Price', key: 'BuyPrice', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Paid Fees', key: 'PaidFees', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Income', key: 'Income', isInfo: false, isSort: true, width: '150px' },
+                            {
+                              name: 'Realized Gains',
+                              key: 'RealizedGains',
+                              isInfo: true,
+                              isSort: false,
+                              width: '200px',
+                            },
+                            { name: 'Since Trade', key: 'SinceTrade', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '100px' },
+                            { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
+                          ]}
+                          loading={isLoadingIncomeNfts}
+                        />
+                      </>
+                    )}
+                    {activeTab === 2 && (
+                      <HoldingTotalTable
+                        crypto={crypto}
+                        data={totalData.tokens.slice(startIndex, endIndex)}
+                        totalValue={holdingTotalValue + incomeTotalValue}
+                        headData={[
+                          { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
+                          { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
+                          { name: 'Weight', key: 'Weight', isInfo: false, isSort: false, width: '100px' },
+                          { name: 'Floor', key: 'Floor', isInfo: false, isSort: false, width: '100px' },
+                          { name: 'Rarity', key: 'Rarity', isInfo: false, isSort: false, width: '100px' },
+                          { name: 'Buy Price', key: 'BuyPrice', isInfo: false, isSort: false, width: '100px' },
+                          {
+                            name: 'Est. Fees + Paid Fees',
+                            key: 'EstFeesPaidFees',
+                            isInfo: false,
+                            isSort: false,
+                            width: '200px',
+                          },
+                          {
+                            name: 'Floor Value + Income',
+                            key: 'FloorValueIncome',
+                            isInfo: false,
+                            isSort: false,
+                            width: '200px',
+                          },
+                          { name: 'Gains', key: 'Gains', isInfo: false, isSort: false, width: '100px' },
+                          { name: 'Since Trade', key: 'SinceTrade', isInfo: false, isSort: false, width: '100px' },
+                          { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '105px' },
+                          { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
+                        ]}
+                      />
+                    )}
+                    {activeTab === 3 && (
+                      <HoldingAnalyticsTable
+                        crypto={crypto}
+                        data={holdingData.tokens?.slice(startIndex, endIndex)}
+                        totalValue={holdingTotalValue}
+                        headData={[
+                          { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
+                          { name: 'Amount', key: 'Amount', isInfo: false, isSort: true, width: '70px' },
+                          { name: 'Weight', key: 'Weight', isInfo: false, isSort: true, width: '100px' },
+                          { name: 'Floor', key: 'Floor', isInfo: false, isSort: true, width: '100px' },
+                          { name: 'Rank', key: 'Rank', isInfo: true, isSort: true, width: '100px' },
+                          { name: 'Buy Price', key: 'BuyPrice', isInfo: true, isSort: true, width: '150px' },
+                          { name: 'Est. Fees', key: 'EstFees', isInfo: true, isSort: true, width: '200px' },
+                          { name: 'Floor Value', key: 'FloorValue', isInfo: true, isSort: true, width: '150px' },
+                          {
+                            name: 'Unrealized Gains',
+                            key: 'UnrealizedGains',
+                            isInfo: true,
+                            isSort: true,
+                            width: '200px',
+                          },
+                          { name: 'Since Trade', key: 'SinceTrade', isInfo: true, isSort: true, width: '200px' },
+                          { name: 'Holding Time', key: 'HoldingTime', isInfo: true, isSort: true, width: '200px' },
+                          { name: 'Link', key: 'Link', isInfo: false, isSort: true, width: '70px' },
+                        ]}
+                        loading={isLoadingHoldingTokens}
+                      />
+                    )}
+                  </div>
+                  {((holdingData.tokens?.length > 9 && activeTab === 0) ||
+                    (incomeData.tokens?.length > 9 && activeTab === 1) ||
+                    (totalData.tokens.length > 9 && activeTab === 2) ||
+                    (holdingData.tokens.length > 9 && activeTab === 3)) && (
+                    <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
