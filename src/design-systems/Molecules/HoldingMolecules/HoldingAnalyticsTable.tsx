@@ -377,7 +377,7 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                   .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
               }%`
               return (
-                <React.Fragment key={index}>
+                <React.Fragment key={token?.demon}>
                   <tr className="cursor-pointer">
                     <td className="min-w-[230px]">
                       <div className="flex items-center justify-center gap-2">
@@ -415,13 +415,15 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                         : '--'}
                     </td>
                     <td className="w-[40px] overflow-hidden overflow-ellipsis">
-                      {token?.floorPrice !== undefined && totalValue !== 0
-                        ? `${((token.floorPrice * 100) / totalValue).toFixed(2)}%`
+                      {token?.worthUsei && totalValue !== 0
+                        ? `${((formatUnits(token?.worthUsei, 6) * 100) / totalValue)?.toFixed(2)}%`
                         : '--'}
                     </td>
                     <td className="w-[100px] overflow-hidden overflow-ellipsis">
-                      {token?.floorPrice !== undefined && token?.floorPrice !== null
-                        ? `${formatUSei(token.floorPrice)?.toFixed(2)} ${crypto?.symbol}`
+                      {token?.amount && token?.worthUsei
+                        ? `${(
+                            formatUnits(token?.worthUsei, 6) / formatUnits(token.amount, token?.decimals || 6)
+                          )?.toFixed(6)} SEI`
                         : '--'}
                     </td>
                     <td>{token?.rank && token?.rank !== null ? token?.rank : '--'}</td>

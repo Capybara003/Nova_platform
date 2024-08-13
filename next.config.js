@@ -19,6 +19,8 @@ module.exports = {
       'images.jpgstoreapis.com',
       "storage.googleapis.com",
       'arweave.net',
+      'https://ymsnf3yqbyy6n75nd5663bfjgzo4udko7ibrdxubdvuugszn35ia.arweave.net',
+      'https://27edyvkbiykc3ft663ig3e66tz5gzeyiaullpiw3obfjsz2izusq.arweave.net',
     ],
     unoptimized: true,
   },
