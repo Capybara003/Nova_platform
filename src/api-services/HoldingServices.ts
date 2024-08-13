@@ -38,6 +38,18 @@ class HoldingServices {
     )
   }
 
+  getTokensTopGainers = async (data: { wallet_address: string }) => {
+    return CoreAPIService.get<any>(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_TOKENS_TOP}/${data.wallet_address}`
+    )
+  }
+
+  getTokensTradeInfo = async (data: { wallet_address: string }) => {
+    return CoreAPIService.get<any>(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_TOKENS_TRADE_INFO}/${data.wallet_address}`
+    )
+  }
+
   postAssetDetails = async (AssetsDetails: AssetsDetailsBlock) => {
     return CoreAPIService.post<any>(
       `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.POST_ASSETS_DETAILS}`,

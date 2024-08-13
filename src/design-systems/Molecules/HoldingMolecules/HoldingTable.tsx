@@ -87,7 +87,6 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
       setCheckboxes([])
     }
   }
-  console.log(data)
 
   return (
     <table className="rounded-corners w-full rounded-sm font-Lexend">
@@ -447,7 +446,7 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
             }%`
 
             return (
-              <React.Fragment key={index}>
+              <React.Fragment key={token?.demon}>
                 <tr className="cursor-pointer">
                   <td className="min-w-[230px]">
                     <>
@@ -514,7 +513,11 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                     </TETooltip>
                   </td>
                   <td className="">
-                    <TETooltip title={token?.size}>{token?.size ? parseInt(token?.size).toFixed(2) : '--'}</TETooltip>
+                    <TETooltip title={`${((formatUnits(token?.worthUsei, 6) * 100) / totalValue)?.toFixed(2)}%`}>
+                      {token?.worthUsei && totalValue !== 0
+                        ? `${((formatUnits(token?.worthUsei, 6) * 100) / totalValue)?.toFixed(2)}%`
+                        : '--'}
+                    </TETooltip>
                   </td>
                   <td className=" overflow-hidden overflow-ellipsis">
                     <div>

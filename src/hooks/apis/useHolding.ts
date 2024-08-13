@@ -125,6 +125,24 @@ export const useHolding = () => {
     }
   )
 
+  const { isLoading: isLoadingTokensTopGainer, data: TokensTopGainer } = useQuery(
+    [API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_TOKENS_TOP],
+    () => HoldingServices.getTokensTopGainers({ wallet_address: 'sei1d649tnttdphknafag5xwz69fd55v9rllrnrt4h' }),
+    {
+      select: res => res,
+      refetchOnWindowFocus: false,
+    }
+  )
+
+  const { isLoading: isLoadingTokenTradeInfo, data: TokenTradeInfo } = useQuery(
+    [API_ENDPOINTS.PUBLIC.GET_TOKENS_TRADE_INFO],
+    () => HoldingServices.getTokensTradeInfo({ wallet_address: 'sei1d649tnttdphknafag5xwz69fd55v9rllrnrt4h' }),
+    {
+      select: res => res,
+      refetchOnWindowFocus: false,
+    }
+  )
+
   const {
     isLoading: isLoadingWallet,
     data: walletConnect,
@@ -185,5 +203,9 @@ export const useHolding = () => {
     HoldingTokens,
     refetchHoldingTokens,
     isFetchingHoldingTokens,
+    isLoadingTokensTopGainer,
+    TokensTopGainer,
+    isLoadingTokenTradeInfo,
+    TokenTradeInfo,
   }
 }
