@@ -16,16 +16,16 @@ const tabs: tabType = {
   2: 'token',
 }
 export const useHolding = () => {
-  const { binance, coinbase } = useDataSelector('exchange')
-  const { data: globalData } = useDataSelector('globalData')
+  // const { binance, coinbase } = useDataSelector('exchange')
+  // const { data: globalData } = useDataSelector('globalData')
   const { wallets } = useDataSelector('walletSlice')
-  const [walletUpdate, setWalletUpdate] = useState<string[]>([])
+  const [activeAddresses, setActiveAddresses] = useState<string[]>([])
   useMemo(() => {
     const activeWallets = wallets?.filter(item => item?.isActive)
-    setWalletUpdate(activeWallets?.map(item => item?.walletAddress) || [])
+    setActiveAddresses(activeWallets?.map(item => item?.walletAddress) || [])
   }, [wallets])
 
-  const { tabName } = useDataSelector('toggle')
+  // const { tabName } = useDataSelector('toggle')
 
   const Local = localStorage.getItem('id')
   const [token, setToken] = useState(Local)
@@ -42,28 +42,28 @@ export const useHolding = () => {
     }
   }
 
-  const data = removeEmptyKey({
-    BINANCE_API_KEY: binance.api_key,
-    BINANCE_SECRET_KEY: binance.api_secret,
-    COINBASE_API_KEY: coinbase.api_key,
-    COINBASE_SECRET_KEY: coinbase.api_secret,
-    marketplace: coinbase.api_key ? 'coinbase' : binance.api_key ? 'binance' : '',
-    userId: token,
-    userAddress: walletUpdate,
-    search: globalData.search,
-    tab: tabs[tabName],
-    // wallets?.filter(walletItem => walletItem.isActive)?.map(walletItem => walletItem.walletAddress) || [],
-    type:
-      tabName !== 2
-        ? tabs[tabName]
-        : binance.api_key && coinbase.api_key
-        ? 'allToken'
-        : binance.api_key
-        ? 'binanceToken'
-        : coinbase.api_key
-        ? 'coinbaseToken'
-        : 'allToken',
-  })
+  // const data = removeEmptyKey({
+  //   BINANCE_API_KEY: binance.api_key,
+  //   BINANCE_SECRET_KEY: binance.api_secret,
+  //   COINBASE_API_KEY: coinbase.api_key,
+  //   COINBASE_SECRET_KEY: coinbase.api_secret,
+  //   marketplace: coinbase.api_key ? 'coinbase' : binance.api_key ? 'binance' : '',
+  //   userId: token,
+  //   userAddress: walletUpdate,
+  //   search: globalData.search,
+  //   tab: tabs[tabName],
+  //   wallets: wallets?.filter(walletItem => walletItem.isActive)?.map(walletItem => walletItem.walletAddress) || [],
+  //   type:
+  //     tabName !== 2
+  //       ? tabs[tabName]
+  //       : binance.api_key && coinbase.api_key
+  //       ? 'allToken'
+  //       : binance.api_key
+  //       ? 'binanceToken'
+  //       : coinbase.api_key
+  //       ? 'coinbaseToken'
+  //       : 'allToken',
+  // })
 
   // ===================== NFT Data =====================
 
@@ -74,9 +74,9 @@ export const useHolding = () => {
     isFetching: isFetchingHoldingNfts,
   } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_HOLDING_NFTS],
-    () => HoldingServices.getHoldingNfts({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
+    () => HoldingServices.getHoldingNfts({ wallet_addresses: activeAddresses }),
     {
-      select: res => res.collections,
+      select: res => (res.collections?.result === null ? [] : res.collections),
       refetchOnWindowFocus: false,
       // enabled: coinbase.is_connected || binance.is_connected || data.walletAddress.length > 0,
     }
@@ -84,27 +84,57 @@ export const useHolding = () => {
 
   const { isLoading: isLoadingIncomeNfts, data: IncomeNfts } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_INCOME_NFTS],
-    () => HoldingServices.getIncomeNfts({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
+    () => HoldingServices.getIncomeNfts({ wallet_addresses: activeAddresses }),
     {
-      select: res => res,
+      select: res => (res?.result === null ? [] : res),
       refetchOnWindowFocus: false,
     }
   )
 
   const { isLoading: isLoadingNftsTopGainer, data: NftsTopGainer } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_NFTS_TOP],
-    () => HoldingServices.getNftsTopGainers({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
+    () => HoldingServices.getNftsTopGainers({ wallet_addresses: activeAddresses }),
     {
-      select: res => res,
+      select: res => (res?.result === null ? { topGainers: [], topLosser: [] } : res),
       refetchOnWindowFocus: false,
     }
   )
 
   const { isLoading: isLoadingNftTradeInfo, data: NftTradeInfo } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_NFTS_TRADE_INFO],
-    () => HoldingServices.getNftsTradeInfo({ wallet_address: 'sei16zjp47vwu48uvjdetc3rn477d8td5dlwnsd0n4' }),
+    () => HoldingServices.getNftsTradeInfo({ wallet_addresses: activeAddresses }),
     {
-      select: res => res,
+      select: res =>
+        res?.result === null
+          ? {
+              ageOfNftAssets:
+                {
+                  level1: [],
+                  level2: [],
+                  level3: [],
+                  level4: [],
+                  level5: [],
+                  level6: [],
+                } || null,
+              transaction: {
+                day: {},
+                week: {},
+                month: {},
+              },
+              volume: {
+                buyVolume: {
+                  day: {},
+                  week: {},
+                  month: {},
+                },
+                sellVolume: {
+                  day: {},
+                  week: {},
+                  month: {},
+                },
+              },
+            }
+          : res,
       refetchOnWindowFocus: false,
     }
   )
@@ -118,27 +148,46 @@ export const useHolding = () => {
     isFetching: isFetchingHoldingTokens,
   } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_HOLDING_TOKENS],
-    () => HoldingServices.getHoldingTokens({ wallet_address: 'sei1d649tnttdphknafag5xwz69fd55v9rllrnrt4h' }),
+    () => HoldingServices.getHoldingTokens({ wallet_addresses: activeAddresses }),
     {
-      select: res => res,
+      select: res => (res?.result === null ? [] : res),
       refetchOnWindowFocus: false,
     }
   )
 
   const { isLoading: isLoadingTokensTopGainer, data: TokensTopGainer } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_TOKENS_TOP],
-    () => HoldingServices.getTokensTopGainers({ wallet_address: 'sei1d649tnttdphknafag5xwz69fd55v9rllrnrt4h' }),
+    () => HoldingServices.getTokensTopGainers({ wallet_addresses: activeAddresses }),
     {
-      select: res => res,
+      select: res => (res?.result === null ? { topGainers: [], topLosser: [] } : res),
       refetchOnWindowFocus: false,
     }
   )
 
   const { isLoading: isLoadingTokenTradeInfo, data: TokenTradeInfo } = useQuery(
     [API_ENDPOINTS.PUBLIC.GET_TOKENS_TRADE_INFO],
-    () => HoldingServices.getTokensTradeInfo({ wallet_address: 'sei1d649tnttdphknafag5xwz69fd55v9rllrnrt4h' }),
+    () => HoldingServices.getTokensTradeInfo({ wallet_addresses: activeAddresses }),
     {
-      select: res => res,
+      select: res =>
+        res?.result === null
+          ? {
+              all: {
+                day: {},
+                week: {},
+                month: {},
+              },
+              buy: {
+                day: {},
+                week: {},
+                month: {},
+              },
+              sell: {
+                day: {},
+                week: {},
+                month: {},
+              },
+            }
+          : res,
       refetchOnWindowFocus: false,
     }
   )
