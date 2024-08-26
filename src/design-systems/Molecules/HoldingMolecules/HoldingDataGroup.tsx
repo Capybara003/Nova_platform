@@ -84,8 +84,6 @@ const HoldingDataGroup: React.FC = () => {
     incomeNftsData.realizedGains += Number(info?.realizedGains) || 0
   }, {})
 
-  console.log(HoldingTokens)
-
   HoldingTokens?.map((collection: any) => {
     holdingTokensData.amount += Number(collection?.nftsHolding?.length) || 0
     holdingTokensData.buyPrice += Number(collection?.buyPrice) || 0

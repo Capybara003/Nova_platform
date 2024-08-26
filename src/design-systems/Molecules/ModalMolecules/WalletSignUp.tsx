@@ -73,6 +73,7 @@ const WalletSignUp = ({ isOpen, setOpen, walletRepo }: WalletModalProps) => {
     wallet
       .connect()
       .then(async () => {
+        console.log(wallet)
         if (wallet.walletStatus === 'Connected') {
           const localUserData = localStorage.getItem('id')
           if (localUserData && localUserData !== undefined && localUserData !== null) {

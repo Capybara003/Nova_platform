@@ -34,11 +34,11 @@ const AnalyticsBottomSection: React.FC = () => {
   const [topGainerData, setTopGainerData] = useState<any>({
     nfts: {
       topGainers: [],
-      topLooser: [],
+      topLosser: [],
     },
     tokens: {
       topGainers: [],
-      topLooser: [],
+      topLosser: [],
     },
   })
   const [nftTradeData, setNftTradeData] = useState<any>({
@@ -102,36 +102,42 @@ const AnalyticsBottomSection: React.FC = () => {
       nfts:
         HoldingNfts &&
         HoldingNfts.length > 0 &&
-        HoldingNfts.reduce((acc: any, item: any) => {
-          const info =
-            item?.nftsHolding &&
-            item?.nftsHolding?.reduce((acc: any, nft: any) => {
-              acc = (acc || 0) + formatUSei(nft?.floorPrice) || 0
-              return acc
-            }, 0)
+        HoldingNfts.reduce(
+          (acc: any, item: any) => {
+            const info =
+              item?.nftsHolding &&
+              item?.nftsHolding?.reduce((acc: any, nft: any) => {
+                acc = (acc || 0) + formatUSei(nft?.floorPrice) || 0
+                return acc
+              }, 0)
 
-          acc['total'] = (acc['total'] || 0) + (info || 0)
+            acc['total'] = (acc['total'] || 0) + (info || 0)
 
-          if (acc['collections'] === undefined) {
-            acc['collections'] = {}
-          }
-          acc['collections'][item.name] = (acc['collections'][item.name] || 0) + info
+            if (acc['collections'] === undefined) {
+              acc['collections'] = {}
+            }
+            acc['collections'][item.name] = (acc['collections'][item.name] || 0) + info
 
-          return acc
-        }, {}),
+            return acc
+          },
+          { total: 0, collections: {} }
+        ),
       tokens:
         HoldingTokens &&
         HoldingTokens.length > 0 &&
-        HoldingTokens.reduce((acc: any, item: any) => {
-          acc['total'] = (acc['total'] || 0) + (formatUnits(item.worthUsei, 6) || 0)
+        HoldingTokens.reduce(
+          (acc: any, item: any) => {
+            acc['total'] = (acc['total'] || 0) + (formatUnits(item.worthUsei, 6) || 0)
 
-          if (acc['collections'] === undefined) {
-            acc['collections'] = {}
-          }
-          acc['collections'][item.name] = (acc['collections'][item.name] || 0) + formatUnits(item.worthUsei, 6)
+            if (acc['collections'] === undefined) {
+              acc['collections'] = {}
+            }
+            acc['collections'][item.name] = (acc['collections'][item.name] || 0) + formatUnits(item.worthUsei, 6)
 
-          return acc
-        }, {}),
+            return acc
+          },
+          { total: 0, collections: {} }
+        ),
     }
   }, [HoldingNfts, isLoadingHoldingNfts, HoldingTokens, isLoadingHoldingTokens])
 
@@ -439,14 +445,14 @@ const AnalyticsBottomSection: React.FC = () => {
                     <>
                       <p>Total</p>
                       <p className="text-xl text-white font-medium">
-                        {(collectionChartData && `${collectionChartData.nfts['total'].toFixed(3)}`) || 0} SEI
+                        {(collectionChartData.nfts && `${collectionChartData.nfts['total'].toFixed(3)}`) || 0} SEI
                       </p>
                     </>
                   }
                   colors={['#5A3FFF', '#2592D9', '#1ED6FF', '#F466FE', '#C517D1', '#6B0090']}
                   height={550}
-                  labels={Object.keys(collectionChartData.nfts['collections'])}
-                  series={Object.values(collectionChartData.nfts['collections'])}
+                  labels={collectionChartData.nfts ? Object.keys(collectionChartData.nfts['collections']) : []}
+                  series={collectionChartData.nfts ? Object.values(collectionChartData.nfts['collections']) : []}
                   width={550}
                 />
               </div>
@@ -513,7 +519,8 @@ const AnalyticsBottomSection: React.FC = () => {
 
                             <td className="text-white text-left font-medium">
                               <div className="flex items-center justify-start gap-2">
-                                {collectionChartData.nfts.collections[collection.name] &&
+                                {collectionChartData.nfts &&
+                                collectionChartData.nfts.collections[collection.name] &&
                                 collectionChartData.nfts['total'] &&
                                 collectionChartData.nfts['total'] != 0
                                   ? (
@@ -643,7 +650,7 @@ const AnalyticsBottomSection: React.FC = () => {
 
                 <tbody className="mt-5">
                   {!isLoadingNftsTopGainer &&
-                    topGainerData.nfts.topLooser.slice(0, 6).map((item: any, key: any) => {
+                    topGainerData.nfts.topLosser.slice(0, 6).map((item: any, key: any) => {
                       return (
                         <tr key={item.key}>
                           <td className="text-white text-left font-medium">
@@ -1431,14 +1438,14 @@ const AnalyticsBottomSection: React.FC = () => {
                     <>
                       <p>Total</p>
                       <p className="text-xl text-white font-medium">
-                        {(collectionChartData && `${collectionChartData.tokens['total'].toFixed(3)}`) || 0} SEI
+                        {(collectionChartData.tokens && `${collectionChartData.tokens['total'].toFixed(3)}`) || 0} SEI
                       </p>
                     </>
                   }
                   colors={['#5A3FFF', '#2592D9', '#1ED6FF', '#F466FE', '#C517D1', '#6B0090']}
                   height={550}
-                  labels={Object.keys(collectionChartData.tokens['collections'])}
-                  series={Object.values(collectionChartData.tokens['collections'])}
+                  labels={collectionChartData.tokens && Object.keys(collectionChartData.tokens['collections'])}
+                  series={collectionChartData.tokens && Object.values(collectionChartData.tokens['collections'])}
                   width={550}
                 />
               </div>
@@ -1502,7 +1509,8 @@ const AnalyticsBottomSection: React.FC = () => {
 
                             <td className="text-white text-left font-medium">
                               <div className="flex items-center justify-start gap-2">
-                                {collectionChartData.tokens.collections[collection.name] &&
+                                {collectionChartData.tokens &&
+                                collectionChartData.tokens.collections[collection.name] &&
                                 collectionChartData.tokens['total'] &&
                                 collectionChartData.tokens['total'] != 0
                                   ? (
@@ -1634,7 +1642,7 @@ const AnalyticsBottomSection: React.FC = () => {
 
                 <tbody className="mt-5">
                   {!isLoadingNftsTopGainer &&
-                    topGainerData.tokens.topLooser.slice(0, 6).map((item: any, key: any) => {
+                    topGainerData.tokens.topLosser.slice(0, 6).map((item: any, key: any) => {
                       return (
                         <tr key={item.key}>
                           <td className="text-white text-left font-medium">

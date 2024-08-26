@@ -29,7 +29,6 @@ const HoldingDataGroup2: React.FC = () => {
   const { crypto } = useDataSelector('toggle')
   const { wallets } = useDataSelector('walletSlice')
 
-  const [walletList, setWalletList] = useState<any>([])
   const [loading, setLoading] = useState(false)
   const [showExchangeWallet, setShowExchangeWallet] = useState<boolean>(false)
   const [exchangeSetting, setExchangeSetting] = useState<ExchangeSettingType>({
@@ -40,11 +39,6 @@ const HoldingDataGroup2: React.FC = () => {
 
   useMemo(() => refetchWallet(), [refetchWallet])
 
-  useMemo(() => {
-    if (walletConnect) {
-      setWalletList(walletConnect)
-    }
-  }, [walletConnect])
   const handleExchangeSettings = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name
 
@@ -99,8 +93,9 @@ const HoldingDataGroup2: React.FC = () => {
 
       // Handle "Select All" checkbox click
       const updatedWallets =
-        walletList?.userWallets?.map((wallet: any) => ({
-          walletName: wallet.name,
+        walletConnect?.map((wallet: any) => ({
+          id: wallet.id,
+          walletName: wallet.walletName,
           walletAddress: wallet.walletAddress,
           isActive: e.target.checked,
         })) || []
@@ -112,14 +107,15 @@ const HoldingDataGroup2: React.FC = () => {
       }, 1000)
     } else {
       const updatedWallet = {
-        walletName: item2?.name,
+        id: item2?.id,
+        walletName: item2?.walletName,
         walletAddress: item2?.walletAddress,
         isActive: e.target.checked,
       }
 
       const currentWallets = [...wallets]
 
-      const index = currentWallets.findIndex((wallet: any) => wallet.walletName === item2.name)
+      const index = currentWallets.findIndex((wallet: any) => wallet.id === item2.id)
 
       if (index !== -1) {
         // If the wallet is already in the state, update its isActive property
@@ -143,8 +139,8 @@ const HoldingDataGroup2: React.FC = () => {
   //     setSelectAll(!selectAll)
   //   }
   const totalBalance =
-    walletList?.userWallets &&
-    walletList.userWallets.reduce((total: any, wallet: any) => total + parseFloat(wallet.balance), 0)
+    walletConnect &&
+    walletConnect.reduce((total: any, wallet: any) => total + parseFloat(wallet.balance), 0)
 
   const coinbaseTotal = useMemo(
     () =>
@@ -277,11 +273,11 @@ const HoldingDataGroup2: React.FC = () => {
             </div>
             {loading === false ? (
               <>
-                {walletList?.map((item2: any, key: number) => {
+                {walletConnect?.map((item2: any) => {
                   const address = `${formatAddress(item2?.walletAddress)}`
-                  const isActive = wallets?.some(w => w.walletName === item2.name && w.isActive)
+                  const isActive = wallets?.some(w => w.id === item2.id && w.isActive)
                   return (
-                    <div className="flex justify-between" key={key}>
+                    <div className="flex justify-between" key={item2.id}>
                       <div className="flex w-full items-start gap-2">
                         <Checkbox
                           defaultChecked={isActive}
@@ -290,7 +286,7 @@ const HoldingDataGroup2: React.FC = () => {
                           }}
                         />
                         <div className="text-left">
-                          <Typography>{item2.walletName} Wallet</Typography>
+                          <Typography className="leading-h1">{item2.walletName} Wallet</Typography>
                           <Typography className="text-[11px] font-medium">{address}</Typography>
                         </div>
                       </div>
