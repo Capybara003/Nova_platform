@@ -4,7 +4,7 @@ export const formatUSei = (usei: string): number => {
 }
 
 export const formatUnits = (value: string | number, decimal: string | number): number => {
-  const parsedValue = parseFloat(value.toString())
+  const parsedValue = parseFloat(value?.toString() || '0')
 
   return parsedValue / 10 ** Number(decimal)
 }

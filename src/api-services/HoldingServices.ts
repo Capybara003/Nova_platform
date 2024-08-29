@@ -7,59 +7,73 @@ import { AssetsDetailsBlock } from 'design-systems/Templates/HoldingPageTemplate
 import { API_ENDPOINTS } from 'utils/api-integration'
 class HoldingServices {
   getHoldingNfts = async (data: { wallet_addresses: string[] }) => {
-    return await Promise.all(data.wallet_addresses.map(address => {
-      return CoreAPIService.get<any>(
-        `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_NFTS}/${address}`
-      )
-    }))
+    return await Promise.all(
+      data.wallet_addresses.map(address => {
+        return CoreAPIService.get<any>(
+          `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_NFTS}/${address}`
+        )
+      })
+    )
   }
 
   getIncomeNfts = async (data: { wallet_addresses: string[] }) => {
-    return await Promise.all(data.wallet_addresses.map(address => {
-      return CoreAPIService.get<any>(
-        `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_INCOME_NFTS}/${address}`
-      )
-    }))
+    return await Promise.all(
+      data.wallet_addresses.map(address => {
+        return CoreAPIService.get<any>(
+          `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_INCOME_NFTS}/${address}`
+        )
+      })
+    )
   }
 
   getNftsTopGainers = async (data: { wallet_addresses: string[] }) => {
-    return await Promise.all(data.wallet_addresses.map(address => {
-      return CoreAPIService.get<any>(
-        `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_NFTS_TOP}/${address}`
-      )
-    }))
+    return await Promise.all(
+      data.wallet_addresses.map(address => {
+        return CoreAPIService.get<any>(
+          `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_NFTS_TOP}/${address}`
+        )
+      })
+    )
   }
 
   getNftsTradeInfo = async (data: { wallet_addresses: string[] }) => {
-    return await Promise.all(data.wallet_addresses.map(address => {
-      return CoreAPIService.get<any>(
-        `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_NFTS_TRADE_INFO}/${address}`
-      )
-    }))
+    return await Promise.all(
+      data.wallet_addresses.map(address => {
+        return CoreAPIService.get<any>(
+          `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_NFTS_TRADE_INFO}/${address}`
+        )
+      })
+    )
   }
 
   getHoldingTokens = async (data: { wallet_addresses: string[] }) => {
-    return await Promise.all(data.wallet_addresses.map(address => {
-      return CoreAPIService.get<any>(
-        `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_TOKENS}/${address}`
-      )
-    }))
+    return await Promise.all(
+      data.wallet_addresses.map(address => {
+        return CoreAPIService.get<any>(
+          `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_HOLDING_TOKENS}/${address}`
+        )
+      })
+    )
   }
 
   getTokensTopGainers = async (data: { wallet_addresses: string[] }) => {
-    return await Promise.all(data.wallet_addresses.map(address => {
-      return CoreAPIService.get<any>(
-        `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_TOKENS_TOP}/${address}`
-      )
-    }))
+    return await Promise.all(
+      data.wallet_addresses.map(address => {
+        return CoreAPIService.get<any>(
+          `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_TOKENS_TOP}/${address}`
+        )
+      })
+    )
   }
 
   getTokensTradeInfo = async (data: { wallet_addresses: string[] }) => {
-    return await Promise.all(data.wallet_addresses.map(address => {
-      return CoreAPIService.get<any>(
-        `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_TOKENS_TRADE_INFO}/${address}`
-      )
-    }))
+    return await Promise.all(
+      data.wallet_addresses.map(address => {
+        return CoreAPIService.get<any>(
+          `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_TOKENS_TRADE_INFO}/${address}`
+        )
+      })
+    )
   }
 
   postAssetDetails = async (AssetsDetails: AssetsDetailsBlock) => {

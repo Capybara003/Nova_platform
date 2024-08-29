@@ -99,29 +99,29 @@ const AnalyticsBottomSection: React.FC = () => {
 
   const collectionChartData = useMemo(() => {
     return {
-      nfts:
-        HoldingNfts &&
-        HoldingNfts.length > 0 &&
-        HoldingNfts.reduce(
-          (acc: any, item: any) => {
-            const info =
-              item?.nftsHolding &&
-              item?.nftsHolding?.reduce((acc: any, nft: any) => {
-                acc = (acc || 0) + formatUSei(nft?.floorPrice) || 0
-                return acc
-              }, 0)
+      nfts: { total: 0, collections: {} },
+      // HoldingNfts &&
+      // HoldingNfts.length > 0 &&
+      // HoldingNfts.reduce(
+      //   (acc: any, item: any) => {
+      //     const info =
+      //       item?.nftsHolding &&
+      //       item?.nftsHolding?.reduce((acc: any, nft: any) => {
+      //         acc = (acc || 0) + formatUSei(nft?.floorPrice) || 0
+      //         return acc
+      //       }, 0)
 
-            acc['total'] = (acc['total'] || 0) + (info || 0)
+      //     acc['total'] = (acc['total'] || 0) + (info || 0)
 
-            if (acc['collections'] === undefined) {
-              acc['collections'] = {}
-            }
-            acc['collections'][item.name] = (acc['collections'][item.name] || 0) + info
+      //     if (acc['collections'] === undefined) {
+      //       acc['collections'] = {}
+      //     }
+      //     acc['collections'][item.name] = (acc['collections'][item.name] || 0) + info
 
-            return acc
-          },
-          { total: 0, collections: {} }
-        ),
+      //     return acc
+      //   },
+      //   { total: 0, collections: {} }
+      // ),
       tokens:
         HoldingTokens &&
         HoldingTokens.length > 0 &&
