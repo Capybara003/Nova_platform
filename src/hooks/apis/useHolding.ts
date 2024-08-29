@@ -19,11 +19,14 @@ export const useHolding = () => {
   // const { binance, coinbase } = useDataSelector('exchange')
   // const { data: globalData } = useDataSelector('globalData')
   const { wallets } = useDataSelector('walletSlice')
-  const [activeAddresses, setActiveAddresses] = useState<string[]>([])
-  useMemo(() => {
-    const activeWallets = wallets?.filter(item => item?.isActive)
-    setActiveAddresses(activeWallets?.map(item => item?.walletAddress) || [])
-  }, [wallets])
+  const [activeAddresses, setActiveAddresses] = useState<string[]>([
+    'sei16nsqp4myn0ary0yuckhl7mwptvedqyvfu0u8ny',
+    'sei1yxrgsh2fq4vkx5qp9r9fd9w22tt7avl0f2j95a',
+  ])
+  // useMemo(() => {
+  //   const activeWallets = wallets?.filter(item => item?.isActive)
+  //   setActiveAddresses(activeWallets?.map(item => item?.walletAddress) || [])
+  // }, [wallets])
 
   // const { tabName } = useDataSelector('toggle')
 
@@ -76,7 +79,7 @@ export const useHolding = () => {
     [API_ENDPOINTS.PUBLIC.GET_HOLDING_NFTS],
     () => HoldingServices.getHoldingNfts({ wallet_addresses: activeAddresses }),
     {
-      select: res => (res.collections?.result === null ? [] : res.collections),
+      select: res => res.flatMap(one => (!one.collections || one.collections?.result === null ? [] : one.collections)),
       refetchOnWindowFocus: false,
       // enabled: coinbase.is_connected || binance.is_connected || data.walletAddress.length > 0,
     }
@@ -86,7 +89,7 @@ export const useHolding = () => {
     [API_ENDPOINTS.PUBLIC.GET_INCOME_NFTS],
     () => HoldingServices.getIncomeNfts({ wallet_addresses: activeAddresses }),
     {
-      select: res => (res?.result === null ? [] : res),
+      select: res => res.flatMap(one => (one?.result === null ? [] : one)),
       refetchOnWindowFocus: false,
     }
   )
@@ -95,7 +98,15 @@ export const useHolding = () => {
     [API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_NFTS_TOP],
     () => HoldingServices.getNftsTopGainers({ wallet_addresses: activeAddresses }),
     {
-      select: res => (res?.result === null ? { topGainers: [], topLosser: [] } : res),
+      select: res =>
+        res.reduce(
+          (total, one) => {
+            total.topGainers = [...(total?.topGainers || []), ...(one?.topGainers || [])]
+            total.topLooser = [...(total?.topLooser || []), ...(one?.topLooser || [])]
+            return total
+          },
+          { topGainers: [], topLosser: [] }
+        ),
       refetchOnWindowFocus: false,
     }
   )
@@ -105,36 +116,64 @@ export const useHolding = () => {
     () => HoldingServices.getNftsTradeInfo({ wallet_addresses: activeAddresses }),
     {
       select: res =>
-        res?.result === null
-          ? {
-              ageOfNftAssets:
-                {
-                  level1: [],
-                  level2: [],
-                  level3: [],
-                  level4: [],
-                  level5: [],
-                  level6: [],
-                } || null,
-              transaction: {
+        res.reduce(
+          (total, one) => {
+            total.ageOfNftAssets = {
+              level1: one?.ageOfNftAssets?.level1 || [],
+              level2: one?.ageOfNftAssets?.level2 || [],
+              level3: one?.ageOfNftAssets?.level3 || [],
+              level4: one?.ageOfNftAssets?.level4 || [],
+              level5: one?.ageOfNftAssets?.level5 || [],
+              level6: one?.ageOfNftAssets?.level6 || [],
+            }
+            total.transaction = {
+              day: one?.transaction?.day || {},
+              week: one?.transaction?.week || {},
+              month: one?.transaction?.month || {},
+            }
+            total.volume = {
+              buyVolume: {
+                day: one?.volume?.buyVolume?.day || {},
+                week: one?.volume?.buyVolume?.week || {},
+                month: one?.volume?.buyVolume?.month || {},
+              },
+              sellVolume: {
+                day: one?.volume?.sellVolume?.day || {},
+                week: one?.volume?.sellVolume?.week || {},
+                month: one?.volume?.sellVolume?.month || {},
+              },
+            }
+            return total
+          },
+          {
+            ageOfNftAssets:
+              {
+                level1: [],
+                level2: [],
+                level3: [],
+                level4: [],
+                level5: [],
+                level6: [],
+              } || null,
+            transaction: {
+              day: {},
+              week: {},
+              month: {},
+            },
+            volume: {
+              buyVolume: {
                 day: {},
                 week: {},
                 month: {},
               },
-              volume: {
-                buyVolume: {
-                  day: {},
-                  week: {},
-                  month: {},
-                },
-                sellVolume: {
-                  day: {},
-                  week: {},
-                  month: {},
-                },
+              sellVolume: {
+                day: {},
+                week: {},
+                month: {},
               },
-            }
-          : res,
+            },
+          }
+        ),
       refetchOnWindowFocus: false,
     }
   )
@@ -150,7 +189,7 @@ export const useHolding = () => {
     [API_ENDPOINTS.PUBLIC.GET_HOLDING_TOKENS],
     () => HoldingServices.getHoldingTokens({ wallet_addresses: activeAddresses }),
     {
-      select: res => (res?.result === null ? [] : res),
+      select: res => res.flatMap(one => (!one || one?.result === null ? [] : one)),
       refetchOnWindowFocus: false,
     }
   )
@@ -159,7 +198,15 @@ export const useHolding = () => {
     [API_ENDPOINTS.PUBLIC.GET_USER_HOLDING_TOKENS_TOP],
     () => HoldingServices.getTokensTopGainers({ wallet_addresses: activeAddresses }),
     {
-      select: res => (res?.result === null ? { topGainers: [], topLosser: [] } : res),
+      select: res =>
+        res.reduce(
+          (total, one) => {
+            total.topGainers = [...(total?.topGainers || []), ...(one?.topGainers || [])]
+            total.topLooser = [...(total?.topLooser || []), ...(one?.topLooser || [])]
+            return total
+          },
+          { topGainers: [], topLosser: [] }
+        ),
       refetchOnWindowFocus: false,
     }
   )
@@ -169,25 +216,43 @@ export const useHolding = () => {
     () => HoldingServices.getTokensTradeInfo({ wallet_addresses: activeAddresses }),
     {
       select: res =>
-        res?.result === null
-          ? {
-              all: {
-                day: {},
-                week: {},
-                month: {},
-              },
-              buy: {
-                day: {},
-                week: {},
-                month: {},
-              },
-              sell: {
-                day: {},
-                week: {},
-                month: {},
-              },
+        res.reduce(
+          (total, one) => {
+            total.all = {
+              day: {},
+              week: {},
+              month: {},
             }
-          : res,
+            total.buy = {
+              day: {},
+              week: {},
+              month: {},
+            }
+            total.sell = {
+              day: {},
+              week: {},
+              month: {},
+            }
+            return total
+          },
+          {
+            all: {
+              day: {},
+              week: {},
+              month: {},
+            },
+            buy: {
+              day: {},
+              week: {},
+              month: {},
+            },
+            sell: {
+              day: {},
+              week: {},
+              month: {},
+            },
+          }
+        ),
       refetchOnWindowFocus: false,
     }
   )

@@ -64,7 +64,7 @@ const HoldingDataGroup: React.FC = () => {
     holdingNftsData.estFee += Number(info?.estFee) || 0
     holdingNftsData.estValue += Number(info?.estValue) || 0
     holdingNftsData.unrealizedGains += Number(info?.unrealizedGains) || 0
-  }, {})
+  })
 
   IncomeNfts?.map((collection: any) => {
     const info =
@@ -246,9 +246,9 @@ const HoldingDataGroup: React.FC = () => {
                   Total Assets:
                 </Typography>
                 <Typography className="!font-medium" size="lg">
-                  {holdingNftsData?.amount && incomeNftsData?.amount
-                    ? holdingNftsData.amount + incomeNftsData.amount
-                    : '--'}
+                  {!holdingNftsData?.amount && !incomeNftsData?.amount
+                    ? '--'
+                    : holdingNftsData?.amount || 0 + incomeNftsData?.amount || 0}
                 </Typography>
               </div>
               <div className="flex flex-col gap-3 font-Inter font-normal">
@@ -284,13 +284,13 @@ const HoldingDataGroup: React.FC = () => {
                       title={`${holdingNftsData.unrealizedGains + incomeNftsData.realizedGains} ${crypto.symbol}`}
                     >
                       <Typography>
-                        {holdingNftsData?.unrealizedGains && incomeNftsData?.realizedGains ? (
+                        {!holdingNftsData?.unrealizedGains && !incomeNftsData?.realizedGains ? (
+                          '--'
+                        ) : (
                           <>
-                            {(holdingNftsData.unrealizedGains + incomeNftsData.realizedGains).toFixed(2)}{' '}
+                            {(holdingNftsData?.unrealizedGains || 0 + incomeNftsData?.realizedGains || 0).toFixed(2)}{' '}
                             {crypto.symbol}
                           </>
-                        ) : (
-                          '--'
                         )}
                       </Typography>
                     </TETooltip>
@@ -302,7 +302,9 @@ const HoldingDataGroup: React.FC = () => {
                           100
                         }%`}
                       >
-                        {holdingNftsData.unrealizedGains && incomeNftsData?.realizedGains ? (
+                        {!holdingNftsData?.unrealizedGains && !incomeNftsData?.realizedGains ? (
+                          '--'
+                        ) : (
                           <>
                             {' '}
                             {holdingNftsData?.unrealizedGains === null || incomeNftsData?.realizedGains === null
@@ -315,8 +317,6 @@ const HoldingDataGroup: React.FC = () => {
                                   100
                                 ).toFixed(2)}%`}
                           </>
-                        ) : (
-                          '--'
                         )}
                       </TETooltip>
                     </Typography>

@@ -139,8 +139,7 @@ const HoldingDataGroup2: React.FC = () => {
   //     setSelectAll(!selectAll)
   //   }
   const totalBalance =
-    walletConnect &&
-    walletConnect.reduce((total: any, wallet: any) => total + parseFloat(wallet.balance), 0)
+    walletConnect && walletConnect.reduce((total: any, wallet: any) => total + parseFloat(wallet.balance), 0)
 
   const coinbaseTotal = useMemo(
     () =>

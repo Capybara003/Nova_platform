@@ -71,6 +71,10 @@ const HoldingPageTemplate: React.FC = () => {
     }
   }, [LocalWallet])
 
+  useEffect(() => {
+    setCurrentPage(0)
+  }, [tabName])
+
   const totalItems = useMemo(
     () => (activeTab === 0 ? HoldingNfts?.length : activeTab === 1 ? IncomeNfts?.length : totalData.nfts.length),
     [activeTab, HoldingNfts?.length, IncomeNfts?.length]
@@ -84,7 +88,7 @@ const HoldingPageTemplate: React.FC = () => {
     () => HoldingNfts && HoldingTokens && setHoldingData({ tokens: HoldingTokens, nfts: HoldingNfts }),
     [HoldingNfts, isLoadingHoldingNfts, HoldingTokens, isLoadingHoldingTokens]
   )
-  useMemo(() => IncomeNfts && setIncomeData({ ...IncomeNfts, nfts: IncomeNfts }), [IncomeNfts, isLoadingIncomeNfts])
+  useMemo(() => IncomeNfts && setIncomeData({ ...incomeData, nfts: IncomeNfts }), [IncomeNfts, isLoadingIncomeNfts])
   useMemo(
     () => IncomeNfts && HoldingNfts && setTotalData({ ...totalData, nfts: [...HoldingNfts, ...IncomeNfts] }),
     [HoldingNfts, isLoadingHoldingNfts, IncomeNfts, isLoadingIncomeNfts]
@@ -124,7 +128,7 @@ const HoldingPageTemplate: React.FC = () => {
 
   const handleTabChange = (tab: number) => {
     setActiveTab(tab)
-    // setCurrentPage(0)
+    setCurrentPage(0)
   }
 
   const openModal = () => setIsModalOpen(true)
@@ -320,7 +324,6 @@ const HoldingPageTemplate: React.FC = () => {
                         <HoldingTable
                           crypto={crypto}
                           data={holdingData.nfts?.slice(startIndex, endIndex)}
-                          totalValue={holdingTotalValue.nfts || 0}
                           footerData={holdingData.nfts}
                           headData={[
                             { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
@@ -343,6 +346,7 @@ const HoldingPageTemplate: React.FC = () => {
                             { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
                           ]}
                           loading={isLoadingHoldingNfts}
+                          totalValue={holdingTotalValue.nfts || 0}
                         />
                       </>
                     )}
@@ -352,7 +356,6 @@ const HoldingPageTemplate: React.FC = () => {
                         <HoldingIndexTable
                           crypto={crypto}
                           data={incomeData.nfts?.slice(startIndex, endIndex)}
-                          totalValue={incomeTotalValue}
                           footerData={incomeData.nfts}
                           headData={[
                             { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
@@ -375,6 +378,7 @@ const HoldingPageTemplate: React.FC = () => {
                             { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
                           ]}
                           loading={isLoadingIncomeNfts}
+                          totalValue={incomeTotalValue}
                         />
                       </>
                     )}
@@ -382,7 +386,6 @@ const HoldingPageTemplate: React.FC = () => {
                       <HoldingTotalTable
                         crypto={crypto}
                         data={totalData.nfts.slice(startIndex, endIndex)}
-                        totalValue={holdingTotalValue + incomeTotalValue}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                           { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
@@ -409,13 +412,13 @@ const HoldingPageTemplate: React.FC = () => {
                           { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '105px' },
                           { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
                         ]}
+                        totalValue={holdingTotalValue + incomeTotalValue}
                       />
                     )}
                     {activeTab === 3 && (
                       <HoldingAnalyticsTable
                         crypto={crypto}
                         data={holdingData.nfts?.slice(startIndex, endIndex)}
-                        totalValue={holdingTotalValue.nfts || 0}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                           { name: 'Amount', key: 'Amount', isInfo: false, isSort: true, width: '70px' },
@@ -437,6 +440,7 @@ const HoldingPageTemplate: React.FC = () => {
                           { name: 'Link', key: 'Link', isInfo: false, isSort: true, width: '70px' },
                         ]}
                         loading={isLoadingHoldingNfts}
+                        totalValue={holdingTotalValue.nfts || 0}
                       />
                     )}
                   </div>
@@ -456,7 +460,6 @@ const HoldingPageTemplate: React.FC = () => {
                         <HoldingTable
                           crypto={crypto}
                           data={holdingData.nfts?.slice(startIndex, endIndex)}
-                          totalValue={holdingTotalValue.nfts || 0}
                           footerData={holdingData.nfts}
                           headData={[
                             { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
@@ -479,6 +482,7 @@ const HoldingPageTemplate: React.FC = () => {
                             { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
                           ]}
                           loading={isLoadingHoldingNfts}
+                          totalValue={holdingTotalValue.nfts || 0}
                         />
                       </>
                     )}
@@ -488,7 +492,6 @@ const HoldingPageTemplate: React.FC = () => {
                         <HoldingIndexTable
                           crypto={crypto}
                           data={incomeData.nfts?.slice(startIndex, endIndex)}
-                          totalValue={incomeTotalValue}
                           footerData={incomeData.nfts}
                           headData={[
                             { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
@@ -511,6 +514,7 @@ const HoldingPageTemplate: React.FC = () => {
                             { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
                           ]}
                           loading={isLoadingIncomeNfts}
+                          totalValue={incomeTotalValue}
                         />
                       </>
                     )}
@@ -518,7 +522,6 @@ const HoldingPageTemplate: React.FC = () => {
                       <HoldingTotalTable
                         crypto={crypto}
                         data={totalData.nfts.slice(startIndex, endIndex)}
-                        totalValue={holdingTotalValue + incomeTotalValue}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                           { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
@@ -545,13 +548,13 @@ const HoldingPageTemplate: React.FC = () => {
                           { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '105px' },
                           { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
                         ]}
+                        totalValue={holdingTotalValue + incomeTotalValue}
                       />
                     )}
                     {activeTab === 3 && (
                       <HoldingAnalyticsTable
                         crypto={crypto}
                         data={holdingData.nfts?.slice(startIndex, endIndex)}
-                        totalValue={holdingTotalValue.nfts || 0}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                           { name: 'Amount', key: 'Amount', isInfo: false, isSort: true, width: '70px' },
@@ -573,6 +576,7 @@ const HoldingPageTemplate: React.FC = () => {
                           { name: 'Link', key: 'Link', isInfo: false, isSort: true, width: '70px' },
                         ]}
                         loading={isLoadingHoldingNfts}
+                        totalValue={holdingTotalValue.nfts || 0}
                       />
                     )}
                   </div>
@@ -592,7 +596,6 @@ const HoldingPageTemplate: React.FC = () => {
                         <HoldingTable
                           crypto={crypto}
                           data={holdingData.tokens?.slice(startIndex, endIndex)}
-                          totalValue={holdingTotalValue.tokens}
                           footerData={holdingData.tokens}
                           headData={[
                             { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
@@ -615,6 +618,7 @@ const HoldingPageTemplate: React.FC = () => {
                             { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
                           ]}
                           loading={isLoadingHoldingTokens}
+                          totalValue={holdingTotalValue.tokens}
                         />
                       </>
                     )}
@@ -624,7 +628,6 @@ const HoldingPageTemplate: React.FC = () => {
                         <HoldingIndexTable
                           crypto={crypto}
                           data={incomeData.tokens?.slice(startIndex, endIndex)}
-                          totalValue={incomeTotalValue}
                           footerData={incomeData.tokens}
                           headData={[
                             { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
@@ -647,6 +650,7 @@ const HoldingPageTemplate: React.FC = () => {
                             { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
                           ]}
                           loading={isLoadingIncomeNfts}
+                          totalValue={incomeTotalValue}
                         />
                       </>
                     )}
@@ -654,7 +658,6 @@ const HoldingPageTemplate: React.FC = () => {
                       <HoldingTotalTable
                         crypto={crypto}
                         data={totalData.tokens.slice(startIndex, endIndex)}
-                        totalValue={holdingTotalValue + incomeTotalValue}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                           { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
@@ -681,13 +684,13 @@ const HoldingPageTemplate: React.FC = () => {
                           { name: 'Holding Time', key: 'HoldingTime', isInfo: false, isSort: false, width: '105px' },
                           { name: 'Link', key: 'Link', isInfo: false, isSort: false, width: '70px' },
                         ]}
+                        totalValue={holdingTotalValue + incomeTotalValue}
                       />
                     )}
                     {activeTab === 3 && (
                       <HoldingAnalyticsTable
                         crypto={crypto}
                         data={holdingData.tokens?.slice(startIndex, endIndex)}
-                        totalValue={holdingTotalValue.tokens}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                           { name: 'Amount', key: 'Amount', isInfo: false, isSort: true, width: '70px' },
@@ -709,6 +712,7 @@ const HoldingPageTemplate: React.FC = () => {
                           { name: 'Link', key: 'Link', isInfo: false, isSort: true, width: '70px' },
                         ]}
                         loading={isLoadingHoldingTokens}
+                        totalValue={holdingTotalValue.tokens}
                       />
                     )}
                   </div>

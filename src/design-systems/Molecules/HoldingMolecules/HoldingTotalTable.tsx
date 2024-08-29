@@ -3,8 +3,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // DataTable.tsx
 import Image from 'next/image'
-import React, { useMemo, useState } from 'react' // Import the props interface
-import { TECollapse, TETooltip } from 'tw-elements-react'
+import Link from 'next/link'
+import React, { useState } from 'react' // Import the props interface
+import { TETooltip } from 'tw-elements-react'
 import { FiInfo } from 'react-icons/fi'
 import { RxCaretSort } from 'react-icons/rx'
 
@@ -16,7 +17,6 @@ import Typography from 'design-systems/Atoms/Typography'
 import { Checkbox } from 'design-systems/Atoms/CheckBox'
 import { formatUSei } from 'utils/formatUnit'
 import { IMG } from 'assets/images'
-import Link from 'next/link'
 
 interface HoldingTotalTableProps extends TableProps {
   totalValue: number
@@ -26,7 +26,7 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
   const [activeElement, setActiveElement] = useState<string>('')
   const [checkboxes, setCheckboxes] = useState<any>([])
 
-  const handleCheckboxChange = (id: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckboxChange = (id: number) => {
     const updatedCheckboxes: any = [...checkboxes]
 
     const index = updatedCheckboxes.indexOf(id)
@@ -307,9 +307,7 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                       <td>
                         <div
                           className="flex !w-full justify-end"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            handleCheckboxChange(collection?.seiAddress, e)
-                          }
+                          onChange={() => handleCheckboxChange(collection?.seiAddress)}
                         >
                           <Checkbox checked={checkboxes.includes(collection?.seiAddress)} />
                         </div>{' '}
@@ -431,10 +429,7 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                           )} */}
                       </td>
                       <td>
-                        <div
-                          className="flex !w-full justify-end"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCheckboxChange(collection.id, e)}
-                        >
+                        <div className="flex !w-full justify-end" onChange={() => handleCheckboxChange(collection.id)}>
                           <Checkbox checked={checkboxes.includes(collection.id)} />
                         </div>{' '}
                       </td>
