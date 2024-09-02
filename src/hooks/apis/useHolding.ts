@@ -81,7 +81,7 @@ export const useHolding = () => {
     {
       select: res => res.flatMap(one => (!one.collections || one.collections?.result === null ? [] : one.collections)),
       refetchOnWindowFocus: false,
-      // enabled: coinbase.is_connected || binance.is_connected || data.walletAddress.length > 0,
+      enabled: activeAddresses.length > 0,
     }
   )
 
@@ -91,6 +91,7 @@ export const useHolding = () => {
     {
       select: res => res.flatMap(one => (one?.result === null ? [] : one)),
       refetchOnWindowFocus: false,
+      enabled: activeAddresses.length > 0,
     }
   )
 
@@ -108,6 +109,7 @@ export const useHolding = () => {
           { topGainers: [], topLosser: [] }
         ),
       refetchOnWindowFocus: false,
+      enabled: activeAddresses.length > 0,
     }
   )
 
@@ -115,66 +117,9 @@ export const useHolding = () => {
     [API_ENDPOINTS.PUBLIC.GET_NFTS_TRADE_INFO],
     () => HoldingServices.getNftsTradeInfo({ wallet_addresses: activeAddresses }),
     {
-      select: res =>
-        res.reduce(
-          (total, one) => {
-            total.ageOfNftAssets = {
-              level1: one?.ageOfNftAssets?.level1 || [],
-              level2: one?.ageOfNftAssets?.level2 || [],
-              level3: one?.ageOfNftAssets?.level3 || [],
-              level4: one?.ageOfNftAssets?.level4 || [],
-              level5: one?.ageOfNftAssets?.level5 || [],
-              level6: one?.ageOfNftAssets?.level6 || [],
-            }
-            total.transaction = {
-              day: one?.transaction?.day || {},
-              week: one?.transaction?.week || {},
-              month: one?.transaction?.month || {},
-            }
-            total.volume = {
-              buyVolume: {
-                day: one?.volume?.buyVolume?.day || {},
-                week: one?.volume?.buyVolume?.week || {},
-                month: one?.volume?.buyVolume?.month || {},
-              },
-              sellVolume: {
-                day: one?.volume?.sellVolume?.day || {},
-                week: one?.volume?.sellVolume?.week || {},
-                month: one?.volume?.sellVolume?.month || {},
-              },
-            }
-            return total
-          },
-          {
-            ageOfNftAssets:
-              {
-                level1: [],
-                level2: [],
-                level3: [],
-                level4: [],
-                level5: [],
-                level6: [],
-              } || null,
-            transaction: {
-              day: {},
-              week: {},
-              month: {},
-            },
-            volume: {
-              buyVolume: {
-                day: {},
-                week: {},
-                month: {},
-              },
-              sellVolume: {
-                day: {},
-                week: {},
-                month: {},
-              },
-            },
-          }
-        ),
+      select: res => res,
       refetchOnWindowFocus: false,
+      enabled: activeAddresses.length > 0,
     }
   )
 
@@ -191,6 +136,7 @@ export const useHolding = () => {
     {
       select: res => res.flatMap(one => (!one || one?.result === null ? [] : one)),
       refetchOnWindowFocus: false,
+      enabled: activeAddresses.length > 0,
     }
   )
 
@@ -208,6 +154,7 @@ export const useHolding = () => {
           { topGainers: [], topLosser: [] }
         ),
       refetchOnWindowFocus: false,
+      enabled: activeAddresses.length > 0,
     }
   )
 
@@ -215,45 +162,9 @@ export const useHolding = () => {
     [API_ENDPOINTS.PUBLIC.GET_TOKENS_TRADE_INFO],
     () => HoldingServices.getTokensTradeInfo({ wallet_addresses: activeAddresses }),
     {
-      select: res =>
-        res.reduce(
-          (total, one) => {
-            total.all = {
-              day: {},
-              week: {},
-              month: {},
-            }
-            total.buy = {
-              day: {},
-              week: {},
-              month: {},
-            }
-            total.sell = {
-              day: {},
-              week: {},
-              month: {},
-            }
-            return total
-          },
-          {
-            all: {
-              day: {},
-              week: {},
-              month: {},
-            },
-            buy: {
-              day: {},
-              week: {},
-              month: {},
-            },
-            sell: {
-              day: {},
-              week: {},
-              month: {},
-            },
-          }
-        ),
+      select: res => res,
       refetchOnWindowFocus: false,
+      enabled: activeAddresses.length > 0,
     }
   )
 
@@ -265,31 +176,6 @@ export const useHolding = () => {
     select: res => res.wallet,
     refetchOnWindowFocus: false,
   })
-  const { isLoading: isLoadingHoldingDetails, data: holdingDetails } = useQuery(
-    [API_ENDPOINTS.PRIVATE.GET_USER_PORFOLIO],
-    () => HoldingServices.getUserPortfolio(),
-    {
-      select: res => res,
-      refetchOnWindowFocus: false,
-    }
-  )
-  const { isLoading: isLoadingSoldDetails, data: soldDetails } = useQuery(
-    [API_ENDPOINTS.PRIVATE.GET_HOLDING_AND_GRAIN],
-    () => HoldingServices.getHoldingsAndGrains(),
-    {
-      select: res => res,
-      refetchOnWindowFocus: false,
-    }
-  )
-
-  const { isLoading: isLoadingHoldingGraph, data: HoldingGraph } = useQuery(
-    [API_ENDPOINTS.PRIVATE.GET_HOLDING_GRAPH],
-    () => HoldingServices.getholdingGraph(),
-    {
-      select: res => res.holdingDetails,
-      refetchOnWindowFocus: false,
-    }
-  )
 
   return {
     isLoadingAssetDetails: postAssetDetailsMutation.isLoading,
@@ -303,12 +189,6 @@ export const useHolding = () => {
     walletConnect,
     isLoadingWallet,
     isFetchingHoldingNfts,
-    isLoadingHoldingDetails,
-    holdingDetails,
-    isLoadingSoldDetails,
-    soldDetails,
-    HoldingGraph,
-    isLoadingHoldingGraph,
     isLoadingNftsTopGainer,
     NftsTopGainer,
     isLoadingNftTradeInfo,

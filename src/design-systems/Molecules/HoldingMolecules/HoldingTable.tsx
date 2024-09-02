@@ -90,7 +90,6 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
 
   return (
     <table className="rounded-corners w-full rounded-sm font-Lexend">
-      {' '}
       <thead>
         <tr>
           {headData?.map((item: any, key: number) => {
