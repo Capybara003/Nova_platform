@@ -90,15 +90,6 @@ class HoldingServices {
     // return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PUBLIC.GET_INCOME}`)
     return CoreNextAPIService.get<any>(`${process.env.NEXT_PUBLIC_NEXT_API_URL}${API_ENDPOINTS.PRIVATE.LIST}/${userId}`)
   }
-  getUserPortfolio = async () => {
-    return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PRIVATE.GET_USER_PORFOLIO}`)
-  }
-  getHoldingsAndGrains = async () => {
-    return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PRIVATE.GET_HOLDING_AND_GRAIN}`)
-  }
-  getholdingGraph = async () => {
-    return CoreAPIService.get<any>(`${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.PRIVATE.GET_HOLDING_GRAPH}`)
-  }
 }
 // eslint-disable-next-line import/no-anonymous-default-export
 export default new HoldingServices()

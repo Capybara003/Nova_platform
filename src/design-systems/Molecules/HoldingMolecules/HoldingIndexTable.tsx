@@ -24,7 +24,7 @@ interface HoldingIndexTableProps {
   data: NFTData['collection']
   headData: any[]
   loading?: boolean
-  footerData?: Omit<NFTData, 'data'>
+  footerData?: any
   crypto: cryptoProps
   totalValue: number
 }

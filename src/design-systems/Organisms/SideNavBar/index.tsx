@@ -17,12 +17,11 @@ const SideNavbar: React.FC = () => {
         <div className="fixed mt-[88px] !flex h-full w-[72px] transform !flex-col !gap-[16px] gap-y-3 overflow-hidden  text-ellipsis whitespace-nowrap bg-blackBg   pt-[20px] duration-500 ease-in-out group-hover:left-0 group-hover:inline-block group-hover:h-screen group-hover:w-[252px]">
           {SidebarData.map((item, key) => {
             return (
-              <>
+              <React.Fragment key={key}>
                 {router === item.path ? (
                   <Link
                     className={` flex w-[72px] transform cursor-pointer items-center justify-start gap-3 group-hover:w-[252px]`}
                     href={item.path}
-                    key={key}
                     onClick={() => localStorage.setItem('label', item.label)}
                   >
                     <div className="h-[24px] w-1 rounded-r-[8px] bg-gradient-to-t from-primary to-blue "></div>
@@ -43,7 +42,6 @@ const SideNavbar: React.FC = () => {
                       router === item.path && 'bg-black225_05'
                     } `}
                     href={item.path}
-                    key={key}
                     onClick={() => localStorage.setItem('label', item.label)}
                   >
                     <div className="opacity-[0.25]">{item.icon}</div>
@@ -52,7 +50,7 @@ const SideNavbar: React.FC = () => {
                     </div>
                   </Link>
                 )}
-              </>
+              </React.Fragment>
             )
           })}
         </div>
