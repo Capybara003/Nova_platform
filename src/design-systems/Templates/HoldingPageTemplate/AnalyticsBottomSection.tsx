@@ -47,16 +47,17 @@ const AnalyticsBottomSection: React.FC = () => {
 
   const holdingData = useMemo(() => {
     return {
-      nfts: HoldingNfts?.reduce((res, collection) => {
-        const contracts = res.map((one: any) => one.contract)
-        const index = contracts.indexOf(collection.contract)
-        if (index !== -1) {
-          res[index].nftsHolding = [... new Set([...res[index].nftsHolding, ...collection.nftsHolding])]
-        } else {
-          res.push(collection)
-        }
-        return res
-      }, []) ?? [],
+      nfts:
+        HoldingNfts?.reduce((res, collection) => {
+          const contracts = res.map((one: any) => one.contract)
+          const index = contracts.indexOf(collection.contract)
+          if (index !== -1) {
+            res[index].nftsHolding = [...new Set([...res[index].nftsHolding, ...collection.nftsHolding])]
+          } else {
+            res.push(collection)
+          }
+          return res
+        }, []) ?? [],
       tokens: HoldingTokens ?? [],
     }
   }, [HoldingNfts, isLoadingHoldingNfts, HoldingTokens, isLoadingHoldingTokens])
@@ -108,20 +109,16 @@ const AnalyticsBottomSection: React.FC = () => {
   }, [HoldingNfts, isLoadingHoldingNfts, HoldingTokens, isLoadingHoldingTokens])
 
   const NftTradeData = useMemo(() => {
-    return (
-      NftTradeInfo?.reduce((acc, item) => {
-        if (acc === undefined)
-          acc = {}
-        if (acc.ageOfNftAssets === undefined)
-          acc.ageOfNftAssets = {}
-        acc.ageOfNftAssets.level1 = [...acc.ageOfNftAssets.level1 ?? [], ...item.ageOfNftAssets.level1 ?? []]
-        acc.ageOfNftAssets.level2 = [...acc.ageOfNftAssets.level2 ?? [], ...item.ageOfNftAssets.level2 ?? []]
-        acc.ageOfNftAssets.level3 = [...acc.ageOfNftAssets.level3 ?? [], ...item.ageOfNftAssets.level3 ?? []]
-        acc.ageOfNftAssets.level4 = [...acc.ageOfNftAssets.level4 ?? [], ...item.ageOfNftAssets.level4 ?? []]
-        acc.ageOfNftAssets.level5 = [...acc.ageOfNftAssets.level5 ?? [], ...item.ageOfNftAssets.level5 ?? []]
-        acc.ageOfNftAssets.level6 = [...acc.ageOfNftAssets.level6 ?? [], ...item.ageOfNftAssets.level6 ?? []]
-      }, {})
-    )
+    return NftTradeInfo?.reduce((acc, item) => {
+      if (acc === undefined) acc = {}
+      if (acc.ageOfNftAssets === undefined) acc.ageOfNftAssets = {}
+      acc.ageOfNftAssets.level1 = [...(acc.ageOfNftAssets.level1 ?? []), ...(item.ageOfNftAssets.level1 ?? [])]
+      acc.ageOfNftAssets.level2 = [...(acc.ageOfNftAssets.level2 ?? []), ...(item.ageOfNftAssets.level2 ?? [])]
+      acc.ageOfNftAssets.level3 = [...(acc.ageOfNftAssets.level3 ?? []), ...(item.ageOfNftAssets.level3 ?? [])]
+      acc.ageOfNftAssets.level4 = [...(acc.ageOfNftAssets.level4 ?? []), ...(item.ageOfNftAssets.level4 ?? [])]
+      acc.ageOfNftAssets.level5 = [...(acc.ageOfNftAssets.level5 ?? []), ...(item.ageOfNftAssets.level5 ?? [])]
+      acc.ageOfNftAssets.level6 = [...(acc.ageOfNftAssets.level6 ?? []), ...(item.ageOfNftAssets.level6 ?? [])]
+    }, {})
   }, [NftTradeInfo, isLoadingNftTradeInfo])
 
   const timeChartData = useMemo(() => {
@@ -142,319 +139,325 @@ const AnalyticsBottomSection: React.FC = () => {
           acc['total'] = Number((acc['total'] || 0) + res?.total ?? 0)
           acc['count'] = Number((acc['count'] || 0) + res?.count ?? 0)
         }
-        return acc;
+        return acc
       }, {})
     )
   }, [HoldingNfts, isLoadingHoldingNfts])
 
   const transactionChartData = useMemo(() => {
     return {
-      nfts: !isLoadingNftTradeInfo && NftTradeInfo && {
-        0: NftTradeInfo.reduce((acc, item) => {
-          item.transaction && Object.keys(item.transaction.day)
-            .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
-            .map(day => {
-              const transaction = item.transaction.day[day]
+      nfts: !isLoadingNftTradeInfo &&
+        NftTradeInfo && {
+          0: NftTradeInfo.reduce((acc, item) => {
+            item.transaction &&
+              Object.keys(item.transaction.day)
+                .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
+                .map(day => {
+                  const transaction = item.transaction.day[day]
 
-              const days = acc.map((one: any) => one.day)
-              const index = days.indexOf(day)
+                  const days = acc.map((one: any) => one.day)
+                  const index = days.indexOf(day)
 
-              if (index !== -1) {
-                acc[index].totalVolume += transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0
-                acc[index].transactionAmount += transaction?.transactionAmount ?? 0
-              } else {
-                acc.push({
-                  day,
-                  totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
-                  transactionAmount: transaction?.transactionAmount ?? 0,
+                  if (index !== -1) {
+                    acc[index].totalVolume += transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0
+                    acc[index].transactionAmount += transaction?.transactionAmount ?? 0
+                  } else {
+                    acc.push({
+                      day,
+                      totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
+                      transactionAmount: transaction?.transactionAmount ?? 0,
+                    })
+                  }
                 })
-              }
-            })
-          return acc
-        }, []),
-        1: NftTradeInfo.reduce((acc, item) => {
-          item.transaction && Object.keys(item.transaction.week)
-            .map(week => {
-              const transaction = item.transaction.week[week]
+            return acc
+          }, []),
+          1: NftTradeInfo.reduce((acc, item) => {
+            item.transaction &&
+              Object.keys(item.transaction.week).map(week => {
+                const transaction = item.transaction.week[week]
 
-              const days = acc.map((one: any) => one.day)
-              const index = days.indexOf(week)
+                const days = acc.map((one: any) => one.day)
+                const index = days.indexOf(week)
 
-              if (index !== -1) {
-                acc[index].totalVolume += transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0
-                acc[index].transactionAmount += transaction?.transactionAmount ?? 0
-              } else {
-                acc.push({
-                  day: week,
-                  totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
-                  transactionAmount: transaction?.transactionAmount ?? 0,
+                if (index !== -1) {
+                  acc[index].totalVolume += transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0
+                  acc[index].transactionAmount += transaction?.transactionAmount ?? 0
+                } else {
+                  acc.push({
+                    day: week,
+                    totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
+                    transactionAmount: transaction?.transactionAmount ?? 0,
+                  })
+                }
+              })
+            return acc
+          }, []),
+          2: NftTradeInfo.reduce((acc, item) => {
+            item.transaction &&
+              Object.keys(item.transaction.month).map(month => {
+                const transaction = item.transaction.month[month]
+
+                const days = acc.map((one: any) => one.day)
+                const index = days.indexOf(month)
+
+                if (index !== -1) {
+                  acc[index].totalVolume += transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0
+                  acc[index].transactionAmount += transaction?.transactionAmount ?? 0
+                } else {
+                  acc.push({
+                    day: month,
+                    totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
+                    transactionAmount: transaction?.transactionAmount ?? 0,
+                  })
+                }
+              })
+            return acc
+          }, []),
+        },
+      tokens: !isLoadingTokenTradeInfo &&
+        TokenTradeInfo && {
+          0: TokenTradeInfo.reduce((acc, item) => {
+            item.all &&
+              Object.keys(item.all.day)
+                .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
+                .map(day => {
+                  const transaction = item.all.day[day]
+
+                  const days = acc.map((one: any) => one.day)
+                  const index = days.indexOf(day)
+
+                  if (index !== -1) {
+                    acc[index].totalVolume += transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0
+                    acc[index].transactionAmount += transaction?.transactionAmount ?? 0
+                  } else {
+                    acc.push({
+                      day,
+                      totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
+                      transactionAmount: transaction?.transactionAmount ?? 0,
+                    })
+                  }
                 })
-              }
-            })
-          return acc
-        }, []),
-        2: NftTradeInfo.reduce((acc, item) => {
-          item.transaction && Object.keys(item.transaction.month)
-            .map(month => {
-              const transaction = item.transaction.month[month]
+            return acc
+          }, []),
+          1: TokenTradeInfo.reduce((acc, item) => {
+            item.all &&
+              Object.keys(item.all.week).map(week => {
+                const transaction = item.all.week[week]
 
-              const days = acc.map((one: any) => one.day)
-              const index = days.indexOf(month)
+                const days = acc.map((one: any) => one.day)
+                const index = days.indexOf(week)
 
-              if (index !== -1) {
-                acc[index].totalVolume += transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0
-                acc[index].transactionAmount += transaction?.transactionAmount ?? 0
-              } else {
-                acc.push({
-                  day: month,
-                  totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
-                  transactionAmount: transaction?.transactionAmount ?? 0,
-                })
-              }
-            })
-          return acc
-        }, []),
-      },
-      tokens: !isLoadingTokenTradeInfo && TokenTradeInfo && {
-        0: TokenTradeInfo.reduce((acc, item) => {
-          item.all && Object.keys(item.all.day)
-            .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
-            .map(day => {
-              const transaction = item.all.day[day]
+                if (index !== -1) {
+                  acc[index].totalVolume += transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0
+                  acc[index].transactionAmount += transaction?.transactionAmount ?? 0
+                } else {
+                  acc.push({
+                    day: week,
+                    totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
+                    transactionAmount: transaction?.transactionAmount ?? 0,
+                  })
+                }
+              })
+            return acc
+          }, []),
+          2: TokenTradeInfo.reduce((acc, item) => {
+            item.all &&
+              Object.keys(item.all.month).map(month => {
+                const transaction = item.all.month[month]
 
-              const days = acc.map((one: any) => one.day)
-              const index = days.indexOf(day)
+                const days = acc.map((one: any) => one.day)
+                const index = days.indexOf(month)
 
-              if (index !== -1) {
-                acc[index].totalVolume += transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0
-                acc[index].transactionAmount += transaction?.transactionAmount ?? 0
-              } else {
-                acc.push({
-                  day,
-                  totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
-                  transactionAmount: transaction?.transactionAmount ?? 0,
-                })
-              }
-            })
-          return acc
-        }, []),
-        1: TokenTradeInfo.reduce((acc, item) => {
-          item.all && Object.keys(item.all.week)
-            .map(week => {
-              const transaction = item.all.week[week]
-
-              const days = acc.map((one: any) => one.day)
-              const index = days.indexOf(week)
-
-              if (index !== -1) {
-                acc[index].totalVolume += transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0
-                acc[index].transactionAmount += transaction?.transactionAmount ?? 0
-              } else {
-                acc.push({
-                  day: week,
-                  totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
-                  transactionAmount: transaction?.transactionAmount ?? 0,
-                })
-              }
-            })
-          return acc
-        }, []),
-        2: TokenTradeInfo.reduce((acc, item) => {
-          item.all && Object.keys(item.all.month)
-            .map(month => {
-              const transaction = item.all.month[month]
-
-              const days = acc.map((one: any) => one.day)
-              const index = days.indexOf(month)
-
-              if (index !== -1) {
-                acc[index].totalVolume += transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0
-                acc[index].transactionAmount += transaction?.transactionAmount ?? 0
-              } else {
-                acc.push({
-                  day: month,
-                  totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
-                  transactionAmount: transaction?.transactionAmount ?? 0,
-                })
-              }
-            })
-          return acc
-        }, []),
-      },
+                if (index !== -1) {
+                  acc[index].totalVolume += transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0
+                  acc[index].transactionAmount += transaction?.transactionAmount ?? 0
+                } else {
+                  acc.push({
+                    day: month,
+                    totalVolume: transaction?.totalVolume ? formatUSei(transaction.totalVolume) : 0,
+                    transactionAmount: transaction?.transactionAmount ?? 0,
+                  })
+                }
+              })
+            return acc
+          }, []),
+        },
     }
   }, [NftTradeInfo, isLoadingNftTradeInfo, TokenTradeInfo, isLoadingTokenTradeInfo]) as any
 
   const volumeChartData = useMemo(() => {
     return {
-      nfts: !isLoadingNftTradeInfo && NftTradeInfo && {
-        buyVolume: {
-          0: NftTradeInfo.reduce((acc, item) => {
-            Object.keys(item.volume.buyVolume.day)
-              .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
-              .map(day => {
-                const volume = item.volume.buyVolume.day[day]
-                acc[day] = (acc[day] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-              })
-            
-            return acc
-          }, {}),
-          1: NftTradeInfo.reduce((acc, item) => {
-            Object.keys(item.volume.buyVolume.week)
-              .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
-              .map(week => {
-                const volume = item.volume.buyVolume.week[week]
-                acc[week] = (acc[week] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-              })
-            
-            return acc
-          }, {}),
-          2: NftTradeInfo.reduce((acc, item) => {
-            Object.keys(item.volume.buyVolume.month)
-              .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
-              .map(month => {
-                const volume = item.volume.buyVolume.month[month]
-                acc[month] = (acc[month] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-              })
-            
-            return acc
-          }, {}),
-        },
-        sellVolume: {
-          0: NftTradeInfo.reduce((acc, item) => {
-            Object.keys(item.volume.sellVolume.day)
-              .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
-              .map(day => {
-                const volume = item.volume.sellVolume.day[day]
-                acc[day] = (acc[day] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-              })
-            
-            return acc
-          }, {}),
-          1: NftTradeInfo.reduce((acc, item) => {
-            Object.keys(item.volume.sellVolume.week)
-              .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
-              .map(week => {
-                const volume = item.volume.sellVolume.week[week]
-                acc[week] = (acc[week] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-              })
-            
-            return acc
-          }, {}),
-          2: NftTradeInfo.reduce((acc, item) => {
-            Object.keys(item.volume.sellVolume.month)
-              .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
-              .map(month => {
-                const volume = item.volume.sellVolume.month[month]
-                acc[month] = (acc[month] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-              })
-            
-            return acc
-          }, {}),
-        },
-        flowOverview: [
-          ...new Set([
-            ...Object.keys(NftTradeInfo[0].volume.buyVolume.month),
-            ...Object.keys(NftTradeInfo[0].volume.sellVolume.month),
-          ]),
-        ].reduce((acc: any, month) => {
-          const sellVolume = NftTradeInfo[0].volume.sellVolume.month[month] || 0
-          const buyVolume = NftTradeInfo[0].volume.buyVolume.month[month] || 0
-          if (acc[month.split('_')[0]] === undefined) {
-            acc[month.split('_')[0]] = {
-              year: month.split('_')[0],
+      nfts: !isLoadingNftTradeInfo &&
+        NftTradeInfo && {
+          buyVolume: {
+            0: NftTradeInfo.reduce((acc, item) => {
+              Object.keys(item.volume.buyVolume.day)
+                .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
+                .map(day => {
+                  const volume = item.volume.buyVolume.day[day]
+                  acc[day] = (acc[day] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+                })
+
+              return acc
+            }, {}),
+            1: NftTradeInfo.reduce((acc, item) => {
+              Object.keys(item.volume.buyVolume.week)
+                .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
+                .map(week => {
+                  const volume = item.volume.buyVolume.week[week]
+                  acc[week] = (acc[week] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+                })
+
+              return acc
+            }, {}),
+            2: NftTradeInfo.reduce((acc, item) => {
+              Object.keys(item.volume.buyVolume.month)
+                .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
+                .map(month => {
+                  const volume = item.volume.buyVolume.month[month]
+                  acc[month] = (acc[month] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+                })
+
+              return acc
+            }, {}),
+          },
+          sellVolume: {
+            0: NftTradeInfo.reduce((acc, item) => {
+              Object.keys(item.volume.sellVolume.day)
+                .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
+                .map(day => {
+                  const volume = item.volume.sellVolume.day[day]
+                  acc[day] = (acc[day] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+                })
+
+              return acc
+            }, {}),
+            1: NftTradeInfo.reduce((acc, item) => {
+              Object.keys(item.volume.sellVolume.week)
+                .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
+                .map(week => {
+                  const volume = item.volume.sellVolume.week[week]
+                  acc[week] = (acc[week] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+                })
+
+              return acc
+            }, {}),
+            2: NftTradeInfo.reduce((acc, item) => {
+              Object.keys(item.volume.sellVolume.month)
+                .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
+                .map(month => {
+                  const volume = item.volume.sellVolume.month[month]
+                  acc[month] = (acc[month] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+                })
+
+              return acc
+            }, {}),
+          },
+          flowOverview: [
+            ...new Set([
+              ...Object.keys(NftTradeInfo[0].volume.buyVolume.month),
+              ...Object.keys(NftTradeInfo[0].volume.sellVolume.month),
+            ]),
+          ].reduce((acc: any, month) => {
+            const sellVolume = NftTradeInfo[0].volume.sellVolume.month[month] || 0
+            const buyVolume = NftTradeInfo[0].volume.buyVolume.month[month] || 0
+            if (acc[month.split('_')[0]] === undefined) {
+              acc[month.split('_')[0]] = {
+                year: month.split('_')[0],
+              }
             }
-          }
-          const volume =
-            (buyVolume?.totalVolume ? formatUSei(buyVolume.totalVolume) : 0) +
-            (sellVolume?.totalVolume ? formatUSei(sellVolume.totalVolume) : 0)
-          acc[month.split('_')[0]][month.split('_')[1]] = volume
-          acc[month.split('_')[0]].total = (acc[month.split('_')[0]]?.total || 0) + volume
-          return acc
-        }, {}),
-      },
-      tokens: !isLoadingTokenTradeInfo && TokenTradeInfo && {
-        buyVolume: {
-          0: TokenTradeInfo.reduce((acc, item) => {
-            Object.keys(item.buy.day)
-              .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
-              .map(day => {
-                const volume = item.buy.day[day]
-                acc[day] = (acc[day] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-              })
-            
-            return acc
-          }, {}),
-          1: TokenTradeInfo.reduce((acc, item) => {
-            Object.keys(item.buy.week)
-              .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
-              .map(week => {
-                const volume = item.buy.week[week]
-                acc[week] = (acc[week] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-              })
-            
-            return acc
-          }, {}),
-          2: TokenTradeInfo.reduce((acc, item) => {
-            Object.keys(item.buy.month)
-              .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
-              .map(month => {
-                const volume = item.buy.month[month]
-                acc[month] = (acc[month] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-              })
-            
+            const volume =
+              (buyVolume?.totalVolume ? formatUSei(buyVolume.totalVolume) : 0) +
+              (sellVolume?.totalVolume ? formatUSei(sellVolume.totalVolume) : 0)
+            acc[month.split('_')[0]][month.split('_')[1]] = volume
+            acc[month.split('_')[0]].total = (acc[month.split('_')[0]]?.total || 0) + volume
             return acc
           }, {}),
         },
-        sellVolume: {
-          0: TokenTradeInfo.reduce((acc, item) => {
-            Object.keys(item.sell.day)
-              .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
-              .map(day => {
-                const volume = item.sell.day[day]
-                acc[day] = (acc[day] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-              })
-            
-            return acc
-          }, {}),
-          1: TokenTradeInfo.reduce((acc, item) => {
-            Object.keys(item.sell.week)
-              .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
-              .map(week => {
-                const volume = item.sell.week[week]
-                acc[week] = (acc[week] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-              })
-            
-            return acc
-          }, {}),
-          2: TokenTradeInfo.reduce((acc, item) => {
-            Object.keys(item.sell.month)
-              .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
-              .map(month => {
-                const volume = item.sell.month[month]
-                acc[month] = (acc[month] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
-              })
-            
-            return acc
-          }, {}),
-        },
-        flowOverview: [
-          ...new Set([...Object.keys(TokenTradeInfo[0].buy.month), ...Object.keys(TokenTradeInfo[0].sell.month)]),
-        ].reduce((acc: any, month) => {
-          const sellVolume = TokenTradeInfo[0].sell.month[month] || 0
-          const buyVolume = TokenTradeInfo[0].buy.month[month] || 0
-          if (acc[month.split('_')[0]] === undefined) {
-            acc[month.split('_')[0]] = {
-              year: month.split('_')[0],
+      tokens: !isLoadingTokenTradeInfo &&
+        TokenTradeInfo && {
+          buyVolume: {
+            0: TokenTradeInfo.reduce((acc, item) => {
+              Object.keys(item.buy.day)
+                .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
+                .map(day => {
+                  const volume = item.buy.day[day]
+                  acc[day] = (acc[day] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+                })
+
+              return acc
+            }, {}),
+            1: TokenTradeInfo.reduce((acc, item) => {
+              Object.keys(item.buy.week)
+                .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
+                .map(week => {
+                  const volume = item.buy.week[week]
+                  acc[week] = (acc[week] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+                })
+
+              return acc
+            }, {}),
+            2: TokenTradeInfo.reduce((acc, item) => {
+              Object.keys(item.buy.month)
+                .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
+                .map(month => {
+                  const volume = item.buy.month[month]
+                  acc[month] = (acc[month] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+                })
+
+              return acc
+            }, {}),
+          },
+          sellVolume: {
+            0: TokenTradeInfo.reduce((acc, item) => {
+              Object.keys(item.sell.day)
+                .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
+                .map(day => {
+                  const volume = item.sell.day[day]
+                  acc[day] = (acc[day] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+                })
+
+              return acc
+            }, {}),
+            1: TokenTradeInfo.reduce((acc, item) => {
+              Object.keys(item.sell.week)
+                .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
+                .map(week => {
+                  const volume = item.sell.week[week]
+                  acc[week] = (acc[week] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+                })
+
+              return acc
+            }, {}),
+            2: TokenTradeInfo.reduce((acc, item) => {
+              Object.keys(item.sell.month)
+                .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))
+                .map(month => {
+                  const volume = item.sell.month[month]
+                  acc[month] = (acc[month] ?? 0) + volume?.totalVolume ? formatUSei(volume.totalVolume) : 0
+                })
+
+              return acc
+            }, {}),
+          },
+          flowOverview: [
+            ...new Set([...Object.keys(TokenTradeInfo[0].buy.month), ...Object.keys(TokenTradeInfo[0].sell.month)]),
+          ].reduce((acc: any, month) => {
+            const sellVolume = TokenTradeInfo[0].sell.month[month] || 0
+            const buyVolume = TokenTradeInfo[0].buy.month[month] || 0
+            if (acc[month.split('_')[0]] === undefined) {
+              acc[month.split('_')[0]] = {
+                year: month.split('_')[0],
+              }
             }
-          }
-          const volume =
-            (buyVolume?.totalVolume ? formatUSei(buyVolume.totalVolume) : 0) +
-            (sellVolume?.totalVolume ? formatUSei(sellVolume.totalVolume) : 0)
-          acc[month.split('_')[0]][month.split('_')[1]] = volume
-          acc[month.split('_')[0]].total = (acc[month.split('_')[0]]?.total || 0) + volume
-          return acc
-        }, {}),
-      },
+            const volume =
+              (buyVolume?.totalVolume ? formatUSei(buyVolume.totalVolume) : 0) +
+              (sellVolume?.totalVolume ? formatUSei(sellVolume.totalVolume) : 0)
+            acc[month.split('_')[0]][month.split('_')[1]] = volume
+            acc[month.split('_')[0]].total = (acc[month.split('_')[0]]?.total || 0) + volume
+            return acc
+          }, {}),
+        },
     }
   }, [NftTradeInfo, isLoadingNftTradeInfo, TokenTradeInfo, isLoadingTokenTradeInfo]) as any
 
@@ -559,22 +562,22 @@ const AnalyticsBottomSection: React.FC = () => {
                 <table className="h-full w-full rounded-md font-Lexend">
                   <thead className="sticky top-0 bg-[#24222b]">
                     <tr>
-                      <th className="text-left font-medium text-[#DBDBDB] w-2/5">
+                      <th className="w-2/5 text-left font-medium text-[#DBDBDB]">
                         <div className="flex items-center justify-center gap-2">
                           Collection <RxCaretSort className="text-paragraph" />
                         </div>
                       </th>
-                      <th className="text-left font-medium text-[#DBDBDB] w-1/5">
+                      <th className="w-1/5 text-left font-medium text-[#DBDBDB]">
                         <div className="flex items-center justify-center gap-2">
                           Amount <RxCaretSort className="text-paragraph" />
                         </div>
                       </th>
-                      <th className="text-left font-medium text-[#DBDBDB] w-1/5">
+                      <th className="w-1/5 text-left font-medium text-[#DBDBDB]">
                         <div className="flex items-center justify-center gap-2">
                           Weight <RxCaretSort className="text-paragraph" />
                         </div>
                       </th>
-                      <th className="text-left font-medium text-[#DBDBDB] w-1/5">
+                      <th className="w-1/5 text-left font-medium text-[#DBDBDB]">
                         <div className="flex items-center justify-center gap-2">
                           Value <RxCaretSort className="text-paragraph" />
                         </div>
@@ -593,7 +596,7 @@ const AnalyticsBottomSection: React.FC = () => {
                         .slice(0, 10)
                         .map((collection: any) => (
                           <tr key={collection.contract}>
-                            <td className="text-white text-left font-medium w-2/5">
+                            <td className="text-white w-2/5 text-left font-medium">
                               <div className="flex items-center justify-start gap-2">
                                 <div className="h-5 w-5 rounded bg-red"></div>
                                 {collection?.pfp && collection?.pfp !== null ? (
@@ -607,7 +610,7 @@ const AnalyticsBottomSection: React.FC = () => {
                               </div>
                             </td>
 
-                            <td className="text-white text-left font-medium w-1/5">
+                            <td className="text-white w-1/5 text-left font-medium">
                               <div className="flex items-center justify-start gap-2">
                                 {collection?.nftsHolding && collection?.nftsHolding !== null
                                   ? collection?.nftsHolding.length || '--'
@@ -615,27 +618,27 @@ const AnalyticsBottomSection: React.FC = () => {
                               </div>
                             </td>
 
-                            <td className="text-white text-left font-medium w-1/5">
+                            <td className="text-white w-1/5 text-left font-medium">
                               <div className="flex items-center justify-start gap-2">
                                 {collectionChartData.nfts &&
-                                  collectionChartData.nfts.collections[collection.name] &&
-                                  collectionChartData.nfts['total'] &&
-                                  collectionChartData.nfts['total'] != 0
+                                collectionChartData.nfts.collections[collection.name] &&
+                                collectionChartData.nfts['total'] &&
+                                collectionChartData.nfts['total'] != 0
                                   ? (
-                                    (collectionChartData.nfts.collections[collection.name] /
-                                      collectionChartData.nfts['total']) *
-                                    100
-                                  ).toFixed(2) + '%'
+                                      (collectionChartData.nfts.collections[collection.name] /
+                                        collectionChartData.nfts['total']) *
+                                      100
+                                    ).toFixed(2) + '%'
                                   : '--'}
                               </div>
                             </td>
 
-                            <td className="text-white text-left font-medium w-1/5">
+                            <td className="text-white w-1/5 text-left font-medium">
                               <div className="flex items-center justify-start gap-2">
                                 {collection?.nftsHolding && collection.nftsHolding !== null
                                   ? `${Number(collectionChartData.nfts.collections[collection.name])?.toFixed(
-                                    3
-                                  )} SEI` || '--'
+                                      3
+                                    )} SEI` || '--'
                                   : '--'}
                               </div>
                             </td>
@@ -1003,7 +1006,10 @@ const AnalyticsBottomSection: React.FC = () => {
                       },
                     ]}
                     width={800}
-                    xAxisCategory={[...Object.keys(volumeChartData.nfts['buyVolume'][activeTabOfVolume]), ...Object.keys(volumeChartData.nfts['sellVolume'][activeTabOfVolume])]}
+                    xAxisCategory={[
+                      ...Object.keys(volumeChartData.nfts['buyVolume'][activeTabOfVolume]),
+                      ...Object.keys(volumeChartData.nfts['sellVolume'][activeTabOfVolume]),
+                    ]}
                   />
                 </div>
               </div>
@@ -1578,8 +1584,7 @@ const AnalyticsBottomSection: React.FC = () => {
                   <tbody className="mt-5 overflow-y-scroll md:!h-[500px] [&>*>td:first-child]:border-s-0 [&>*>td:last-child]:border-e-0">
                     {!isLoadingHoldingTokens &&
                       HoldingTokens &&
-                      HoldingTokens
-                        .sort((a: any, b: any) => b.worthUsei - a.worthUsei)
+                      HoldingTokens.sort((a: any, b: any) => b.worthUsei - a.worthUsei)
                         .slice(0, 10)
                         .map((collection: any) => (
                           <tr key={collection.demon}>
@@ -1608,14 +1613,14 @@ const AnalyticsBottomSection: React.FC = () => {
                             <td className="text-white text-left font-medium">
                               <div className="flex items-center justify-start gap-2">
                                 {collectionChartData.tokens &&
-                                  collectionChartData.tokens.collections[collection.name] &&
-                                  collectionChartData.tokens['total'] &&
-                                  collectionChartData.tokens['total'] != 0
+                                collectionChartData.tokens.collections[collection.name] &&
+                                collectionChartData.tokens['total'] &&
+                                collectionChartData.tokens['total'] != 0
                                   ? (
-                                    (collectionChartData.tokens.collections[collection.name] /
-                                      collectionChartData.tokens['total']) *
-                                    100
-                                  ).toFixed(2) + '%'
+                                      (collectionChartData.tokens.collections[collection.name] /
+                                        collectionChartData.tokens['total']) *
+                                      100
+                                    ).toFixed(2) + '%'
                                   : '--'}
                               </div>
                             </td>
@@ -1691,8 +1696,8 @@ const AnalyticsBottomSection: React.FC = () => {
                             <div className="flex items-center justify-center gap-2">
                               {item?.amount && item?.worthUsei
                                 ? `${(
-                                  formatUnits(item.worthUsei, 6) / formatUnits(item.amount, item?.decimals || 6)
-                                )?.toFixed(6)} SEI`
+                                    formatUnits(item.worthUsei, 6) / formatUnits(item.amount, item?.decimals || 6)
+                                  )?.toFixed(6)} SEI`
                                 : '--'}
                             </div>
                           </td>
@@ -1996,7 +2001,10 @@ const AnalyticsBottomSection: React.FC = () => {
                       },
                     ]}
                     width={800}
-                    xAxisCategory={[...Object.keys(volumeChartData.tokens['buyVolume'][activeTabOfVolume]), ...Object.keys(volumeChartData.tokens['sellVolume'][activeTabOfVolume])]}
+                    xAxisCategory={[
+                      ...Object.keys(volumeChartData.tokens['buyVolume'][activeTabOfVolume]),
+                      ...Object.keys(volumeChartData.tokens['sellVolume'][activeTabOfVolume]),
+                    ]}
                   />
                 </div>
               </div>

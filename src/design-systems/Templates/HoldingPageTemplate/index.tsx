@@ -59,7 +59,6 @@ const HoldingPageTemplate: React.FC = () => {
 
   const { crypto, tabName } = useDataSelector('toggle')
 
-
   useEffect(() => {
     if (LocalWallet !== null) {
       setWalletLoading(JSON.parse(LocalWallet))
@@ -72,16 +71,17 @@ const HoldingPageTemplate: React.FC = () => {
 
   const holdingData = useMemo(() => {
     return {
-      nfts: HoldingNfts?.reduce((res, collection) => {
-        const contracts = res.map((one: any) => one.contract)
-        const index = contracts.indexOf(collection.contract)
-        if (index !== -1) {
-          res[index].nftsHolding = [... new Set([...res[index].nftsHolding, ...collection.nftsHolding])]
-        } else {
-          res.push(collection)
-        }
-        return res
-      }, []) ?? [],
+      nfts:
+        HoldingNfts?.reduce((res, collection) => {
+          const contracts = res.map((one: any) => one.contract)
+          const index = contracts.indexOf(collection.contract)
+          if (index !== -1) {
+            res[index].nftsHolding = [...new Set([...res[index].nftsHolding, ...collection.nftsHolding])]
+          } else {
+            res.push(collection)
+          }
+          return res
+        }, []) ?? [],
       tokens: HoldingTokens ?? [],
     }
   }, [HoldingNfts, isLoadingHoldingNfts, HoldingTokens, isLoadingHoldingTokens])
@@ -91,17 +91,18 @@ const HoldingPageTemplate: React.FC = () => {
       nfts: IncomeNfts ?? [],
       tokens: [],
     }
-  }, []);
+  }, [])
 
   const totalData = useMemo(() => {
     return {
-      nfts: [...HoldingNfts ?? [], ...IncomeNfts ?? []],
-      tokens: []
+      nfts: [...(HoldingNfts ?? []), ...(IncomeNfts ?? [])],
+      tokens: [],
     }
   }, [HoldingNfts, isLoadingHoldingNfts, IncomeNfts, isLoadingIncomeNfts])
 
   const totalItems = useMemo(
-    () => (activeTab === 0 ? HoldingNfts?.length ?? 0 : activeTab === 1 ? IncomeNfts?.length ?? 0 : totalData.nfts.length),
+    () =>
+      activeTab === 0 ? HoldingNfts?.length ?? 0 : activeTab === 1 ? IncomeNfts?.length ?? 0 : totalData.nfts.length,
     [activeTab, HoldingNfts?.length, IncomeNfts?.length]
   )
 
@@ -135,11 +136,9 @@ const HoldingPageTemplate: React.FC = () => {
     }
   }, [HoldingNfts, HoldingTokens])
 
-
   const startIndex = currentPage * itemsPerPage
   const endIndex = startIndex + itemsPerPage
   const pageCount = Math.ceil(totalItems / itemsPerPage)
-
 
   const handlePageChange = ({ selected }: { selected: number }) => setCurrentPage(selected)
 
@@ -156,8 +155,9 @@ const HoldingPageTemplate: React.FC = () => {
       <Web3Modal>
         <div className="flex flex-col font-Lexend">
           <div
-            className={`grid !grid-cols-1 flex-col justify-center gap-[20px] md:flex-row lg:!grid-cols-7 ${width < 768 ? 'h-[600px] overflow-hidden' : ''
-              }`}
+            className={`grid !grid-cols-1 flex-col justify-center gap-[20px] md:flex-row lg:!grid-cols-7 ${
+              width < 768 ? 'h-[600px] overflow-hidden' : ''
+            }`}
           >
             {width > 768 && <HoldingDataGroup />}
             <div className="w-full rounded-[12px] bg-blackCardBg p-2 md:!rounded-md md:!p-[22px] lg:col-span-3">
@@ -209,8 +209,9 @@ const HoldingPageTemplate: React.FC = () => {
                               <div>
                                 <TETooltip title={`${per / crypto.value}%`}>
                                   <Typography
-                                    className={`font-Poppins overflow-hidden overflow-ellipsis whitespace-nowrap font-normal ${per < 0 ? 'text-warning-300' : 'text-green'
-                                      }`}
+                                    className={`font-Poppins overflow-hidden overflow-ellipsis whitespace-nowrap font-normal ${
+                                      per < 0 ? 'text-warning-300' : 'text-green'
+                                    }`}
                                     size="paragraph"
                                   >
                                     {per ? <>{per === null ? '0.00%' : `${per / crypto.value}%`}</> : '--'}
@@ -309,12 +310,12 @@ const HoldingPageTemplate: React.FC = () => {
                       activeTab === 0
                         ? holdingData.nfts
                         : activeTab === 1
-                          ? incomeData.nfts
-                          : activeTab === 2
-                            ? totalData.nfts
-                            : activeTab === 3
-                              ? holdingData.nfts
-                              : []
+                        ? incomeData.nfts
+                        : activeTab === 2
+                        ? totalData.nfts
+                        : activeTab === 3
+                        ? holdingData.nfts
+                        : []
                     }
                     filename="data"
                     // headers={activeTab === 0 ? holdingData : activeTab === 1 ? incomeData : holdingHeaders}
@@ -463,8 +464,8 @@ const HoldingPageTemplate: React.FC = () => {
                     (incomeData.nfts?.length > 9 && activeTab === 1) ||
                     (totalData.nfts.length > 9 && activeTab === 2) ||
                     (holdingData.nfts.length > 9 && activeTab === 3)) && (
-                      <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
-                    )}
+                    <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
+                  )}
                 </div>
               )}
               {tabName === 1 && (
@@ -599,8 +600,8 @@ const HoldingPageTemplate: React.FC = () => {
                     (incomeData.nfts?.length > 9 && activeTab === 1) ||
                     (totalData.nfts.length > 9 && activeTab === 2) ||
                     (holdingData.nfts.length > 9 && activeTab === 3)) && (
-                      <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
-                    )}
+                    <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
+                  )}
                 </div>
               )}
               {tabName === 2 && (
@@ -735,8 +736,8 @@ const HoldingPageTemplate: React.FC = () => {
                     (incomeData.tokens?.length > 9 && activeTab === 1) ||
                     (totalData.tokens.length > 9 && activeTab === 2) ||
                     (holdingData.tokens.length > 9 && activeTab === 3)) && (
-                      <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
-                    )}
+                    <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
+                  )}
                 </div>
               )}
             </div>

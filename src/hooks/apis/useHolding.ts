@@ -79,7 +79,7 @@ export const useHolding = () => {
     [API_ENDPOINTS.PUBLIC.GET_HOLDING_NFTS],
     () => HoldingServices.getHoldingNfts({ wallet_addresses: activeAddresses }),
     {
-      select: res => res.flatMap(one => ((!one.collections || one.collections?.result === null) ? [] : one.collections)),
+      select: res => res.flatMap(one => (!one.collections || one.collections?.result === null ? [] : one.collections)),
       refetchOnWindowFocus: false,
       enabled: activeAddresses.length > 0,
     }
