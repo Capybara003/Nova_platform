@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
         <div className=" flex !flex-wrap-reverse items-center !justify-center gap-3 px-[70px] py-[22px] text-center xsm:!justify-between">
           <div className="flex text-center">
             <Typography className="" size="body">
-              © 2023 NOVA P2 CodeFactory Ltd.
+              © 2024 NOVA P2 CodeFactory Ltd.
             </Typography>
           </div>
           <div className="flex gap-6">

@@ -89,7 +89,7 @@ const Header: React.FC<any> = ({ noComponent, hide, userData }) => {
                   onTabChange={handleTabChange}
                 />
               )}
-              <div className="h-[56px] w-[120px]">
+              {/* <div className="h-[56px] w-[120px]">
                 <OnSelect
                   className="h-[56px] !w-full "
                   imageHeight={0}
@@ -98,13 +98,13 @@ const Header: React.FC<any> = ({ noComponent, hide, userData }) => {
                   options={['1 day', '7 days', '30 days', '90 days', '1 year', 'All']}
                   onSelect={handleSelect}
                 />
-              </div>
+              </div> */}
             </>
           )}
         </div>
         <div className="flex items-center gap-4 lg:!mr-6">
           {' '}
-          {!hide && <SearchMolecule />}
+          {/* {!hide && <SearchMolecule />} */}
           {hide && (
             <Button className="flex h-[52px] rounded-[6px]  bg-gradint-dark-pink p-[3px] font-Inter" onClick={connect}>
               <div className="flex h-full items-center justify-center gap-[10px] rounded-[6px] bg-[#181620] px-4">
@@ -115,7 +115,7 @@ const Header: React.FC<any> = ({ noComponent, hide, userData }) => {
               </div>
             </Button>
           )}
-          {!hide && (
+          {/* {!hide && (
             <div className="h-[56px] min-w-[119px]">
               <OnSelect
                 className="font-Poppins h-[56px]"
@@ -126,7 +126,7 @@ const Header: React.FC<any> = ({ noComponent, hide, userData }) => {
                 onSelect={handleSelectSei}
               />
             </div>
-          )}
+          )} */}
           {session.status === 'authenticated' || hasToken ? (
             <Button className="font-Poppins h-[52px] w-[126px] rounded bg-button-gradient" onClick={handleSignOut}>
               Log Out

@@ -112,12 +112,12 @@ const AnalyticsBottomSection: React.FC = () => {
     return NftTradeInfo?.reduce((acc, item) => {
       if (acc === undefined) acc = {}
       if (acc.ageOfNftAssets === undefined) acc.ageOfNftAssets = {}
-      acc.ageOfNftAssets.level1 = [...(acc.ageOfNftAssets.level1 ?? []), ...(item.ageOfNftAssets.level1 ?? [])]
-      acc.ageOfNftAssets.level2 = [...(acc.ageOfNftAssets.level2 ?? []), ...(item.ageOfNftAssets.level2 ?? [])]
-      acc.ageOfNftAssets.level3 = [...(acc.ageOfNftAssets.level3 ?? []), ...(item.ageOfNftAssets.level3 ?? [])]
-      acc.ageOfNftAssets.level4 = [...(acc.ageOfNftAssets.level4 ?? []), ...(item.ageOfNftAssets.level4 ?? [])]
-      acc.ageOfNftAssets.level5 = [...(acc.ageOfNftAssets.level5 ?? []), ...(item.ageOfNftAssets.level5 ?? [])]
-      acc.ageOfNftAssets.level6 = [...(acc.ageOfNftAssets.level6 ?? []), ...(item.ageOfNftAssets.level6 ?? [])]
+      acc.ageOfNftAssets.level1 = [...(acc.ageOfNftAssets.level1 ?? []), ...(item?.ageOfNftAssets?.level1 ?? [])]
+      acc.ageOfNftAssets.level2 = [...(acc.ageOfNftAssets.level2 ?? []), ...(item?.ageOfNftAssets?.level2 ?? [])]
+      acc.ageOfNftAssets.level3 = [...(acc.ageOfNftAssets.level3 ?? []), ...(item?.ageOfNftAssets?.level3 ?? [])]
+      acc.ageOfNftAssets.level4 = [...(acc.ageOfNftAssets.level4 ?? []), ...(item?.ageOfNftAssets?.level4 ?? [])]
+      acc.ageOfNftAssets.level5 = [...(acc.ageOfNftAssets.level5 ?? []), ...(item?.ageOfNftAssets?.level5 ?? [])]
+      acc.ageOfNftAssets.level6 = [...(acc.ageOfNftAssets.level6 ?? []), ...(item?.ageOfNftAssets?.level6 ?? [])]
     }, {})
   }, [NftTradeInfo, isLoadingNftTradeInfo])
 
@@ -126,7 +126,7 @@ const AnalyticsBottomSection: React.FC = () => {
       !isLoadingNftTradeInfo &&
       NftTradeInfo &&
       NftTradeInfo.reduce((acc, item) => {
-        if (item.ageOfNftAssets) {
+        if (item?.ageOfNftAssets) {
           const res = Object.values(item.ageOfNftAssets)
             .flat()
             .reduce((acc: any, item: any) => {
@@ -149,7 +149,7 @@ const AnalyticsBottomSection: React.FC = () => {
       nfts: !isLoadingNftTradeInfo &&
         NftTradeInfo && {
           0: NftTradeInfo.reduce((acc, item) => {
-            item.transaction &&
+            item?.transaction &&
               Object.keys(item.transaction.day)
                 .sort((a, b) => new Date(a.replaceAll('_', '-')).getTime() - new Date(b.replaceAll('_', '-')).getTime())
                 .map(day => {
@@ -172,7 +172,7 @@ const AnalyticsBottomSection: React.FC = () => {
             return acc
           }, []),
           1: NftTradeInfo.reduce((acc, item) => {
-            item.transaction &&
+            item?.transaction &&
               Object.keys(item.transaction.week).map(week => {
                 const transaction = item.transaction.week[week]
 
@@ -193,7 +193,7 @@ const AnalyticsBottomSection: React.FC = () => {
             return acc
           }, []),
           2: NftTradeInfo.reduce((acc, item) => {
-            item.transaction &&
+            item?.transaction &&
               Object.keys(item.transaction.month).map(month => {
                 const transaction = item.transaction.month[month]
 
