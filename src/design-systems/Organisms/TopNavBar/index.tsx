@@ -64,17 +64,17 @@ export const TopNavbar: React.FC<HeaderProps> = ({ open, setOpen, setModelName, 
                 onTabChange={handleTabChange}
               />
             </div>
-            <OnSelect
+            {/* <OnSelect
               className="h-[41px] w-full !text-[12px] sm:!h-full sm:!w-auto"
               imageHeight={0}
               imageSrc={''}
               imageWidth={0}
               options={['1 day', '7 days', '30 days', '90 days', '1 year', 'All']}
               onSelect={() => {}}
-            />
+            /> */}
           </div>
         )}
-        {!hide && <SearchMolecule />}
+        {/* {!hide && <SearchMolecule />} */}
         {(pathname === '/NOVA-Naut' ||
           pathname === '/mint' ||
           pathname === '/NOVA-Naut/NOVA-Naut-id' ||
@@ -92,8 +92,8 @@ export const TopNavbar: React.FC<HeaderProps> = ({ open, setOpen, setModelName, 
             </div>
           </Button>
         )}
-        <div className="grid grid-cols-2 items-center justify-center gap-4">
-          {!hide && (
+        <div className="grid grid-cols-1 items-center justify-center gap-4">
+          {/* {!hide && (
             <div className="">
               <OnSelect
                 className="font-Poppins h-full"
@@ -107,7 +107,7 @@ export const TopNavbar: React.FC<HeaderProps> = ({ open, setOpen, setModelName, 
                 }}
               />
             </div>
-          )}
+          )} */}
           <div className="flex h-full items-center justify-center ">
             {session.status === 'authenticated' || hasToken ? (
               <Button
@@ -147,7 +147,7 @@ export const TopNavbar: React.FC<HeaderProps> = ({ open, setOpen, setModelName, 
             )}
           </div>
         </div>
-        <div className="flex flex-col gap-3 ">
+        {/* <div className="flex flex-col gap-3 ">
           {SidebarData.map((item, key) => {
             return (
               <div className="grid " key={key}>
@@ -178,7 +178,7 @@ export const TopNavbar: React.FC<HeaderProps> = ({ open, setOpen, setModelName, 
               </div>
             )
           })}
-        </div>
+        </div> */}
       </div>
     </div>
   )

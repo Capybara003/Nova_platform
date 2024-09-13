@@ -70,19 +70,19 @@ import {
 } from 'design-systems/Atoms/Icons'
 
 export const SidebarData = [
-  { key: 0, label: 'Market', activeIcon: <MarketActiveIcon />, icon: <MarketIcon />, path: '/market-analitics' },
+  // { key: 0, label: 'Market', activeIcon: <MarketActiveIcon />, icon: <MarketIcon />, path: '/market-analitics' },
   { key: 1, label: 'Portfolio', activeIcon: <HoldingActiveIcon />, icon: <HoldingIcon />, path: '/holding' },
-  { key: 2, label: 'Revenue Calculator', activeIcon: <RevenuActiveIcon />, icon: <RevenuIcons />, path: '/revenu' },
-  { key: 3, label: 'Taxes', activeIcon: <TaxesActiveIcons />, icon: <TaxesIcons />, path: '/taxes' },
-  { key: 4, label: 'Watchlist', activeIcon: <WatchListActiveIcons />, icon: <WatchListIcons />, path: '/watchlist' },
-  {
-    key: 5,
-    label: 'Whale Watching',
-    activeIcon: <MarketWhaleActiveIcons />,
-    icon: <MarketWhaleIcons />,
-    path: '/whale-watching',
-  },
-  { key: 6, label: 'My Account', activeIcon: <AccountActiveIcons />, icon: <AccountIcons />, path: '/account' },
+  // { key: 2, label: 'Revenue Calculator', activeIcon: <RevenuActiveIcon />, icon: <RevenuIcons />, path: '/revenu' },
+  // { key: 3, label: 'Taxes', activeIcon: <TaxesActiveIcons />, icon: <TaxesIcons />, path: '/taxes' },
+  // { key: 4, label: 'Watchlist', activeIcon: <WatchListActiveIcons />, icon: <WatchListIcons />, path: '/watchlist' },
+  // {
+  //   key: 5,
+  //   label: 'Whale Watching',
+  //   activeIcon: <MarketWhaleActiveIcons />,
+  //   icon: <MarketWhaleIcons />,
+  //   path: '/whale-watching',
+  // },
+  // { key: 6, label: 'My Account', activeIcon: <AccountActiveIcons />, icon: <AccountIcons />, path: '/account' },
 ]
 export const allowedPathnames = [
   '/login',

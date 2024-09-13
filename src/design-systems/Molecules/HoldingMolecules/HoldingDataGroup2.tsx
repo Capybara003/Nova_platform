@@ -167,7 +167,7 @@ const HoldingDataGroup2: React.FC = () => {
   return (
     <Web3Modal>
       <div className="flex h-auto w-full flex-col flex-wrap content-between justify-between gap-[22px] !rounded-md bg-blackCardBg p-2 text-[#DBDBDB] md:!p-[22px] lg:col-span-2  ">
-        <div className="flex flex-col gap-4">
+        {/* <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between font-Lexend">
             <Typography className="!font-medium" size="lg">
               Connected Exchanges:
@@ -245,7 +245,7 @@ const HoldingDataGroup2: React.FC = () => {
               </div>
             </Button>
           </div>
-        </div>
+        </div> */}
         <div className="flex w-full flex-col gap-4">
           <div className="flex items-center justify-between font-Lexend">
             <Typography className="!font-medium" size="lg">

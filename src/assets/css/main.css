@@ -54,7 +54,7 @@
   html,
   body,
   :root {
-    /* @apply h-full w-full; */
+    @apply h-auto w-full;
     @apply text-neutral-100 dark:text-neutral-800;
     @apply bg-light dark:bg-dark;
 

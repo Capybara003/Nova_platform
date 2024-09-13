@@ -41,7 +41,7 @@ const DashboardIndex: React.FC = () => {
               <Button
                 className=" w-full max-w-[232px] rounded-xs bg-button-gradient p-[12px] px-[30px]"
                 onClick={() => {
-                  router.push('/market-analitics')
+                  router.push('/holding')
                 }}
               >
                 <Typography className="font-normal " size="md">

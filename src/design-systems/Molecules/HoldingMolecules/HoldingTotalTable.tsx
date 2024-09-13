@@ -101,7 +101,7 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
         <tbody>
           {data?.map((collection: any, index: any) => {
             const info =
-              (collection?.incomeNfts &&
+              ((collection?.incomeNfts &&
                 collection?.incomeNfts?.reduce((acc: any, nft: any) => {
                   // acc.rank = (acc.rank || 0) + (nft?.rarity?.rank || 0) / collection.userHoldingAmount
                   acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
@@ -111,18 +111,20 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                   acc.holdingTime = (acc.holdingTime || 0) + Number(nft?.holdingTime) / (24 * 60 * 60) || 0
                   return acc
                 }, {})) ||
-              (collection?.nftsHolding &&
-                collection?.nftsHolding?.reduce((acc: any, nft: any) => {
-                  // acc.rank = (acc.rank || 0) + nft?.rarity?.rank || 0
-                  acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
-                  acc.fee = (acc.fee || 0) + formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01 || 0
-                  acc.gains = (acc.gains || 0) + formatUSei(nft?.unrealizedGains) || 0
-                  acc.holdingTime =
-                    (acc.holdingTime || 0) + (Date.now() - new Date(nft?.ts).getTime()) / (24 * 60 * 60 * 1000) || 0
-                  acc.floorPrice = (acc.floorPrice || 0) + formatUSei(nft?.floorPrice) || 0
-                  return acc
-                }, {}))
-            info.holdingTime = info.holdingTime / collection?.nftsHolding?.length || collection?.incomeNfts?.length || 0
+                (collection?.nftsHolding &&
+                  collection?.nftsHolding?.reduce((acc: any, nft: any) => {
+                    // acc.rank = (acc.rank || 0) + nft?.rarity?.rank || 0
+                    acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
+                    acc.fee = (acc.fee || 0) + formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01 || 0
+                    acc.gains = (acc.gains || 0) + formatUSei(nft?.unrealizedGains) || 0
+                    acc.holdingTime =
+                      (acc.holdingTime || 0) + (Date.now() - new Date(nft?.ts).getTime()) / (24 * 60 * 60 * 1000) || 0
+                    acc.floorPrice = (acc.floorPrice || 0) + formatUSei(nft?.floorPrice) || 0
+                    return acc
+                  }, {}))) ??
+              {}
+            info.holdingTime =
+              info?.holdingTime / collection?.nftsHolding?.length || collection?.incomeNfts?.length || 0
             info.weight = ((formatUSei(collection?.floorPrice) || 0) * 100) / (totalValue || 0)
             info.floorPrice = formatUSei(collection?.floorPrice) * collection?.nftsHolding?.length || 0
             return (
@@ -163,7 +165,7 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                       : '--'}
                   </td>
                   <td className="w-[40px] overflow-hidden overflow-ellipsis">
-                    <TETooltip title={`${((collection.floorPrice * 100) / (totalValue || 0)).toFixed(2)}%`}>
+                    <TETooltip title={`${((collection?.floorPrice * 100) / (totalValue || 0)).toFixed(2)}%`}>
                       {collection?.floorPrice !== undefined && totalValue && totalValue !== 0
                         ? `${((collection.floorPrice * 100) / totalValue).toFixed(2)}%`
                         : '--'}
@@ -178,7 +180,7 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                       </Typography>
                     </TETooltip>
                   </td>
-                  <td>{collection.rarity}</td>
+                  <td>{collection?.rarity}</td>
                   <td className="w-[100px] overflow-hidden overflow-ellipsis">
                     <TETooltip title={`${info?.buyPrice} ${crypto?.symbol}`}>
                       <Typography className="w-max">
@@ -197,7 +199,7 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                   <td>
                     {info?.gains && info?.gains !== null ? `${Number(info.gains).toFixed(2)} ${crypto?.symbol}` : '--'}
                   </td>
-                  <td>{collection.tokenReard}</td>
+                  <td>{collection?.tokenReard}</td>
                   <td>{info && info?.holdingTime !== null ? `${info.holdingTime.toFixed(2)} d` : '--'}</td>
                   <td>
                     <div className="flex flex-col items-center justify-center">
