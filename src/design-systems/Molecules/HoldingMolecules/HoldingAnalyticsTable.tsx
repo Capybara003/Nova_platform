@@ -12,7 +12,7 @@ import { RxCaretSort } from 'react-icons/rx'
 import TableProps from '../IndexTable/interface'
 import BookMarkButton from '../Table/BookMarkButton'
 
-import { LinkIcon, RightArrowIcons } from 'design-systems/Atoms/Icons'
+import { BookMarkEmpty, BookMarkFill, LinkIcon, RightArrowIcons } from 'design-systems/Atoms/Icons'
 import Typography from 'design-systems/Atoms/Typography'
 import { Checkbox } from 'design-systems/Atoms/CheckBox'
 import { IMG } from 'assets/images'
@@ -30,8 +30,10 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
   loading,
   totalValue,
 }) => {
-  const [activeElement, setActiveElement] = useState<string>('')
+  const [activeElement, setActiveElement] = useState<string[]>([])
   const [checkboxes, setCheckboxes] = useState<any>([])
+  const [bookmarkedItems, setBookmarkedItems] = useState<string[]>([])
+  const [isBookmarkedAll, setIsBookmarkedAll] = useState<boolean>(false)
 
   const { tabName } = useDataSelector('toggle')
 
@@ -39,23 +41,44 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
   const baseValue = 100
 
   const handleClick = (value: string) => {
-    if (value === activeElement) {
-      setActiveElement('')
+    if (activeElement.includes(value)) {
+      setActiveElement(prev => prev.filter(item => item !== value))
     } else {
-      setActiveElement(value)
+      setActiveElement(prev => [...prev, value])
     }
+  }
+
+  const handleBookMark = (id: string) => {
+    // Check if the item is already bookmarked
+    if (bookmarkedItems.includes(id)) {
+      // If bookmarked, remove it from the list
+      setBookmarkedItems(bookmarkedItems.filter(item => item !== id))
+    } else {
+      // If not bookmarked, add it to the list
+      setBookmarkedItems([...bookmarkedItems, id])
+    }
+  }
+
+  const handleBookMarkAll = () => {
+    if (!isBookmarkedAll) {
+      const allIds = data.map((item: any) => item.contract)
+      setBookmarkedItems(allIds)
+    } else {
+      setBookmarkedItems([])
+    }
+    setIsBookmarkedAll(prev => !prev);
   }
 
   const handleSelectAllChange = (checked: boolean) => {
     if (checked) {
-      const allIds = data.map((item: any) => item.id)
+      const allIds = data.map((item: any) => item.contract)
       setCheckboxes(allIds)
     } else {
       setCheckboxes([])
     }
   }
 
-  const handleCheckboxChange = (id: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckboxChange = (id: string) => {
     const updatedCheckboxes: any = [...checkboxes]
 
     const index = updatedCheckboxes.indexOf(id)
@@ -80,7 +103,7 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                   <div className={`flex !w-full items-center gap-2 ${key === 0 ? 'justify-start' : 'justify-center'}`}>
                     {key === 0 && (
                       <Typography className="ml-4 mr-16">
-                        <BookMarkButton isActive={true} />
+                        <BookMarkButton isActive={isBookmarkedAll} onClick={handleBookMarkAll} />
                       </Typography>
                     )}
                     {item.isInfo && <FiInfo className="text-md" />}
@@ -113,10 +136,10 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
         <tbody>
           {!loading &&
             tabName === 1 &&
-            data?.map((collection: any, index: any) => {
+            data?.map((collection: any) => {
               const info =
-                collection?.nftsHolding &&
-                collection?.nftsHolding?.reduce((acc: any, nft: any) => {
+                collection?.nftsHold &&
+                collection?.nftsHold?.reduce((acc: any, nft: any) => {
                   // acc.rank = (acc.rank || 0) + nft?.rarity?.rank || 0
                   acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
                   acc.estFee = (acc.estFee || 0) + formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01 || 0
@@ -127,25 +150,34 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                   return acc
                 }, {})
               // info.rank = info.rank / collection?.userHoldingNfts?.length || 0
-              info.holdingTime = info.holdingTime / collection?.nftsHolding?.length || 0
+              info.holdingTime = info.holdingTime / collection?.nftsHold?.length || 0
 
               const SinceTrade = collection?.sinceTrade / SEI
 
               const percentageChange = (SinceTrade - baseValue) / baseValue
-              const formattedPercentageChange = `${
-                (percentageChange >= 0 ? '+' : '') +
+              const formattedPercentageChange = `${(percentageChange >= 0 ? '+' : '') +
                 percentageChange
                   .toFixed(2)
                   .replace('.', ',')
                   .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-              }%`
+                }%`
               return (
-                <React.Fragment key={index}>
+                <React.Fragment key={collection.contract}>
                   <tr className="cursor-pointer">
                     <td className="min-w-[230px]">
                       <div className="flex items-center justify-center gap-2">
-                        <BookMarkButton isActive={false} />
-                        <div className={`${activeElement === index && 'rotate-90'}`} onClick={() => handleClick(index)}>
+                        <div onClick={() => handleBookMark(collection?.contract)}>
+                          {bookmarkedItems.includes(collection?.contract) ? (
+                            <div>
+                              <BookMarkFill />
+                            </div>
+                          ) : (
+                            <div>
+                              <BookMarkEmpty />
+                            </div>
+                          )}
+                        </div>
+                        <div className={`${activeElement.includes(collection.contract) && 'rotate-90'}`} onClick={() => handleClick(collection.contract)}>
                           <RightArrowIcons />
                         </div>
                         <div className="flex items-center justify-center gap-[3px]">
@@ -171,9 +203,7 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                       </div>
                     </td>
                     <td className="!w-[20px] !overflow-hidden !overflow-ellipsis">
-                      {collection?.nftsHolding && collection?.nftsHolding !== null
-                        ? collection.nftsHolding.length
-                        : '--'}
+                      {collection?.nftsHold && collection?.nftsHold !== null ? collection.nftsHold.length : '--'}
                     </td>
                     <td className="w-[40px] overflow-hidden overflow-ellipsis">
                       {info?.floorPrice !== undefined && totalValue !== 0
@@ -216,9 +246,8 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                         <Link
                           className="flex flex-col items-center justify-center"
                           href={collection && collection?.link}
-                          target={`${
-                            collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
-                          }`}
+                          target={`${collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
+                            }`}
                         >
                           <div className="rounded-[8px] bg-black225_05 p-1">
                             <LinkIcon />
@@ -231,18 +260,18 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                     <td>
                       <div
                         className="flex !w-full justify-end"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          handleCheckboxChange(collection?.seiAddress, e)
+                        onChange={() =>
+                          handleCheckboxChange(collection?.contract)
                         }
                       >
-                        <Checkbox checked={checkboxes.includes(collection?.seiAddress)} />
+                        <Checkbox checked={checkboxes.includes(collection?.contract)} />
                       </div>{' '}
                     </td>
                   </tr>
-                  {collection?.nftsHolding &&
-                    collection?.nftsHolding?.map((nft: any) => (
+                  {collection?.nftsHold &&
+                    collection?.nftsHold?.map((nft: any) => (
                       <tr
-                        className={`${activeElement === index ? 'table-row' : 'hidden'} cursor-pointer`}
+                        className={`${activeElement.includes(collection.contract) ? 'table-row' : 'hidden'} cursor-pointer`}
                         key={nft.key}
                       >
                         <td className="!p-0">
@@ -278,9 +307,8 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                         <td>
                           <div>
                             {nft?.royaltyPercentage && nft?.royaltyPercentage !== null
-                              ? `${(formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01).toFixed(2)} ${
-                                  crypto?.symbol
-                                }`
+                              ? `${(formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01).toFixed(2)} ${crypto?.symbol
+                              }`
                               : '--'}
                           </div>
                         </td>
@@ -321,9 +349,8 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                             <Link
                               className="flex flex-col items-center justify-center"
                               href={collection && collection?.link}
-                              target={`${
-                                collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
-                              }`}
+                              target={`${collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
+                                }`}
                             >
                               <div className="rounded-[8px] bg-black225_05 p-1">
                                 <LinkIcon />
@@ -336,11 +363,11 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                         <td>
                           <div
                             className="flex !w-full justify-end"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                              handleCheckboxChange(collection?.seiAddress, e)
+                            onChange={() =>
+                              handleCheckboxChange(collection?.contract)
                             }
                           >
-                            <Checkbox checked={checkboxes.includes(collection?.seiAddress)} />
+                            <Checkbox checked={checkboxes.includes(collection?.contract)} />
                           </div>{' '}
                         </td>
                       </tr>
@@ -350,10 +377,10 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
             })}
           {!loading &&
             tabName === 2 &&
-            data?.map((token: any, index: any) => {
+            data?.map((token: any) => {
               // const info =
-              //   token?.nftsHolding &&
-              //   token?.nftsHolding?.reduce((acc: any, nft: any) => {
+              //   token?.nftsHold &&
+              //   token?.nftsHold?.reduce((acc: any, nft: any) => {
               //     // acc.rank = (acc.rank || 0) + nft?.rarity?.rank || 0
               //     acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
               //     acc.estFee = (acc.estFee || 0) + formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01 || 0
@@ -364,25 +391,34 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
               //     return acc
               //   }, {})
               // info.rank = info.rank / token?.userHoldingNfts?.length || 0
-              // info.holdingTime = info.holdingTime / token?.nftsHolding?.length || 0
+              // info.holdingTime = info.holdingTime / token?.nftsHold?.length || 0
 
               const SinceTrade = token?.sinceTrade / SEI
 
               const percentageChange = (SinceTrade - baseValue) / baseValue
-              const formattedPercentageChange = `${
-                (percentageChange >= 0 ? '+' : '') +
+              const formattedPercentageChange = `${(percentageChange >= 0 ? '+' : '') +
                 percentageChange
                   .toFixed(2)
                   .replace('.', ',')
                   .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-              }%`
+                }%`
               return (
                 <React.Fragment key={token?.demon}>
                   <tr className="cursor-pointer">
                     <td className="min-w-[230px]">
                       <div className="flex items-center justify-center gap-2">
-                        <BookMarkButton isActive={false} />
-                        <div className={`${activeElement === index && 'rotate-90'}`} onClick={() => handleClick(index)}>
+                        <div onClick={() => handleBookMark(token?.demon)}>
+                          {bookmarkedItems.includes(token?.demon) ? (
+                            <div>
+                              <BookMarkFill />
+                            </div>
+                          ) : (
+                            <div>
+                              <BookMarkEmpty />
+                            </div>
+                          )}
+                        </div>
+                        <div className={`${activeElement.includes(token.demon) && 'rotate-90'}`} onClick={() => handleClick(token.demon)}>
                           <RightArrowIcons />
                         </div>
                         <div className="flex items-center justify-center gap-[3px]">
@@ -422,8 +458,8 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                     <td className="w-[100px] overflow-hidden overflow-ellipsis">
                       {token?.amount && token?.worthUsei
                         ? `${(
-                            formatUnits(token?.worthUsei, 6) / formatUnits(token.amount, token?.decimals || 6)
-                          )?.toFixed(6)} SEI`
+                          formatUnits(token?.worthUsei, 6) / formatUnits(token.amount, token?.decimals || 6)
+                        )?.toFixed(6)} SEI`
                         : '--'}
                     </td>
                     <td>{token?.rank && token?.rank !== null ? token?.rank : '--'}</td>
@@ -468,18 +504,18 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                     <td>
                       <div
                         className="flex !w-full justify-end"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          handleCheckboxChange(token?.seiAddress, e)
+                        onChange={() =>
+                          handleCheckboxChange(token?.contract)
                         }
                       >
-                        <Checkbox checked={checkboxes.includes(token?.seiAddress)} />
+                        <Checkbox checked={checkboxes.includes(token?.contract)} />
                       </div>{' '}
                     </td>
                   </tr>
-                  {token?.nftsHolding &&
-                    token?.nftsHolding?.map((nft: any) => (
+                  {token?.nftsHold &&
+                    token?.nftsHold?.map((nft: any) => (
                       <tr
-                        className={`${activeElement === index ? 'table-row' : 'hidden'} cursor-pointer`}
+                        className={`${activeElement.includes(token.demon) ? 'table-row' : 'hidden'} cursor-pointer`}
                         key={nft.key}
                       >
                         <td className="!p-0">
@@ -515,9 +551,8 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                         <td>
                           <div>
                             {nft?.royaltyPercentage && nft?.royaltyPercentage !== null
-                              ? `${(formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01).toFixed(2)} ${
-                                  crypto?.symbol
-                                }`
+                              ? `${(formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01).toFixed(2)} ${crypto?.symbol
+                              }`
                               : '--'}
                           </div>
                         </td>
@@ -569,11 +604,11 @@ const HoldingAnalyticsTable: React.FC<HoldingAnalyticsTableProps> = ({
                         <td>
                           <div
                             className="flex !w-full justify-end"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                              handleCheckboxChange(token?.seiAddress, e)
+                            onChange={() =>
+                              handleCheckboxChange(token?.contract)
                             }
                           >
-                            <Checkbox checked={checkboxes.includes(token?.seiAddress)} />
+                            <Checkbox checked={checkboxes.includes(token?.contract)} />
                           </div>{' '}
                         </td>
                       </tr>

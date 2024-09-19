@@ -21,13 +21,13 @@ export const API_ENDPOINTS = {
   },
 
   PUBLIC: {
-    GET_HOLDING_NFTS: 'nfts/user/get_holding_nfts',
-    GET_INCOME_NFTS: 'nfts/user/get_income_nfts',
-    GET_USER_HOLDING_NFTS_TOP: 'nfts/user/get_holding_nfts_top',
-    GET_NFTS_TRADE_INFO: 'nfts/user/get_nfts_trade_info',
-    GET_HOLDING_TOKENS: 'token/user/get_holding_tokens',
-    GET_USER_HOLDING_TOKENS_TOP: 'token/user/get_holding_tokens_top',
-    GET_TOKENS_TRADE_INFO: 'token/user/get_tokens_trade_info',
+    GET_HOLDING_NFTS: 'user/nft/get_holding_nfts',
+    GET_INCOME_NFTS: 'user/nft/get_income_nfts',
+    GET_USER_HOLDING_NFTS_TOP: 'user/nft/get_holding_nfts_top',
+    GET_NFTS_TRADE_INFO: 'user/nft/get_nfts_trade_info',
+    GET_HOLDING_TOKENS: 'user/token/get_holding_tokens',
+    GET_USER_HOLDING_TOKENS_TOP: 'user/token/get_holding_tokens_top',
+    GET_TOKENS_TRADE_INFO: 'user/token/get_tokens_trade_info',
     GET_HOLDING:
       'collections/all-nft/addr1qyf6cdhh0gn246dt92ac97sgrct9dteaqn85hutzemak4j9s2fhw5xj4gzh5feq0fursxsrman00lvy9cl9un6n84msswxthgn',
     POST_ASSETS_DETAILS: 'assets/asset-details',
