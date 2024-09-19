@@ -75,7 +75,7 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({
     } else {
       setBookmarkedItems([])
     }
-    setIsBookmarkedAll(prev => !prev);
+    setIsBookmarkedAll(prev => !prev)
   }
 
   const handleCheckboxChange = (id: string) => {
@@ -182,7 +182,10 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({
                             </div>
                           )}
                         </div>
-                        <div className={`${activeElement.includes(collection.contract) && 'rotate-90'}`} onClick={() => handleClick(collection.contract)}>
+                        <div
+                          className={`${activeElement.includes(collection.contract) && 'rotate-90'}`}
+                          onClick={() => handleClick(collection.contract)}
+                        >
                           <RightArrowIcons />
                         </div>
                         <Link
@@ -294,7 +297,9 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({
                   {collection?.incomeNfts &&
                     collection?.incomeNfts?.map((nft: any) => (
                       <tr
-                        className={`${activeElement.includes(collection.contract) ? 'table-row' : 'hidden'} cursor-pointer`}
+                        className={`${
+                          activeElement.includes(collection.contract) ? 'table-row' : 'hidden'
+                        } cursor-pointer`}
                         key={nft.tokenId}
                       >
                         {/* avatar, name */}
@@ -314,9 +319,9 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({
                         <td>
                           <Typography>
                             {info?.weight !== undefined &&
-                              totalValue !== 0 &&
-                              collection?.incomeNfts &&
-                              collection.incomeNfts.length > 0
+                            totalValue !== 0 &&
+                            collection?.incomeNfts &&
+                            collection.incomeNfts.length > 0
                               ? `${(info.weight / collection.incomeNfts.length).toFixed(2)}%`
                               : '--'}
                           </Typography>
@@ -407,9 +412,7 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({
                         <td>
                           <div
                             className="flex !w-full justify-end"
-                            onChange={() =>
-                              handleCheckboxChange(collection.contract)
-                            }
+                            onChange={() => handleCheckboxChange(collection.contract)}
                           >
                             <Checkbox checked={checkboxes.includes(collection.contract)} />
                           </div>{' '}

@@ -46,7 +46,7 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
     } else {
       setBookmarkedItems([])
     }
-    setIsBookmarkedAll(prev => !prev);
+    setIsBookmarkedAll(prev => !prev)
   }
 
   const handleCheckboxChange = (id: number) => {
@@ -165,7 +165,10 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                           </div>
                         )}
                       </div>
-                      <div className={`${activeElement.includes(collection.contract) && 'rotate-90'}`} onClick={() => handleClick(collection.contract)}>
+                      <div
+                        className={`${activeElement.includes(collection.contract) && 'rotate-90'}`}
+                        onClick={() => handleClick(collection.contract)}
+                      >
                         <RightArrowIcons />
                       </div>
                       <div className="flex items-center justify-center gap-[3px]">
@@ -192,7 +195,7 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                   </td>
                   <td className="!w-[20px] !overflow-hidden !overflow-ellipsis">
                     {(collection?.nftsHold && collection.nftsHold !== null) ||
-                      (collection?.incomeNfts && collection.incomeNfts !== null)
+                    (collection?.incomeNfts && collection.incomeNfts !== null)
                       ? collection?.nftsHold?.length || collection?.incomeNfts?.length
                       : '--'}
                   </td>
@@ -243,9 +246,7 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                   <td>
                     <div
                       className="flex !w-full justify-end"
-                      onChange={() =>
-                        handleCheckboxChange(collection?.contract)
-                      }
+                      onChange={() => handleCheckboxChange(collection?.contract)}
                     >
                       <Checkbox checked={checkboxes.includes(collection?.contract)} />
                     </div>{' '}
@@ -253,7 +254,12 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                 </tr>
                 {collection?.nftsHold &&
                   collection?.nftsHold?.map((nft: any) => (
-                    <tr className={`${activeElement.includes(collection.contract) ? 'table-row' : 'hidden'} cursor-pointer`} key={nft.key}>
+                    <tr
+                      className={`${
+                        activeElement.includes(collection.contract) ? 'table-row' : 'hidden'
+                      } cursor-pointer`}
+                      key={nft.key}
+                    >
                       <td className="!p-0">
                         <div>
                           <div className="flex w-full items-center">
@@ -287,8 +293,9 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                       <td>
                         <div>
                           {nft?.royaltyPercentage && nft?.royaltyPercentage !== null
-                            ? `${(formatUSei(nft?.floorPrice) * nft.royaltyPercentage * 0.01).toFixed(2)} ${crypto?.symbol
-                            }`
+                            ? `${(formatUSei(nft?.floorPrice) * nft.royaltyPercentage * 0.01).toFixed(2)} ${
+                                crypto?.symbol
+                              }`
                             : '--'}
                         </div>
                       </td>
@@ -330,8 +337,9 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                           <Link
                             className="flex flex-col items-center justify-center"
                             href={collection && collection?.link}
-                            target={`${collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
-                              }`}
+                            target={`${
+                              collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
+                            }`}
                           >
                             <div className="rounded-[8px] bg-black225_05 p-1">
                               <LinkIcon />
@@ -355,7 +363,9 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                 {collection?.incomeNfts &&
                   collection?.incomeNfts?.map((nft: any) => (
                     <tr
-                      className={`${activeElement.includes(collection.contract) ? 'table-row' : 'hidden'} cursor-pointer`}
+                      className={`${
+                        activeElement.includes(collection.contract) ? 'table-row' : 'hidden'
+                      } cursor-pointer`}
                       key={nft.tokenId}
                     >
                       {/* avatar, name */}
@@ -375,9 +385,9 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                       <td>
                         <Typography>
                           {info?.weight !== undefined &&
-                            totalValue !== 0 &&
-                            collection?.incomeNfts &&
-                            collection.incomeNfts.length > 0
+                          totalValue !== 0 &&
+                          collection?.incomeNfts &&
+                          collection.incomeNfts.length > 0
                             ? `${(info.weight / collection.incomeNfts.length).toFixed(2)}%`
                             : '--'}
                         </Typography>
@@ -466,7 +476,10 @@ const HoldingTotalTable: React.FC<HoldingTotalTableProps> = ({ crypto, data, hea
                           )} */}
                       </td>
                       <td>
-                        <div className="flex !w-full justify-end" onChange={() => handleCheckboxChange(collection.contract)}>
+                        <div
+                          className="flex !w-full justify-end"
+                          onChange={() => handleCheckboxChange(collection.contract)}
+                        >
                           <Checkbox checked={checkboxes.includes(collection.contract)} />
                         </div>{' '}
                       </td>

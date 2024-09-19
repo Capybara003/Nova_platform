@@ -43,11 +43,12 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
   const TotalUnRealizedGains = footerData?.totalUnRealizedGains / SEI
   const TotalSinceTrade = footerData?.totalSinceTrade / SEI
   const TotalpercentageChange = (TotalSinceTrade - baseValue) / baseValue
-  const TotalFormattedPercentageChange = `${(TotalpercentageChange >= 0 ? '+' : '') +
+  const TotalFormattedPercentageChange = `${
+    (TotalpercentageChange >= 0 ? '+' : '') +
     TotalpercentageChange.toFixed(2)
       .replace('.', ',')
       .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-    }%`
+  }%`
 
   const { tabName } = useDataSelector('toggle')
 
@@ -77,7 +78,7 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
     } else {
       setBookmarkedItems([])
     }
-    setIsBookmarkedAll(prev => !prev);
+    setIsBookmarkedAll(prev => !prev)
   }
 
   const handleCheckboxChange = (id: string) => {
@@ -169,12 +170,13 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
             const SinceTrade = collection?.sinceTrade / SEI
 
             const percentageChange = (SinceTrade - baseValue) / baseValue
-            const formattedPercentageChange = `${(percentageChange >= 0 ? '+' : '') +
+            const formattedPercentageChange = `${
+              (percentageChange >= 0 ? '+' : '') +
               percentageChange
                 .toFixed(2)
                 .replace('.', ',')
                 .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-              }%`
+            }%`
 
             return (
               <React.Fragment key={collection?.contract}>
@@ -192,7 +194,10 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                           </div>
                         )}
                       </div>
-                      <div className={`${activeElement.includes(collection.contract) && 'rotate-90'}`} onClick={() => handleClick(collection.contract)}>
+                      <div
+                        className={`${activeElement.includes(collection.contract) && 'rotate-90'}`}
+                        onClick={() => handleClick(collection.contract)}
+                      >
                         <RightArrowIcons />
                       </div>
                       <Link
@@ -299,8 +304,9 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                       <Link
                         className="flex flex-col items-center justify-center"
                         href={collection && collection?.link}
-                        target={`${collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
-                          }`}
+                        target={`${
+                          collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
+                        }`}
                       >
                         <div className="rounded-[8px] bg-black225_05 p-1">
                           <LinkIcon />
@@ -313,9 +319,7 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                   <td>
                     <div
                       className="flex !w-full justify-end"
-                      onChange={() =>
-                        handleCheckboxChange(collection?.contract)
-                      }
+                      onChange={() => handleCheckboxChange(collection?.contract)}
                     >
                       <Checkbox checked={checkboxes.includes(collection?.contract)} />
                     </div>{' '}
@@ -323,7 +327,12 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                 </tr>
                 {collection?.nftsHold &&
                   collection?.nftsHold?.map((nft: any) => (
-                    <tr className={`${activeElement.includes(collection.contract) ? 'table-row' : 'hidden'} cursor-pointer`} key={nft.key}>
+                    <tr
+                      className={`${
+                        activeElement.includes(collection.contract) ? 'table-row' : 'hidden'
+                      } cursor-pointer`}
+                      key={nft.key}
+                    >
                       <td className="!p-0">
                         <div>
                           <div className="flex w-full items-center">
@@ -357,8 +366,9 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                       <td>
                         <div>
                           {nft?.royaltyPercentage && nft?.royaltyPercentage !== null
-                            ? `${(formatUSei(nft?.floorPrice) * nft.royaltyPercentage * 0.01).toFixed(2)} ${crypto?.symbol
-                            }`
+                            ? `${(formatUSei(nft?.floorPrice) * nft.royaltyPercentage * 0.01).toFixed(2)} ${
+                                crypto?.symbol
+                              }`
                             : '--'}
                         </div>
                       </td>
@@ -399,8 +409,9 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                           <Link
                             className="flex flex-col items-center justify-center"
                             href={collection && collection?.link}
-                            target={`${collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
-                              }`}
+                            target={`${
+                              collection ? (collection?.link !== '' && collection?.link !== null ? '_blank' : '') : ''
+                            }`}
                           >
                             <div className="rounded-[8px] bg-black225_05 p-1">
                               <LinkIcon />
@@ -413,9 +424,7 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                       <td>
                         <div
                           className="flex !w-full justify-end"
-                          onChange={() =>
-                            handleCheckboxChange(collection?.contract)
-                          }
+                          onChange={() => handleCheckboxChange(collection?.contract)}
                         >
                           <Checkbox checked={checkboxes.includes(collection?.contract)} />
                         </div>{' '}
@@ -448,12 +457,13 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
             const SinceTrade = token?.sinceTrade / SEI
 
             const percentageChange = (SinceTrade - baseValue) / baseValue
-            const formattedPercentageChange = `${(percentageChange >= 0 ? '+' : '') +
+            const formattedPercentageChange = `${
+              (percentageChange >= 0 ? '+' : '') +
               percentageChange
                 .toFixed(2)
                 .replace('.', ',')
                 .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-              }%`
+            }%`
 
             return (
               <React.Fragment key={token?.demon}>
@@ -533,8 +543,8 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                     <div>
                       {token?.amount && token?.worthUsei
                         ? `${(formatUnits(token?.worthUsei, 6) / formatUnits(token.amount, token.decimals))?.toFixed(
-                          6
-                        )} SEI`
+                            6
+                          )} SEI`
                         : '--'}
                     </div>
                   </td>
@@ -594,12 +604,7 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                     )}
                   </td>
                   <td className="">
-                    <div
-                      className="flex !w-full justify-end"
-                      onChange={() =>
-                        handleCheckboxChange(token?.demon)
-                      }
-                    >
+                    <div className="flex !w-full justify-end" onChange={() => handleCheckboxChange(token?.demon)}>
                       <Checkbox checked={checkboxes.includes(token?.demon)} />
                     </div>{' '}
                   </td>
