@@ -76,7 +76,7 @@ const HoldingPageTemplate: React.FC = () => {
           const contracts = res.map((one: any) => one.contract)
           const index = contracts.indexOf(collection.contract)
           if (index !== -1) {
-            res[index].nftsHolding = [...new Set([...res[index].nftsHolding, ...collection.nftsHolding])]
+            res[index].nftsHold = [...new Set([...res[index].nftsHold, ...collection.nftsHold])]
           } else {
             res.push(collection)
           }
@@ -123,7 +123,7 @@ const HoldingPageTemplate: React.FC = () => {
         HoldingNfts &&
         HoldingNfts.length > 0 &&
         HoldingNfts.reduce((acc: any, item: any) => {
-          acc = (acc || 0) + (formatUSei(item?.floorPrice) * item?.nftsHolding?.length || 0)
+          acc = (acc || 0) + (formatUSei(item?.floorPrice) * item?.nftsHold?.length || 0)
           return acc
         }, 0),
       tokens:

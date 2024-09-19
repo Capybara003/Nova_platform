@@ -26,9 +26,10 @@ interface HoldingTableProps extends TableProps {
 }
 
 const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, footerData, crypto, totalValue }) => {
-  const [activeElement, setActiveElement] = useState<string>('')
-  const [bookmarkedItems, setBookmarkedItems] = useState<number[]>([])
+  const [activeElement, setActiveElement] = useState<string[]>([])
   const [checkboxes, setCheckboxes] = useState<any>([])
+  const [bookmarkedItems, setBookmarkedItems] = useState<string[]>([])
+  const [isBookmarkedAll, setIsBookmarkedAll] = useState<boolean>(false)
   const SEI = crypto?.value || 0
   const baseValue = 100
   const NftTotal = footerData?.nftTotal / SEI
@@ -48,15 +49,18 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
       .replace('.', ',')
       .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
   }%`
+
+  const { tabName } = useDataSelector('toggle')
+
   const handleClick = (value: string) => {
-    if (value === activeElement) {
-      setActiveElement('')
+    if (activeElement.includes(value)) {
+      setActiveElement(prev => prev.filter(item => item !== value))
     } else {
-      setActiveElement(value)
+      setActiveElement(prev => [...prev, value])
     }
   }
-  const { tabName } = useDataSelector('toggle')
-  const handleBookMark = (id: number) => {
+
+  const handleBookMark = (id: string) => {
     // Check if the item is already bookmarked
     if (bookmarkedItems.includes(id)) {
       // If bookmarked, remove it from the list
@@ -66,7 +70,18 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
       setBookmarkedItems([...bookmarkedItems, id])
     }
   }
-  const handleCheckboxChange = (id: number, e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleBookMarkAll = () => {
+    if (!isBookmarkedAll) {
+      const allIds = data.map((item: any) => item.contract)
+      setBookmarkedItems(allIds)
+    } else {
+      setBookmarkedItems([])
+    }
+    setIsBookmarkedAll(prev => !prev)
+  }
+
+  const handleCheckboxChange = (id: string) => {
     const updatedCheckboxes: any = [...checkboxes]
 
     const index = updatedCheckboxes.indexOf(id)
@@ -79,9 +94,10 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
 
     setCheckboxes(updatedCheckboxes)
   }
+
   const handleSelectAllChange = (checked: boolean) => {
     if (checked) {
-      const allIds = data.map((item: any) => item.id)
+      const allIds = data.map((item: any) => item.contract)
       setCheckboxes(allIds)
     } else {
       setCheckboxes([])
@@ -100,7 +116,7 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                 >
                   {key === 0 && (
                     <Typography className="ml-4 mr-16">
-                      <BookMarkButton isActive={true} />
+                      <BookMarkButton isActive={isBookmarkedAll} onClick={handleBookMarkAll} />
                     </Typography>
                   )}
 
@@ -134,21 +150,22 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
       <tbody>
         {!loading &&
           tabName === 1 &&
-          data?.map((collection: any, index: any) => {
+          data?.map((collection: any) => {
             const info =
-              collection?.nftsHolding &&
-              collection?.nftsHolding?.reduce((acc: any, nft: any) => {
-                // acc.rank = (acc.rank || 0) + nft?.rarity?.rank || 0
-                acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
-                acc.estFee = (acc.estFee || 0) + formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01 || 0
-                acc.unrealizedGains = (acc.unrealizedGains || 0) + formatUSei(nft?.unrealizedGains) || 0
-                acc.holdingTime =
-                  (acc.holdingTime || 0) + (Date.now() - new Date(nft?.ts).getTime()) / (24 * 60 * 60 * 1000) || 0
-                acc.floorPrice = (acc.floorPrice || 0) + formatUSei(nft?.floorPrice) || 0
-                return acc
-              }, {})
+              (collection?.nftsHold &&
+                collection?.nftsHold?.reduce((acc: any, nft: any) => {
+                  // acc.rank = (acc.rank || 0) + nft?.rarity?.rank || 0
+                  acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
+                  acc.estFee = (acc.estFee || 0) + formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01 || 0
+                  acc.unrealizedGains = (acc.unrealizedGains || 0) + formatUSei(nft?.unrealizedGains) || 0
+                  acc.holdingTime =
+                    (acc.holdingTime || 0) + (Date.now() - new Date(nft?.ts).getTime()) / (24 * 60 * 60 * 1000) || 0
+                  acc.floorPrice = (acc.floorPrice || 0) + formatUSei(nft?.floorPrice) || 0
+                  return acc
+                }, {})) ||
+              {}
             // info.rank = info.rank / collection?.userHoldingNfts?.length || 0
-            info.holdingTime = info?.holdingTime / collection?.nftsHolding?.length || 0
+            info.holdingTime = info?.holdingTime / collection?.nftsHold?.length || 0
 
             const SinceTrade = collection?.sinceTrade / SEI
 
@@ -162,12 +179,12 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
             }%`
 
             return (
-              <React.Fragment key={index}>
+              <React.Fragment key={collection?.contract}>
                 <tr className="cursor-pointer">
                   <td className="min-w-[230px]">
                     <div className="flex items-center justify-center gap-2">
-                      <div onClick={() => handleBookMark(collection?.id)}>
-                        {bookmarkedItems.includes(collection?.id) ? (
+                      <div onClick={() => handleBookMark(collection?.contract)}>
+                        {bookmarkedItems.includes(collection?.contract) ? (
                           <div>
                             <BookMarkFill />
                           </div>
@@ -177,7 +194,10 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                           </div>
                         )}
                       </div>
-                      <div className={`${activeElement === index && 'rotate-90'}`} onClick={() => handleClick(index)}>
+                      <div
+                        className={`${activeElement.includes(collection.contract) && 'rotate-90'}`}
+                        onClick={() => handleClick(collection.contract)}
+                      >
                         <RightArrowIcons />
                       </div>
                       <Link
@@ -216,7 +236,7 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                     </div>
                   </td>
                   <td className="">
-                    {collection?.nftsHolding && collection?.nftsHolding !== null ? collection.nftsHolding.length : '--'}
+                    {collection?.nftsHold && collection?.nftsHold !== null ? collection.nftsHold.length : '--'}
                   </td>
                   <td>
                     <div className="tooltip !w-[60px]">
@@ -299,17 +319,20 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                   <td>
                     <div
                       className="flex !w-full justify-end"
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleCheckboxChange(collection?.seiAddress, e)
-                      }
+                      onChange={() => handleCheckboxChange(collection?.contract)}
                     >
-                      <Checkbox checked={checkboxes.includes(collection?.seiAddress)} />
+                      <Checkbox checked={checkboxes.includes(collection?.contract)} />
                     </div>{' '}
                   </td>
                 </tr>
-                {collection?.nftsHolding &&
-                  collection?.nftsHolding?.map((nft: any) => (
-                    <tr className={`${activeElement === index ? 'table-row' : 'hidden'} cursor-pointer`} key={nft.key}>
+                {collection?.nftsHold &&
+                  collection?.nftsHold?.map((nft: any) => (
+                    <tr
+                      className={`${
+                        activeElement.includes(collection.contract) ? 'table-row' : 'hidden'
+                      } cursor-pointer`}
+                      key={nft.key}
+                    >
                       <td className="!p-0">
                         <div>
                           <div className="flex w-full items-center">
@@ -401,11 +424,9 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                       <td>
                         <div
                           className="flex !w-full justify-end"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            handleCheckboxChange(collection?.seiAddress, e)
-                          }
+                          onChange={() => handleCheckboxChange(collection?.contract)}
                         >
-                          <Checkbox checked={checkboxes.includes(collection?.seiAddress)} />
+                          <Checkbox checked={checkboxes.includes(collection?.contract)} />
                         </div>{' '}
                       </td>
                       {/* </TECollapse> */}
@@ -416,7 +437,7 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
           })}
         {!loading &&
           tabName === 2 &&
-          data?.map((token: any, index: any) => {
+          data?.map((token: any) => {
             // const info =
             //   token &&
             //   token?.reduce((acc: any, nft: any) => {
@@ -431,7 +452,7 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
             //   }, {})
             const info: any = {}
             // info.rank = info.rank / collection?.userHoldingNfts?.length || 0
-            // info.holdingTime = info?.holdingTime / collection?.nftsHolding?.length || 0
+            // info.holdingTime = info?.holdingTime / collection?.nftsHold?.length || 0
 
             const SinceTrade = token?.sinceTrade / SEI
 
@@ -463,8 +484,8 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                         </div>
 
                         <div
-                          className={`${activeElement === index ? 'rotate-90' : ''}`}
-                          onClick={() => handleClick(index)}
+                          className={`${activeElement.includes(token.demon) ? 'rotate-90' : ''}`}
+                          onClick={() => handleClick(token.demon)}
                         >
                           <RightArrowIcons />
                         </div>
@@ -583,67 +604,11 @@ const HoldingTable: React.FC<HoldingTableProps> = ({ data, headData, loading, fo
                     )}
                   </td>
                   <td className="">
-                    <div className="flex !w-full justify-end">
-                      <Checkbox />
+                    <div className="flex !w-full justify-end" onChange={() => handleCheckboxChange(token?.demon)}>
+                      <Checkbox checked={checkboxes.includes(token?.demon)} />
                     </div>{' '}
                   </td>
                 </tr>
-                {index === 1 && (
-                  <tr>
-                    <td className="!border-0 !border-b-0 !p-0" colSpan={headData.length + 1}>
-                      <TECollapse
-                        className="Collapse !mt-0 !w-full !rounded-b-none text-left !shadow-none"
-                        show={activeElement === index}
-                      >
-                        <div className="px-2 py-1">
-                          <table className="w-full">
-                            <tbody>
-                              {footerData.transData &&
-                                footerData.transData.map((item: any, key: number) => {
-                                  return (
-                                    <tr key={item?.id}>
-                                      <td className="w-[12%]">{item.details.title}</td>
-                                      <td className="">{item.amount.amount}</td>
-                                      <td className="">{item.weight.toFixed(3)}</td>
-                                      <td className="">--</td>
-                                      <td className="">--</td>
-                                      <td className="">{item?.advancedTradeFill?.fillPrice}</td>
-                                      <td className="">{item?.network?.transactionFee?.amount}</td>
-                                      <td className=""></td>
-                                      <td className="">{item?.gain?.toFixed(3)}</td>
-                                      <td className=""></td>
-                                      <td className=""></td>
-                                      <td className="">
-                                        {item && item?.network?.transactionUrl && (
-                                          <Link
-                                            className="flex flex-col items-center justify-center"
-                                            href={(item && item?.network?.transactionUrl) || ''}
-                                            target={`${
-                                              item
-                                                ? item?.network?.transactionUrl !== '' &&
-                                                  item?.network?.transactionUrl !== null
-                                                  ? '_blank'
-                                                  : ''
-                                                : ''
-                                            }`}
-                                          >
-                                            <div className="rounded-[8px] bg-black225_05 p-1">
-                                              <LinkIcon />
-                                            </div>
-                                          </Link>
-                                        )}
-                                      </td>
-                                      <td className=""></td>
-                                    </tr>
-                                  )
-                                })}
-                            </tbody>
-                          </table>
-                        </div>
-                      </TECollapse>
-                    </td>
-                  </tr>
-                )}
               </React.Fragment>
             )
           })}

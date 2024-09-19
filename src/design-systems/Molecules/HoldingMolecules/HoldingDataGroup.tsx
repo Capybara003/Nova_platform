@@ -51,15 +51,15 @@ const HoldingDataGroup: React.FC = () => {
 
   HoldingNfts?.map((collection: any) => {
     const info =
-      collection?.nftsHolding &&
-      collection?.nftsHolding?.reduce((acc: any, nft: any) => {
+      collection?.nftsHold &&
+      collection?.nftsHold?.reduce((acc: any, nft: any) => {
         acc.buyPrice = (acc.buyPrice || 0) + formatUSei(nft?.buyPrice) || 0
         acc.estFee = (acc.estFee || 0) + formatUSei(nft?.floorPrice) * nft?.royaltyPercentage * 0.01 || 0
         acc.unrealizedGains = (acc.unrealizedGains || 0) + formatUSei(nft?.unrealizedGains) || 0
         acc.estValue = (acc.estValue || 0) + formatUSei(nft?.floorPrice) || 0
         return acc
       }, {})
-    holdingNftsData.amount += Number(collection?.nftsHolding?.length) || 0
+    holdingNftsData.amount += Number(collection?.nftsHold?.length) || 0
     holdingNftsData.buyPrice += Number(info?.buyPrice) || 0
     holdingNftsData.estFee += Number(info?.estFee) || 0
     holdingNftsData.estValue += Number(info?.estValue) || 0
@@ -85,7 +85,7 @@ const HoldingDataGroup: React.FC = () => {
   }, {})
 
   HoldingTokens?.map((collection: any) => {
-    holdingTokensData.amount += Number(collection?.nftsHolding?.length) || 0
+    holdingTokensData.amount += Number(collection?.nftsHold?.length) || 0
     holdingTokensData.buyPrice += Number(collection?.buyPrice) || 0
     holdingTokensData.estFee += Number(collection?.estFee) || 0
     holdingTokensData.estValue += formatUnits(collection?.worthUsei, 6) || 0
