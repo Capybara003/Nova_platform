@@ -136,8 +136,8 @@ const AnalyticsBottomSection: React.FC = () => {
               return acc
             }, {}) as any
 
-          acc['total'] = Number((acc['total'] || 0) + res?.total ?? 0)
-          acc['count'] = Number((acc['count'] || 0) + res?.count ?? 0)
+          acc['total'] = Number((acc['total'] || 0) + res?.total)
+          acc['count'] = Number((acc['count'] || 0) + res?.count)
         }
         return acc
       }, {})
