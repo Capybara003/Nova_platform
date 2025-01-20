@@ -31,6 +31,7 @@ import { useHolding } from 'hooks/apis/useHolding'
 import { useDataSelector } from 'lib/redux/store'
 import useWindowWidth from 'hooks/useWindowWidth'
 import { formatUnits, formatUSei } from 'utils/formatUnit'
+import { getCollectionDetail } from 'utils/function'
 
 const HoldingPageTemplate: React.FC = () => {
   const [activeTab, setActiveTab] = useState<number>(0)
@@ -49,7 +50,7 @@ const HoldingPageTemplate: React.FC = () => {
   } = useHolding()
 
   const [soldDetail, setSoldDetails] = useState<any>({})
-  const [HoldingGraphData, setHoldingGraphData] = useState<any>([])
+  const [HoldingData, setHoldingData] = useState<any>({ nfts: [], tokens: [] })
   const [currentPage, setCurrentPage] = useState<number>(0)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const itemsPerPage = 10
@@ -69,22 +70,45 @@ const HoldingPageTemplate: React.FC = () => {
     setCurrentPage(0)
   }, [tabName])
 
-  const holdingData = useMemo(() => {
-    return {
-      nfts:
-        HoldingNfts?.reduce((res, collection) => {
-          const contracts = res.map((one: any) => one.contract)
-          const index = contracts.indexOf(collection.contract)
-          if (index !== -1) {
-            res[index].nftsHold = [...new Set([...res[index].nftsHold, ...collection.nftsHold])]
-          } else {
-            res.push(collection)
-          }
-          return res
-        }, []) ?? [],
-      tokens: HoldingTokens ?? [],
+  useEffect(() => {
+    const init = async () => {
+      if (HoldingNfts) {
+        const nft =
+          (await HoldingNfts?.reduce(async (res, collection) => {
+            const contracts = res.map((one: any) => one.contract)
+            const index = contracts.indexOf(collection.contract)
+            if (index !== -1) {
+              res[index].nftsHold = [...new Set([...res[index].nftsHold, ...collection.nftsHold])]
+            } else {
+              collection.detail = await getCollectionDetail(collection.contract)
+              res.push(collection)
+            }
+            return res
+          }, [])) ?? []
+
+        setHoldingData({ nfts: nft, tokens: [] })
+      }
     }
-  }, [HoldingNfts, isLoadingHoldingNfts, HoldingTokens, isLoadingHoldingTokens])
+    init()
+  }, [HoldingNfts, isLoadingHoldingNfts])
+
+  // const holdingData = useMemo(() => {
+  //   return {
+  //     nfts:
+  //       HoldingNfts?.reduce(async (res, collection) => {
+  //         const contracts = res.map((one: any) => one.contract)
+  //         const index = contracts.indexOf(collection.contract)
+  //         if (index !== -1) {
+  //           res[index].nftsHold = [...new Set([...res[index].nftsHold, ...collection.nftsHold])]
+  //         } else {
+  //           collection.detail = await getCollectionDetail(collection.contract)
+  //           res.push(collection)
+  //         }
+  //         return res
+  //       }, []) ?? [],
+  //     tokens: HoldingTokens ?? [],
+  //   }
+  // }, [HoldingNfts, isLoadingHoldingNfts, HoldingTokens, isLoadingHoldingTokens])
 
   const incomeData = useMemo(() => {
     return {
@@ -148,7 +172,7 @@ const HoldingPageTemplate: React.FC = () => {
   }
 
   const openModal = () => setIsModalOpen(true)
-  const DataLength = holdingData.nfts?.length || incomeData.nfts?.length
+  const DataLength = HoldingData.nfts?.length || incomeData.nfts?.length
 
   return (
     <>
@@ -308,13 +332,13 @@ const HoldingPageTemplate: React.FC = () => {
                   <ExportPopOver
                     data={
                       activeTab === 0
-                        ? holdingData.nfts
+                        ? HoldingData.nfts
                         : activeTab === 1
                         ? incomeData.nfts
                         : activeTab === 2
                         ? totalData.nfts
                         : activeTab === 3
-                        ? holdingData.nfts
+                        ? HoldingData.nfts
                         : []
                     }
                     filename="data"
@@ -339,8 +363,8 @@ const HoldingPageTemplate: React.FC = () => {
                       <>
                         <HoldingTable
                           crypto={crypto}
-                          data={holdingData.nfts?.slice(startIndex, endIndex)}
-                          footerData={holdingData.nfts}
+                          data={HoldingData.nfts?.slice(startIndex, endIndex)}
+                          footerData={HoldingData.nfts}
                           headData={[
                             { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                             { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
@@ -434,7 +458,7 @@ const HoldingPageTemplate: React.FC = () => {
                     {activeTab === 3 && (
                       <HoldingAnalyticsTable
                         crypto={crypto}
-                        data={holdingData.nfts?.slice(startIndex, endIndex)}
+                        data={HoldingData.nfts?.slice(startIndex, endIndex)}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                           { name: 'Amount', key: 'Amount', isInfo: false, isSort: true, width: '70px' },
@@ -460,10 +484,10 @@ const HoldingPageTemplate: React.FC = () => {
                       />
                     )}
                   </div>
-                  {((holdingData.nfts?.length > 9 && activeTab === 0) ||
+                  {((HoldingData.nfts?.length > 9 && activeTab === 0) ||
                     (incomeData.nfts?.length > 9 && activeTab === 1) ||
                     (totalData.nfts.length > 9 && activeTab === 2) ||
-                    (holdingData.nfts.length > 9 && activeTab === 3)) && (
+                    (HoldingData.nfts.length > 9 && activeTab === 3)) && (
                     <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
                   )}
                 </div>
@@ -475,8 +499,8 @@ const HoldingPageTemplate: React.FC = () => {
                       <>
                         <HoldingTable
                           crypto={crypto}
-                          data={holdingData.nfts?.slice(startIndex, endIndex)}
-                          footerData={holdingData.nfts}
+                          data={HoldingData.nfts?.slice(startIndex, endIndex)}
+                          footerData={HoldingData.nfts}
                           headData={[
                             { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                             { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
@@ -570,7 +594,7 @@ const HoldingPageTemplate: React.FC = () => {
                     {activeTab === 3 && (
                       <HoldingAnalyticsTable
                         crypto={crypto}
-                        data={holdingData.nfts?.slice(startIndex, endIndex)}
+                        data={HoldingData.nfts?.slice(startIndex, endIndex)}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                           { name: 'Amount', key: 'Amount', isInfo: false, isSort: true, width: '70px' },
@@ -596,10 +620,10 @@ const HoldingPageTemplate: React.FC = () => {
                       />
                     )}
                   </div>
-                  {((holdingData.nfts?.length > 9 && activeTab === 0) ||
+                  {((HoldingData.nfts?.length > 9 && activeTab === 0) ||
                     (incomeData.nfts?.length > 9 && activeTab === 1) ||
                     (totalData.nfts.length > 9 && activeTab === 2) ||
-                    (holdingData.nfts.length > 9 && activeTab === 3)) && (
+                    (HoldingData.nfts.length > 9 && activeTab === 3)) && (
                     <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
                   )}
                 </div>
@@ -611,8 +635,8 @@ const HoldingPageTemplate: React.FC = () => {
                       <>
                         <HoldingTable
                           crypto={crypto}
-                          data={holdingData.tokens?.slice(startIndex, endIndex)}
-                          footerData={holdingData.tokens}
+                          data={HoldingData.tokens?.slice(startIndex, endIndex)}
+                          footerData={HoldingData.tokens}
                           headData={[
                             { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                             { name: 'Amount', key: 'Amount', isInfo: false, isSort: false, width: '70px' },
@@ -706,7 +730,7 @@ const HoldingPageTemplate: React.FC = () => {
                     {activeTab === 3 && (
                       <HoldingAnalyticsTable
                         crypto={crypto}
-                        data={holdingData.tokens?.slice(startIndex, endIndex)}
+                        data={HoldingData.tokens?.slice(startIndex, endIndex)}
                         headData={[
                           { name: 'Name', key: 'Name', isInfo: false, isSort: false, width: '210px' },
                           { name: 'Amount', key: 'Amount', isInfo: false, isSort: true, width: '70px' },
@@ -732,10 +756,10 @@ const HoldingPageTemplate: React.FC = () => {
                       />
                     )}
                   </div>
-                  {((holdingData.tokens?.length > 9 && activeTab === 0) ||
+                  {((HoldingData.tokens?.length > 9 && activeTab === 0) ||
                     (incomeData.tokens?.length > 9 && activeTab === 1) ||
                     (totalData.tokens.length > 9 && activeTab === 2) ||
-                    (holdingData.tokens.length > 9 && activeTab === 3)) && (
+                    (HoldingData.tokens.length > 9 && activeTab === 3)) && (
                     <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
                   )}
                 </div>

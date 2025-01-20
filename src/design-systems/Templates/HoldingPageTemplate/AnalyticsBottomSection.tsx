@@ -602,8 +602,8 @@ const AnalyticsBottomSection: React.FC = () => {
                             <td className="text-white w-2/5 text-left font-medium">
                               <div className="flex items-center justify-start gap-2">
                                 <div className="h-5 w-5 rounded bg-red"></div>
-                                {collection?.pfp && collection?.pfp !== null ? (
-                                  <Image alt={'IMG'} height={48} src={collection?.pfp} width={48} />
+                                {collection?.detail?.pfp && collection?.detail?.pfp !== null ? (
+                                  <Image alt={'IMG'} height={48} src={collection.detail.pfp} width={48} />
                                 ) : (
                                   <Image alt={'IMG'} height={48} src={IMG.webump} width={48} />
                                 )}

@@ -30,7 +30,7 @@ const ConnectedWallet: React.FC = () => {
       const mergedArray = wallets.concat(walletConnect).reduce((acc: Wallet[], obj) => {
         const existingObj = acc.find(item => item.id === obj.id)
         if (!existingObj) {
-          acc.push(obj)
+          acc.push({ ...obj, isActive: true })
         }
         return acc
       }, [])

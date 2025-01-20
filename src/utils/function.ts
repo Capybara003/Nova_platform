@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import axios from 'axios'
+
 type objType = { [key: string]: any }
 export function getNestedValue(obj: any, path: string) {
   const keys: string[] = path.split('.')
@@ -29,4 +31,15 @@ export const formatAddress = (address: string): string => {
 
   // Return the formatted address
   return `${firstPart}...${lastPart}`
+}
+
+export const getCollectionDetail = async (collectionAddress: string) => {
+  if (!collectionAddress) {
+    return
+  }
+  const collectionDetail = await axios.get(`https://api.pallet.exchange/api/v2/nfts/${collectionAddress}/details`)
+  if (collectionDetail.status === 200) {
+    return collectionDetail.data
+  }
+  return
 }

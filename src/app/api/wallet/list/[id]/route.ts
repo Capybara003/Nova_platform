@@ -14,6 +14,7 @@ export async function GET(request: NextRequest) {
       id: true,
       walletAddress: true,
       walletName: true,
+      ownerId: true,
     },
   })
 

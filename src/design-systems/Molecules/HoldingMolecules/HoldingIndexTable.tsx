@@ -199,12 +199,12 @@ const HoldingIndexTable: React.FC<HoldingIndexTableProps> = ({
                             // }, // Add your custom props as query parameters
                           }}
                         >
-                          {collection?.pfp && collection?.pfp !== null ? (
+                          {collection?.detail?.pfp && collection?.detail?.pfp !== null ? (
                             <Image
                               alt={'IMG'}
                               className="rounded-[4px] rounded-ee-[10px] rounded-ss-[10px]"
                               height={48}
-                              src={collection.pfp}
+                              src={collection.detail.pfp}
                               width={48}
                             />
                           ) : (
