@@ -230,13 +230,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                           pathname === '/mint' ? '' : pathname === '/' || pathname === '/login' ? 'h-screen' : 'flex'
                         }
                       >
-                        {/* {!noComponent && !hide && (
+                        {!noComponent && !hide && (
                           <>
                             <div className="!hidden md:!flex md:flex-row">
                               <SideNavbar />
                             </div>
                           </>
-                        )} */}
+                        )}
                         <div className="m-0 flex min-h-full w-full overflow-scroll p-0 text-center">
                           <div
                             className={` ${

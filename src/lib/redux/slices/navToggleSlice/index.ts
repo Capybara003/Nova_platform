@@ -5,7 +5,7 @@ import { cryptoProps, navToggleSliceState } from './interface'
 import { Seidata } from 'design-systems/data/data'
 
 const initialState: navToggleSliceState = {
-  tabName: 0,
+  tabName: 1,
   moduleName: '',
   walletLoading: false,
   crypto: {

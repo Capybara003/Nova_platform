@@ -8,25 +8,24 @@ import HoldingServices from 'api-services/HoldingServices'
 import { API_ENDPOINTS } from 'utils/api-integration'
 import { AssetsDetailsBlock } from 'design-systems/Templates/HoldingPageTemplate/interface'
 import { useDataSelector } from 'lib/redux/store'
-import { removeEmptyKey } from 'utils/function'
+
 type tabType = { [key: number]: string }
 const tabs: tabType = {
   0: 'all',
   1: 'nft',
   2: 'token',
 }
+
 export const useHolding = () => {
   // const { binance, coinbase } = useDataSelector('exchange')
   // const { data: globalData } = useDataSelector('globalData')
   const { wallets } = useDataSelector('walletSlice')
-  const [activeAddresses, setActiveAddresses] = useState<string[]>([
-    'sei16nsqp4myn0ary0yuckhl7mwptvedqyvfu0u8ny',
-    'sei1yxrgsh2fq4vkx5qp9r9fd9w22tt7avl0f2j95a',
-  ])
-  // useMemo(() => {
-  //   const activeWallets = wallets?.filter(item => item?.isActive)
-  //   setActiveAddresses(activeWallets?.map(item => item?.walletAddress) || [])
-  // }, [wallets])
+  const [activeAddresses, setActiveAddresses] = useState<string[]>([])
+
+  useMemo(() => {
+    const activeWallets = wallets?.filter(item => item?.isActive)
+    setActiveAddresses(activeWallets?.map(item => item?.walletAddress) || [])
+  }, [wallets])
 
   // const { tabName } = useDataSelector('toggle')
 
@@ -44,29 +43,6 @@ export const useHolding = () => {
       throw error
     }
   }
-
-  // const data = removeEmptyKey({
-  //   BINANCE_API_KEY: binance.api_key,
-  //   BINANCE_SECRET_KEY: binance.api_secret,
-  //   COINBASE_API_KEY: coinbase.api_key,
-  //   COINBASE_SECRET_KEY: coinbase.api_secret,
-  //   marketplace: coinbase.api_key ? 'coinbase' : binance.api_key ? 'binance' : '',
-  //   userId: token,
-  //   userAddress: walletUpdate,
-  //   search: globalData.search,
-  //   tab: tabs[tabName],
-  //   wallets: wallets?.filter(walletItem => walletItem.isActive)?.map(walletItem => walletItem.walletAddress) || [],
-  //   type:
-  //     tabName !== 2
-  //       ? tabs[tabName]
-  //       : binance.api_key && coinbase.api_key
-  //       ? 'allToken'
-  //       : binance.api_key
-  //       ? 'binanceToken'
-  //       : coinbase.api_key
-  //       ? 'coinbaseToken'
-  //       : 'allToken',
-  // })
 
   // ===================== NFT Data =====================
 

@@ -56,14 +56,14 @@ export const TopNavbar: React.FC<HeaderProps> = ({ open, setOpen, setModelName, 
       <div className="grid gap-y-4">
         {pathname !== '/account' && !hide && (
           <div className="flex h-fit flex-row flex-wrap justify-between gap-4 xsm:flex-col md:!h-auto">
-            <div className="!h-auto w-full flex-1 sm:!w-auto">
+            {/* <div className="!h-auto w-full flex-1 sm:!w-auto">
               <NavTabsMolecule
                 activeTab={activeTab}
                 className="h-full w-full !text-[12px] sm:!justify-between"
                 tabs={['NFT', 'Token', 'All']}
                 onTabChange={handleTabChange}
               />
-            </div>
+            </div> */}
             {/* <OnSelect
               className="h-[41px] w-full !text-[12px] sm:!h-full sm:!w-auto"
               imageHeight={0}

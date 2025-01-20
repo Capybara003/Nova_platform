@@ -17,7 +17,7 @@ import { Checkbox } from 'design-systems/Atoms/CheckBox'
 import { EditIcons, PlusOutlined } from 'design-systems/Atoms/Icons'
 import Typography from 'design-systems/Atoms/Typography'
 import { useHolding } from 'hooks/apis/useHolding'
-import { walletData } from 'lib/redux/slices/walletSlice'
+import { Wallet, walletData } from 'lib/redux/slices/walletSlice'
 import { useDataSelector } from 'lib/redux/store'
 import { formatAddress } from 'utils/function'
 
@@ -37,55 +37,68 @@ const HoldingDataGroup2: React.FC = () => {
     selectAll: binance.is_connected && coinbase.is_connected,
   })
 
-  useMemo(() => refetchWallet(), [refetchWallet])
+  useMemo(() => refetchWallet(), [refetchWallet, wallets])
 
-  const handleExchangeSettings = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name
-
-    if (name === 'selectAll') {
-      setExchangeSetting(prev => ({
-        ...prev,
-        selectAll: !prev.selectAll,
-        isCoinbase: e.target.checked,
-        isBinance: e.target.checked,
-      }))
+  useMemo(() => {
+    if (walletConnect) {
+      const mergedArray = wallets.concat(walletConnect).reduce((acc: Wallet[], obj) => {
+        const existingObj = acc.find(item => item.id === obj.id)
+        if (!existingObj) {
+          acc.push({ ...obj, isActive: true })
+        }
+        return acc
+      }, [])
+      dispatch(walletData(mergedArray))
     }
+  }, [walletConnect])
 
-    if (name === 'isCoinbase') {
-      setExchangeSetting(prev => ({
-        ...prev,
-        isCoinbase: !prev.isCoinbase,
-        selectAll: false,
-      }))
-    }
+  // const handleExchangeSettings = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const name = e.target.name
 
-    if (name === 'isBinance') {
-      setExchangeSetting(prev => ({
-        ...prev,
-        isBinance: !prev.isBinance,
-        selectAll: false,
-      }))
-    }
-  }
+  //   if (name === 'selectAll') {
+  //     setExchangeSetting(prev => ({
+  //       ...prev,
+  //       selectAll: !prev.selectAll,
+  //       isCoinbase: e.target.checked,
+  //       isBinance: e.target.checked,
+  //     }))
+  //   }
 
-  const grandTotal = useMemo(
-    () =>
-      (Array.isArray(coinbase.data)
-        ? coinbase.data
-            ?.filter(item => item.asset.includes('Sei'))
-            .reduce((accm, curr) => {
-              return accm + +curr.free
-            }, 0)
-        : undefined || 0) +
-      (Array.isArray(binance.data)
-        ? binance?.data
-            ?.filter(item => item.asset.includes('Sei'))
-            ?.reduce((accum, curr) => {
-              return accum + parseInt(curr.free)
-            }, 0)
-        : undefined || 0),
-    [coinbase, binance]
-  )
+  //   if (name === 'isCoinbase') {
+  //     setExchangeSetting(prev => ({
+  //       ...prev,
+  //       isCoinbase: !prev.isCoinbase,
+  //       selectAll: false,
+  //     }))
+  //   }
+
+  //   if (name === 'isBinance') {
+  //     setExchangeSetting(prev => ({
+  //       ...prev,
+  //       isBinance: !prev.isBinance,
+  //       selectAll: false,
+  //     }))
+  //   }
+  // }
+
+  // const grandTotal = useMemo(
+  //   () =>
+  //     (Array.isArray(coinbase.data)
+  //       ? coinbase.data
+  //           ?.filter(item => item.asset.includes('Sei'))
+  //           .reduce((accm, curr) => {
+  //             return accm + +curr.free
+  //           }, 0)
+  //       : undefined || 0) +
+  //     (Array.isArray(binance.data)
+  //       ? binance?.data
+  //           ?.filter(item => item.asset.includes('Sei'))
+  //           ?.reduce((accum, curr) => {
+  //             return accum + parseInt(curr.free)
+  //           }, 0)
+  //       : undefined || 0),
+  //   [coinbase, binance]
+  // )
 
   const handleWalletSettings = (e: React.ChangeEvent<HTMLInputElement>, item2: any) => {
     if (e.target.name === 'selectAll') {
@@ -97,6 +110,7 @@ const HoldingDataGroup2: React.FC = () => {
           id: wallet.id,
           walletName: wallet.walletName,
           walletAddress: wallet.walletAddress,
+          ownerId: item2.ownerId,
           isActive: e.target.checked,
         })) || []
 
@@ -110,6 +124,7 @@ const HoldingDataGroup2: React.FC = () => {
         id: item2?.id,
         walletName: item2?.walletName,
         walletAddress: item2?.walletAddress,
+        ownerId: item2?.ownerId,
         isActive: e.target.checked,
       }
 
@@ -260,6 +275,7 @@ const HoldingDataGroup2: React.FC = () => {
               <div className="flex w-full items-center gap-2">
                 <Checkbox
                   checked={wallets.length > 0 && wallets.every(w => w.isActive)}
+                  defaultChecked={true}
                   name="selectAll"
                   onChange={e => handleWalletSettings(e, null)}
                 />
@@ -279,7 +295,8 @@ const HoldingDataGroup2: React.FC = () => {
                     <div className="flex justify-between" key={item2.id}>
                       <div className="flex w-full items-start gap-2">
                         <Checkbox
-                          defaultChecked={isActive}
+                          checked={isActive}
+                          defaultChecked={true}
                           onChange={e => {
                             handleWalletSettings(e, item2)
                           }}

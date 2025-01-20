@@ -4,6 +4,7 @@ export interface Wallet {
   walletName: string
   walletAddress: string
   isActive: boolean
+  ownerId: number
 }
 
 const initialState = {

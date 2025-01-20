@@ -80,7 +80,7 @@ const Header: React.FC<any> = ({ noComponent, hide, userData }) => {
           </div>
           {pathname !== '/account' && !hide && (
             <>
-              {pathname !== '/project' && (
+              {/* {pathname !== '/project' && (
                 <NavTabsMolecule
                   activeTab={tabCount}
                   className="!bg-blackBg"
@@ -88,7 +88,7 @@ const Header: React.FC<any> = ({ noComponent, hide, userData }) => {
                   tabs={['All', 'NFT', 'Token']}
                   onTabChange={handleTabChange}
                 />
-              )}
+              )} */}
               {/* <div className="h-[56px] w-[120px]">
                 <OnSelect
                   className="h-[56px] !w-full "
